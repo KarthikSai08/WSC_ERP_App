@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.CRM.Domain.Enums
+﻿namespace WSC.CRM.Domain.Enums
 {
     public enum ActivityType
     {
