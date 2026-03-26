@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="WSC.Shared.Contracts/WSC.Shared.Contracts.csproj" />
+  <Project Path="WSC.Shared.Infrastructure/WSC.Shared.Infrastructure.csproj" />
+</Solution>

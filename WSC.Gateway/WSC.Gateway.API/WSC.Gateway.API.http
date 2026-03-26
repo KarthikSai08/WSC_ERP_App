@@ -1,0 +1,6 @@
+@WSC.Gateway.API_HostAddress = http://localhost:5034
+
+GET {{WSC.Gateway.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

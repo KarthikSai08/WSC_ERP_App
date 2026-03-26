@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="WSC.Delivery.API/WSC.Delivery.API.csproj" Id="866005cd-920b-4c51-8f94-ccd1b0e9f56e" />
+  <Project Path="WSC.Delivery.Application/WSC.Delivery.Application.csproj" Id="4d2d1262-fbdb-4699-94af-f65856df9236" />
+  <Project Path="WSC.Delivery.Domain/WSC.Delivery.Domain.csproj" Id="0db7239f-8a67-4f5c-ad1d-80687da9e554" />
+  <Project Path="WSC.Delivery.Infrastructure/WSC.Delivery.Infrastructure.csproj" Id="2b68bd2c-cd11-4dee-8325-3282e6649132" />
+</Solution>

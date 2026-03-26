@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="WSC.Dashboard.API/WSC.Dashboard.API.csproj" />
+  <Project Path="WSC.Dashboard.Application/WSC.Dashboard.Application.csproj" />
+  <Project Path="WSC.Dashboard.Domain/WSC.Dashboard.Domain.csproj" />
+  <Project Path="WSC.Dashboard.Infrastructure/WSC.Dashboard.Infrastructure.csproj" />
+</Solution>

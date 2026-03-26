@@ -1,0 +1,34 @@
+<Solution>
+  <Folder Name="/WSC.CRM/">
+    <Project Path="WSC.CRM/WSC.CRM.API/WSC.CRM.API.csproj" />
+    <Project Path="WSC.CRM/WSC.CRM.Application/WSC.CRM.Application.csproj" />
+    <Project Path="WSC.CRM/WSC.CRM.Domain/WSC.CRM.Domain.csproj" />
+    <Project Path="WSC.CRM/WSC.CRM.Infrastructure/WSC.CRM.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/WSC.Dashboard/">
+    <Project Path="WSC.Dashboard/WSC.Dashboard.API/WSC.Dashboard.API.csproj" />
+    <Project Path="WSC.Dashboard/WSC.Dashboard.Application/WSC.Dashboard.Application.csproj" />
+    <Project Path="WSC.Dashboard/WSC.Dashboard.Domain/WSC.Dashboard.Domain.csproj" />
+    <Project Path="WSC.Dashboard/WSC.Dashboard.Infrastructure/WSC.Dashboard.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/WSC.Delivery/">
+    <Project Path="WSC.Delivery/WSC.Delivery.API/WSC.Delivery.API.csproj" />
+    <Project Path="WSC.Delivery/WSC.Delivery.Application/WSC.Delivery.Application.csproj" />
+    <Project Path="WSC.Delivery/WSC.Delivery.Domain/WSC.Delivery.Domain.csproj" />
+    <Project Path="WSC.Delivery/WSC.Delivery.Infrastructure/WSC.Delivery.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/WSC.Gateway/">
+    <Project Path="WSC.Gateway/WSC.Gateway.API/WSC.Gateway.API.csproj" />
+  </Folder>
+  <Folder Name="/WSC.Shared/">
+    <Project Path="WSC.Shared/WSC.Shared.Contracts/WSC.Shared.Contracts.csproj" />
+    <Project Path="WSC.Shared/WSC.Shared.Infrastructure/WSC.Shared.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/WSC.Store/">
+    <Project Path="WSC.Store/WSC.Store.API/WSC.Store.API.csproj" />
+    <Project Path="WSC.Store/WSC.Store.Application/WSC.Store.Application.csproj" />
+    <Project Path="WSC.Store/WSC.Store.Domain/WSC.Store.Domain.csproj" />
+    <Project Path="WSC.Store/WSC.Store.Infrastructure/WSC.Store.Infrastructure.csproj" />
+  </Folder>
+</Solution>
+

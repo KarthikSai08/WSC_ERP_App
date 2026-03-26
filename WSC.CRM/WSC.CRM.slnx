@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="WSC.CRM.API/WSC.CRM.API.csproj" Id="45fb122b-c154-4e00-9c45-00de23914896" />
+  <Project Path="WSC.CRM.Application/WSC.CRM.Application.csproj" Id="8155ec05-4d04-4b1f-8742-8be09845580e" />
+  <Project Path="WSC.CRM.Domain/WSC.CRM.Domain.csproj" Id="0ad642d0-0945-477f-9d75-ba5bc629c761" />
+  <Project Path="WSC.CRM.Infrastructure/WSC.CRM.Infrastructure.csproj" Id="612a6310-201c-457f-8227-1ecf911085ed" />
+</Solution>

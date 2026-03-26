@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="WSC.Store.API/WSC.Store.API.csproj" Id="12075096-5fd6-4f50-acd6-8b273b4e712a" />
+  <Project Path="WSC.Store.Application/WSC.Store.Application.csproj" Id="1b496fee-ac48-456a-bec0-806880715654" />
+  <Project Path="WSC.Store.Domain/WSC.Store.Domain.csproj" Id="31a16b55-806b-437f-ad24-4c63dbf4fdee" />
+  <Project Path="WSc.Store.Infrastructure/WSc.Store.Infrastructure.csproj" Id="a4035c7b-707d-4a14-84c3-9a269127df71" DisplayName="WSC.Store.Infrastructure" />
+</Solution>
