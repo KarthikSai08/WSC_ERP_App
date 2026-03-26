@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using WSC.Shared.Contracts.Dtos;
 
 namespace WSC.CRM.Application.Interfaces
 {
     public interface ICustomerRepository
     {
-        Task<IEnumerable<>
+        Task<IEnumerable<CustomerResponseDto>> GetAllcustomersAsync(CancellationToken ct);
     }
 }

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using WSC.Shared.Contracts.ValueObjects;
 
 namespace WSC.CRM.Domain.Entities
 {
@@ -10,7 +9,7 @@ namespace WSC.CRM.Domain.Entities
         public string CxName { get; set; }
         public string CxEmail { get; set; }
         public string CxPhone { get; set; }
-        
+
         public Address CxAddress { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }

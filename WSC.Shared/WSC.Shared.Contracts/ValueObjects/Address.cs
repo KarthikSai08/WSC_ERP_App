@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WSC.CRM.Domain.ValueObjects
+namespace WSC.Shared.Contracts.ValueObjects
 {
     public class Address
     {

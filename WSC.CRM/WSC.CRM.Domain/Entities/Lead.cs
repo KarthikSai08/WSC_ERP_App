@@ -1,4 +1,5 @@
-﻿
+﻿using WSC.Shared.Contracts.Enums;
+
 namespace WSC.CRM.Domain.Entities
 {
     public class Lead

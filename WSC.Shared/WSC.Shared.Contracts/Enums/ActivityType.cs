@@ -1,4 +1,4 @@
-﻿namespace WSC.CRM.Domain.Enums
+﻿namespace WSC.Shared.Contracts.Enums
 {
     public enum ActivityType
     {
