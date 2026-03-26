@@ -10,5 +10,6 @@ namespace WSC.Shared.Contracts.Dtos
         public int CxId { get; set; }
         public int CxName { get; set; }
         public int CxPhone { get; set; }
+        public DateTime CreatedAt { get; set; } 
     }
 }
