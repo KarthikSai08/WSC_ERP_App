@@ -11,7 +11,7 @@ namespace WSC.CRM.Domain.Entities
         public string CxPhone { get; set; }
 
         public Address CxAddress { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
 
         public ICollection<Lead> Leads { get; set; }
