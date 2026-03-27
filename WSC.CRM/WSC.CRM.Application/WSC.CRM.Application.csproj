@@ -9,11 +9,13 @@
   <ItemGroup>
     <Folder Include="DependencyInjection\" />
     <Folder Include="Common\" />
+    <Folder Include="Interfaces\Services\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\WSC.Shared\WSC.Shared.Contracts\WSC.Shared.Contracts.csproj" />
+    <ProjectReference Include="..\WSC.CRM.Domain\WSC.CRM.Domain.csproj" />
   </ItemGroup>
 
 </Project>
