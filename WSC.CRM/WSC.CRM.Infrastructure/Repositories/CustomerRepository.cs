@@ -80,7 +80,7 @@ namespace WSC.CRM.Infrastructure.Repositories
             return customers;
         }
 
-        public async Task<Customer?> GetCustomerById(int id, CancellationToken ct)
+        public async Task<Customer?> GetCustomerByIdAsync(int id, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
 

@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WSC.Shared.Contracts.ValueObjects
+namespace WSC.CRM.Application.Dtos
 {
-    public class Address
+    public class UpdateCustomerDto
     {
+        public int CxId { get; set; }
+        public string? CxName { get; set; }
+        public string? CxEmail { get; set; }
+        public string? CxPhone { get; set; }
         public string? Street { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }

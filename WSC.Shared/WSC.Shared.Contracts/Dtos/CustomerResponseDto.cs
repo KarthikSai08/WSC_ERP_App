@@ -8,8 +8,8 @@ namespace WSC.Shared.Contracts.Dtos
     public class CustomerResponseDto
     {
         public int CxId { get; set; }
-        public int CxName { get; set; }
-        public int CxPhone { get; set; }
+        public string CxName { get; set; }
+        public string CxPhone { get; set; }
         public DateTime CreatedAt { get; set; } 
     }
 }
