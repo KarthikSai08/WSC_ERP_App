@@ -30,6 +30,12 @@ namespace WSC.CRM.Application.Services
                 throw new DuplicateException("Customer", dto.CxEmail);
 
             var customer = _mapper.Map<Customer>(dto);
+            customer.CxAddress ??= new Address();
+            customer.CxAddress.Street = dto.Street;
+            customer.CxAddress.City = dto.City;
+            customer.CxAddress.State = dto.State;
+            customer.CxAddress.ZipCode = dto.ZipCode;
+            customer.CxAddress.Country = dto.Country;
             var newCxId = await _repo.CreateCustomerAsync(customer, ct);
 
             return ApiResponse<int>.Ok(newCxId,"Customer created Successfully");
@@ -66,7 +72,6 @@ namespace WSC.CRM.Application.Services
 
             var result = _mapper.Map<CustomerResponseDto>(customer);
             return ApiResponse<CustomerResponseDto>.Ok(result, "Customer Found!");
-
         }
 
         public async Task<ApiResponse<bool>> UpdateCustomerAsync(UpdateCustomerDto dto, CancellationToken ct)

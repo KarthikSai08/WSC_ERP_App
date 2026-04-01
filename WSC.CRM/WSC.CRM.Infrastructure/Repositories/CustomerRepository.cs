@@ -36,11 +36,12 @@ namespace WSC.CRM.Infrastructure.Repositories
                             direction: ParameterDirection.Output);
 
             await con.ExecuteAsync(
-                    "CreateCustomer",
+                    "crm.sp_CreateCustomer",
                     parameters,
                     commandType: CommandType.StoredProcedure);
 
             var id = parameters.Get<int>("@NewId");
+            Console.WriteLine($"NewId from SP: {id}");
             return id;
         }
 
