@@ -10,6 +10,7 @@ namespace WSC.CRM.Domain.Entities
         public ActivityType Type { get; set; }
         public DateTime ScheduledAt { get; set; }
         public DateTime? CompletedAt { get; set; }
+        public bool IsActive { get; set; }
 
         public int LeadId { get; set; }
         public Lead Lead { get; set; }

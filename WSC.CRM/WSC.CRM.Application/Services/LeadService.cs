@@ -79,7 +79,7 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<bool>> UpdateLeadAsync(UpdateLeadDto dto, CancellationToken ct)
         {
-            var lead =await _repo.GetLeadByIdAsync(dto.LeadId, ct);
+            var lead =await _repo.GetLeadEntityByIdAsync(dto.LeadId, ct);
             if (lead == null)
                 throw new NotFoundException("Lead", dto.LeadId);
 
@@ -89,7 +89,6 @@ namespace WSC.CRM.Application.Services
             return updated 
                 ? ApiResponse<bool>.Ok(true, "Lead updated successfully.")
                 : ApiResponse<bool>.Failed("Failed to update lead.");
-
         }
 
         public async Task<ApiResponse<bool>> UpdateLeadStatusAsync(int id, LeadStatus newStatus, CancellationToken ct)

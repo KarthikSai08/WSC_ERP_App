@@ -13,7 +13,7 @@ namespace WSC.CRM.Domain.Entities
         public decimal Amount { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? ClosedAt { get; set; }
-
+        public bool IsActive { get; set; }
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
     }
