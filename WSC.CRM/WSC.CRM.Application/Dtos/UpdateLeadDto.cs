@@ -10,7 +10,6 @@ namespace WSC.CRM.Application.Dtos
         public string? LeadName { get; set; }
         public string? LeadEmail { get; set; }
         public string? LeadPhone { get; set; }
-        public LeadStatus? Status { get; set; }
         public DateTime? UpdatedAt { get; set; } 
     }
 }

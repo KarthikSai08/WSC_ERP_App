@@ -11,8 +11,6 @@ namespace WSC.CRM.Application.Dtos
         public string LeadEmail { get; set; }
         public string LeadPhone { get; set; }
 
-        public LeadStatus Status { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public int CustomerId { get; set; }
     }
 }

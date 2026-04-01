@@ -11,8 +11,8 @@ namespace WSC.CRM.Domain.Entities
         public LeadStatus Status { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set;  }
-
         public int CustomerId { get; set; }
+        public bool IsActive { get; set; }
         public Customer Customer { get; set; }
 
         public ICollection<Activity> Activities { get; set; }
