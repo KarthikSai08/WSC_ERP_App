@@ -1,9 +1,7 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using WSC.CRM.Application.Interfaces;
+using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Domain.Entities;
 using WSC.CRM.Infrastructure.Persistence.Context;
 
@@ -13,12 +11,12 @@ namespace WSC.CRM.Infrastructure.Repositories
     {
         private readonly DapperContext _context;
         public CustomerRepository(DapperContext context) => _context = context;
-        
+
 
         public async Task<int> CreateCustomerAsync(Customer cx, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            
+
             var parameters = new DynamicParameters();
             parameters.Add("@CxName", cx.CxName);
             parameters.Add("@CxEmail", cx.CxEmail);
@@ -53,9 +51,9 @@ namespace WSC.CRM.Infrastructure.Repositories
                         SET IsActive = 0, UpdatedAt = SYSUTCDATETIME()
                         WHERE CxId = @Id AND IsActive = 1";
 
-            var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, new {Id = id}, cancellationToken: ct));
+            var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
 
-            return affectedRows > 0;   
+            return affectedRows > 0;
         }
 
         public async Task<bool> ExistsByEmailAsync(string email, CancellationToken ct)
@@ -65,7 +63,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                         FROM crm.Customers 
                         WHERE CxEmail = @Email AND IsActive = 1";
 
-            var exists = await con.QueryFirstOrDefaultAsync<int?>(new CommandDefinition(sql, new {Email = email}, cancellationToken: ct));
+            var exists = await con.QueryFirstOrDefaultAsync<int?>(new CommandDefinition(sql, new { Email = email }, cancellationToken: ct));
 
             return exists.HasValue;
 
@@ -114,7 +112,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                 sql.Append(", CxEmail = @CxEmail");
                 parameters.Add("CxEmail", cx.CxEmail);
             }
-            if(!string.IsNullOrWhiteSpace(cx.CxPhone))
+            if (!string.IsNullOrWhiteSpace(cx.CxPhone))
             {
                 sql.Append(", CxPhone = @CxPhone");
                 parameters.Add("CxPhone", cx.CxPhone);
@@ -147,7 +145,7 @@ namespace WSC.CRM.Infrastructure.Repositories
             }
             sql.Append(" WHERE CxId = @CxId AND IsActive = 1");
 
-            var updated = await con.ExecuteAsync(new CommandDefinition(sql.ToString(),parameters, cancellationToken: ct));
+            var updated = await con.ExecuteAsync(new CommandDefinition(sql.ToString(), parameters, cancellationToken: ct));
 
             return updated > 0;
         }

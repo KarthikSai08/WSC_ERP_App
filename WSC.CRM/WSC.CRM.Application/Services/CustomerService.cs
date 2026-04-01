@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.CRM.Application.Dtos;
-using WSC.CRM.Application.Interfaces;
+using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Application.Interfaces.Services;
 using WSC.CRM.Domain.Entities;
 using WSC.Shared.Contracts.Common;
@@ -38,14 +35,14 @@ namespace WSC.CRM.Application.Services
             customer.CxAddress.Country = dto.Country;
             var newCxId = await _repo.CreateCustomerAsync(customer, ct);
 
-            return ApiResponse<int>.Ok(newCxId,"Customer created Successfully");
+            return ApiResponse<int>.Ok(newCxId, "Customer created Successfully");
         }
 
         public async Task<ApiResponse<bool>> DeleteCustomerAsync(int id, CancellationToken ct)
         {
             var result = await _repo.DeleteCustomerAsync(id, ct);
             return result
-               ?  ApiResponse<bool>.Ok(true,"Customer DeActivated Successfully")
+               ? ApiResponse<bool>.Ok(true, "Customer DeActivated Successfully")
                : ApiResponse<bool>.Failed("Customer deactivation failed!!");
         }
 
@@ -53,8 +50,8 @@ namespace WSC.CRM.Application.Services
         {
             var customers = await _repo.GetAllCustomersAsync(ct);
 
-            if(customers == null || !customers.Any())
-                return ApiResponse<IEnumerable<CustomerResponseDto>>.Ok(new List<CustomerResponseDto>(),"No Customers found");
+            if (customers == null || !customers.Any())
+                return ApiResponse<IEnumerable<CustomerResponseDto>>.Ok(new List<CustomerResponseDto>(), "No Customers found");
 
             var allCustomers = _mapper.Map<IEnumerable<CustomerResponseDto>>(customers);
             return ApiResponse<IEnumerable<CustomerResponseDto>>.Ok(allCustomers, "Customers retrived Successfully");
@@ -80,7 +77,7 @@ namespace WSC.CRM.Application.Services
             if (customer == null)
                 throw new NotFoundException("Customer", dto.CxId);
 
-            _mapper.Map(dto,customer);
+            _mapper.Map(dto, customer);
 
             var updatedCustomer = await _repo.UpdateCustomerAsync(customer, ct);
 

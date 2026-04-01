@@ -14,6 +14,7 @@ namespace WSC.CRM.Application.DependencyInjection
         {
             var assembly = Assembly.GetExecutingAssembly();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ILeadService, LeadService>();
 
             return services;
         }

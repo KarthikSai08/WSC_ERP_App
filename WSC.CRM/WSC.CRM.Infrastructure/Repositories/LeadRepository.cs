@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using System.Data;
-using System.Collections.Generic;
 using System.Text;
 using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Domain.Entities;
@@ -29,10 +28,10 @@ namespace WSC.CRM.Infrastructure.Repositories
             parameters.Add("@NewId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             await con.ExecuteAsync(
-                "sp_CreateLead",
-                parameters, commandType: CommandType.StoredProcedure );
+                "crm.sp_CreateLead",
+                parameters, commandType: CommandType.StoredProcedure);
 
-            var leadId = parameters.Get<int>("@Id");
+            var leadId = parameters.Get<int>("@NewId");
             return leadId;
         }
 
@@ -50,11 +49,15 @@ namespace WSC.CRM.Infrastructure.Repositories
         public async Task<bool> ExistsByLeadAsync(string email, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT COUNT(1) FROM crm.Leads
-                        WHERE LeadEmail = @Email AND IsActive = 1"; 
-            var exists = await con.QueryFirstOrDefaultAsync<int?>(new CommandDefinition(sql, new { Email = email }, cancellationToken: ct));
+            var sql = @"SELECT 1 
+                        WHERE EXISTS (
+                            SELECT 1 FROM crm.Leads
+                            WHERE LeadEmail = @Email AND IsActive = 1
+                        )";
+            var result = await con.QueryFirstOrDefaultAsync<int?>(
+                new CommandDefinition(sql, new { Email = email }, cancellationToken: ct));
 
-            return exists > 0;
+            return result.HasValue;
         }
 
         public async Task<IEnumerable<Lead>> GetAllLeadsAsync(CancellationToken ct)
@@ -62,20 +65,20 @@ namespace WSC.CRM.Infrastructure.Repositories
             using var con = _context.CreateConnection();
             var sql = @"SELECT l.LeadId, l.LeadName, l.LeadEmail, l.LeadPhone, l.Status, l.CreatedAt, l.UpdatedAt, l.CustomerId, c.CxName AS CustomerName, l.IsActive
                         FROM crm.Leads l
-                        JOIN crm.Customers c ON l.CustomerId = c.CxId
-                        WHERE IsActive = 1";
-            var leads =await con.QueryAsync<Lead>(new CommandDefinition(sql, cancellationToken: ct));
+                        INNER JOIN crm.Customers c ON l.CustomerId = c.CxId
+                        WHERE l.IsActive = 1";
+            var leads = await con.QueryAsync<Lead>(new CommandDefinition(sql, cancellationToken: ct));
             return leads;
         }
 
         public async Task<Lead?> GetLeadByIdAsync(int id, CancellationToken ct)
         {
-            using var con = _context.CreateConnection();    
+            using var con = _context.CreateConnection();
             var sql = @"SELECT LeadId, LeadName, LeadEmail, LeadPhone, Status, CreatedAt, UpdatedAt, CustomerId
                         FROM crm.Leads
                         WHERE LeadId = @Id AND IsActive = 1";
 
-            var lead =await con.QueryFirstOrDefaultAsync<Lead>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
+            var lead = await con.QueryFirstOrDefaultAsync<Lead>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
 
             return lead;
         }
@@ -90,17 +93,17 @@ namespace WSC.CRM.Infrastructure.Repositories
             var parameters = new DynamicParameters();
             parameters.Add("@LeadId", lead.LeadId);
 
-            if(!string.IsNullOrEmpty(lead.LeadName))
+            if (!string.IsNullOrWhiteSpace(lead.LeadName))
             {
                 sql.Append(", LeadName = @LeadName");
                 parameters.Add("@LeadName", lead.LeadName);
             }
-            if(!string.IsNullOrEmpty(lead.LeadEmail))
+            if (!string.IsNullOrWhiteSpace(lead.LeadEmail))
             {
                 sql.Append(", LeadEmail = @LeadEmail");
                 parameters.Add("@LeadEmail", lead.LeadEmail);
             }
-            if(!string.IsNullOrEmpty(lead.LeadPhone))
+            if (!string.IsNullOrWhiteSpace(lead.LeadPhone))
             {
                 sql.Append(", LeadPhone = @LeadPhone");
                 parameters.Add("@LeadPhone", lead.LeadPhone);
@@ -118,7 +121,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                         SET Status = @Status, UpdatedAt = SYSUTCDATETIME() 
                         WHERE LeadId = @Id AND IsActive = 1";
 
-            var affectedrows =await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id, Status = newStatus }, cancellationToken: ct));
+            var affectedrows = await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id, Status = (int)newStatus }, cancellationToken: ct));
 
             return affectedrows > 0;
         }

@@ -1,8 +1,6 @@
 ﻿using WSC.CRM.Domain.Entities;
-using WSC.Shared.Contracts.Common;
-using WSC.Shared.Contracts.Dtos;
 
-namespace WSC.CRM.Application.Interfaces
+namespace WSC.CRM.Application.Interfaces.Repository
 {
     public interface ICustomerRepository
     {

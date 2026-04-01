@@ -13,7 +13,8 @@ namespace WSC.CRM.Application.Mappings
         public LeadProfile()
         {
             CreateMap<Lead, LeadResponseDto>()
-                .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.CxName));
+                .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.CxName))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
 
             CreateMap<CreateLeadDto, Lead> ();
             CreateMap<UpdateLeadDto, Lead>();

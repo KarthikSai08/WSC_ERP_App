@@ -11,7 +11,7 @@ namespace WSC.Shared.Contracts.Dtos
         public string LeadName { get; set; }
         public string LeadPhone { get; set; }
 
-        public LeadStatus Status { get; set; }
+        public string Status { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public int CustomerId { get; set; }
