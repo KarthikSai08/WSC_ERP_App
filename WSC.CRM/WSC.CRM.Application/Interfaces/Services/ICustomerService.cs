@@ -14,5 +14,6 @@ namespace WSC.CRM.Application.Interfaces.Services
             Task<ApiResponse<IEnumerable<CustomerResponseDto>>> GetAllAsync(CancellationToken ct);
             Task<ApiResponse<bool>> UpdateCustomerAsync(UpdateCustomerDto dto, CancellationToken ct);
             Task<ApiResponse<bool>> DeleteCustomerAsync(int id, CancellationToken ct);
+            Task<ApiResponse<PagedResponse<CustomerResponseDto>>> GetCustomersAsync(PaginationRequest request, CancellationToken ct);
     }
 }

@@ -1,12 +1,13 @@
 ﻿using Dapper;
-using System.Data;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Domain.Entities;
 using WSC.CRM.Infrastructure.Persistence.Context;
-using WSC.Shared.Contracts.Enums;
+using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos;
+using WSC.Shared.Contracts.Enums;
 
 namespace WSC.CRM.Infrastructure.Repositories
 {
@@ -137,6 +138,44 @@ namespace WSC.CRM.Infrastructure.Repositories
                 WHERE LeadId = @Id AND IsActive = 1";
 
             return await con.QueryFirstOrDefaultAsync<Lead>(sql, new { Id = id });
+        }
+        public async Task<(IEnumerable<LeadResponseDto> Data, int TotalCount)>
+    GetPagedLeadsAsync(PaginationRequest request, CancellationToken ct)
+        {
+            using var con = _context.CreateConnection();
+
+            var sql = @"
+                        SELECT 
+                            l.LeadId,
+                            l.LeadName,
+                            l.LeadPhone,
+                            l.Status,
+                            l.CreatedAt,
+                            l.CustomerId,
+                            c.CxName AS CustomerName,
+                            l.IsActive
+                        FROM crm.Leads l
+                        JOIN crm.Customers c ON l.CustomerId = c.CxId
+                        WHERE l.IsActive = 1
+                        ORDER BY l.LeadId
+                        OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;
+
+                        SELECT COUNT(1)
+                        FROM crm.Leads
+                        WHERE IsActive = 1;
+                    ";
+
+            using var multi = await con.QueryMultipleAsync(
+                new CommandDefinition(sql, new
+                {
+                    Offset = (request.PageNumber - 1) * request.PageSize,
+                    request.PageSize
+                }, cancellationToken: ct));
+
+            var data = await multi.ReadAsync<LeadResponseDto>();
+            var totalCount = await multi.ReadFirstAsync<int>();
+
+            return (data, totalCount);
         }
     }
 }

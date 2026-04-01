@@ -71,6 +71,7 @@ namespace WSC.CRM.Application.Services
             return ApiResponse<CustomerResponseDto>.Ok(result, "Customer Found!");
         }
 
+
         public async Task<ApiResponse<bool>> UpdateCustomerAsync(UpdateCustomerDto dto, CancellationToken ct)
         {
             var customer = await _repo.GetCustomerByIdAsync(dto.CxId, ct);
@@ -84,6 +85,20 @@ namespace WSC.CRM.Application.Services
             return updatedCustomer
                 ? ApiResponse<bool>.Ok(true, "Updated Successfully")
                 : ApiResponse<bool>.Failed("Customer update Failed");
+        }
+        public async Task<ApiResponse<PagedResponse<CustomerResponseDto>>> GetCustomersAsync(PaginationRequest request, CancellationToken ct)
+        {
+            var (data, totalCount) = await _repo.GetPagedCustomersAsync(request, ct);
+
+            var response = new PagedResponse<CustomerResponseDto>(
+                data,
+                request.PageNumber,
+                request.PageSize,
+                totalCount
+            );
+
+            return ApiResponse<PagedResponse<CustomerResponseDto>>
+                .Ok(response, "Leads retrieved successfully.");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using WSC.CRM.Domain.Entities;
+using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos;
 using WSC.Shared.Contracts.Enums;
 
@@ -14,5 +15,6 @@ namespace WSC.CRM.Application.Interfaces.Repository
         Task<bool> DeleteLeadAsync(int id, CancellationToken ct);
         Task<Lead?> GetLeadEntityByIdAsync(int id, CancellationToken ct);
         Task<bool> UpdateLeadStatusAsync(int id, LeadStatus newStatus, CancellationToken ct);
+        Task<(IEnumerable<LeadResponseDto> Data, int TotalCount)> GetPagedLeadsAsync(PaginationRequest request, CancellationToken ct);
     }
 }

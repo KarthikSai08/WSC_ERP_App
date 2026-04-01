@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Services;
+using WSC.Shared.Contracts.Common;
 
 namespace WSC.CRM.API.Controllers
 {
@@ -23,7 +24,7 @@ namespace WSC.CRM.API.Controllers
         public async Task<IActionResult> CreateCustomer(CreateCustomerDto dto, CancellationToken ct)
         {
             var result = await _service.CreateCustomerAsync(dto, ct);
-            if(result.Success)
+            if (result.Success)
                 return Ok(result);
             return BadRequest(result);
         }
@@ -38,8 +39,8 @@ namespace WSC.CRM.API.Controllers
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(int id, CancellationToken ct)
         {
-            var res = await _service.GetByIdAsync(id,ct);
-            if(res.Success)
+            var res = await _service.GetByIdAsync(id, ct);
+            if (res.Success)
                 return Ok(res);
             return BadRequest(res);
         }
@@ -51,6 +52,12 @@ namespace WSC.CRM.API.Controllers
                 return Ok(res);
             return BadRequest(res);
 
+        }
+        [HttpGet("paged-response")]
+        public async Task<IActionResult> GetPagedCustomer([FromQuery] PaginationRequest request, CancellationToken ct)
+        {
+            var result = await _service.GetCustomersAsync(request, ct);
+            return Ok(result);
         }
     }
 }

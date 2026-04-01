@@ -16,6 +16,7 @@ namespace WSC.CRM.Application.Interfaces.Services
         Task<ApiResponse<int>> CreateLeadAsync(CreateLeadDto dto, CancellationToken ct);
         Task<ApiResponse<bool>> UpdateLeadAsync(UpdateLeadDto dto, CancellationToken ct);
         Task<ApiResponse<bool>> DeleteLeadAsync(int id, CancellationToken ct);
+        Task<ApiResponse<PagedResponse<LeadResponseDto>>> GetLeadsAsync(PaginationRequest request, CancellationToken ct);
         Task<ApiResponse<bool>> UpdateLeadStatusAsync(int id, LeadStatus newStatus, CancellationToken ct);
     }
 }

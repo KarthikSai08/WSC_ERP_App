@@ -13,5 +13,8 @@ namespace WSC.Shared.Contracts.Dtos
         public ActivityType Type { get; set; }
         public DateTime ScheduledAt { get; set; }
         public DateTime? CompletedAt { get; set; }
+        public bool IsActive {  get; set; }
+        public int LeadId { get; set; }
+        public string LeadName { get; set; }
     }
 }

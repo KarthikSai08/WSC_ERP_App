@@ -103,5 +103,19 @@ namespace WSC.CRM.Application.Services
                 ? ApiResponse<bool>.Ok(true, "Lead status updated successfully.")
                 : ApiResponse<bool>.Failed("Failed to update lead status.");
         }
+        public async Task<ApiResponse<PagedResponse<LeadResponseDto>>> GetLeadsAsync(PaginationRequest request, CancellationToken ct)
+        {
+            var (data, totalCount) = await _repo.GetPagedLeadsAsync(request, ct);
+
+            var response = new PagedResponse<LeadResponseDto>(
+                data,
+                request.PageNumber,
+                request.PageSize,
+                totalCount
+            );
+
+            return ApiResponse<PagedResponse<LeadResponseDto>>
+                .Ok(response, "Leads retrieved successfully.");
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using WSC.CRM.Domain.Entities;
+using WSC.Shared.Contracts.Common;
+using WSC.Shared.Contracts.Dtos;
 
 namespace WSC.CRM.Application.Interfaces.Repository
 {
@@ -10,5 +12,6 @@ namespace WSC.CRM.Application.Interfaces.Repository
         Task<bool> ExistsByEmailAsync(string email, CancellationToken ct);
         Task<bool> UpdateCustomerAsync(Customer cx, CancellationToken ct);
         Task<bool> DeleteCustomerAsync(int id, CancellationToken ct);
+        Task<(IEnumerable<CustomerResponseDto> Data, int TotalCount)> GetPagedCustomersAsync(PaginationRequest request, CancellationToken ct);
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Services;
+using WSC.Shared.Contracts.Common;
 
 namespace WSC.CRM.API.Controllers
 {
@@ -47,6 +48,12 @@ namespace WSC.CRM.API.Controllers
             var success = await _service.DeleteLeadAsync(id, ct);
             if (success is null) return NotFound();
             return NoContent();
+        }
+        [HttpGet("paged-response")]
+        public async Task<IActionResult> GetLeads( [FromQuery] PaginationRequest request, CancellationToken ct)
+        {
+            var result = await _service.GetLeadsAsync(request, ct);
+            return Ok(result);
         }
     }
 }
