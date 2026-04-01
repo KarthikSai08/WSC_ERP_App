@@ -28,7 +28,7 @@ namespace WSC.CRM.Application.Mappings
                      State = src.State,
                      ZipCode = src.ZipCode,
                      Country = src.Country
-                 })); ;
+                 })); 
         }
     }
 }

@@ -26,13 +26,13 @@ namespace WSC.CRM.Infrastructure.Repositories
             parameters.Add("@LeadPhone", lead.LeadPhone);
             parameters.Add("@CustomerId", lead.CustomerId);
 
-            parameters.Add("@LeadId", dbType: System.Data.DbType.Int32, direction: System.Data.ParameterDirection.Output);
+            parameters.Add("@NewId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             await con.ExecuteAsync(
                 "sp_CreateLead",
                 parameters, commandType: CommandType.StoredProcedure );
 
-            var leadId = parameters.Get<int>("@LeadId");
+            var leadId = parameters.Get<int>("@Id");
             return leadId;
         }
 
@@ -60,8 +60,9 @@ namespace WSC.CRM.Infrastructure.Repositories
         public async Task<IEnumerable<Lead>> GetAllLeadsAsync(CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT LeadId, LeadName, LeadEmail, LeadPhone, Status, CreatedAt, UpdatedAt, CustomerId
-                        FROM crm.Leads
+            var sql = @"SELECT l.LeadId, l.LeadName, l.LeadEmail, l.LeadPhone, l.Status, l.CreatedAt, l.UpdatedAt, l.CustomerId, c.CxName AS CustomerName, l.IsActive
+                        FROM crm.Leads l
+                        JOIN crm.Customers c ON l.CustomerId = c.CxId
                         WHERE IsActive = 1";
             var leads =await con.QueryAsync<Lead>(new CommandDefinition(sql, cancellationToken: ct));
             return leads;
