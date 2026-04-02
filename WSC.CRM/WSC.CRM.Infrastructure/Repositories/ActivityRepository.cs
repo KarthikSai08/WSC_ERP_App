@@ -52,42 +52,56 @@ namespace WSC.CRM.Infrastructure.Repositories
             return affectedRows > 0;
         }
 
-        public async Task<IEnumerable<Activity>> GetActivitiesByLeadIdAsync(int leadId, CancellationToken ct)
+        public async Task<IEnumerable<ActivityResponseDto>> GetActivitiesByLeadIdAsync(int leadId, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT ActivityId, Title, Description, Type, ScheduledAt, CompletedAt, IsActive
-                        FROM crm.Activities
-                        WHERE LeadId = @Id AND IsActive = 1 ";
+            var sql = @"SELECT a.ActivityId, a.Title, a.Description, a.Type, a.ScheduledAt, a.CompletedAt, a.IsActive, a.LeadId, l.LeadName
+                        FROM crm.Activities a
+                        LEFT JOIN crm.Leads l ON a.LeadId = l.LeadId
+                        WHERE a.LeadId = @Id AND a.IsActive = 1 ";
 
-            var activity = await con.QueryAsync<Activity>(new CommandDefinition(sql, new { Id = leadId }, cancellationToken : ct));
+            var activity = await con.QueryAsync<ActivityResponseDto>(new CommandDefinition(sql, new { Id = leadId }, cancellationToken : ct));
 
             return activity;
         }
 
-        public async Task<Activity?> GetActivityByIdAsync(int id, CancellationToken ct)
+        public async Task<ActivityResponseDto?> GetActivityByIdAsync(int id, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT ActivityId, Title, Description, Type, ScheduledAt, CompletedAt, IsActive
-                        FROM crm.Activities
-                        WHERE ActivityId = @Id AND IsActive = 1";
+            var sql = @"SELECT a.ActivityId, a.Title, a.Description, a.Type, a.ScheduledAt, a.CompletedAt, a.IsActive, a.LeadId, l.LeadName
+                        FROM crm.Activities a
+                        LEFT JOIN crm.Leads l ON a.LeadId = l.LeadId
+                        WHERE a.ActivityId = @Id AND a.IsActive = 1";
 
-            var activity = await con.QueryFirstOrDefaultAsync<Activity>(new CommandDefinition(sql, new { Id = id }, cancellationToken : ct));
+            var activity = await con.QueryFirstOrDefaultAsync<ActivityResponseDto>(new CommandDefinition(sql, new { Id = id }, cancellationToken : ct));
 
             return activity;
         }
 
-        public async Task<IEnumerable<Activity>> GetAllActivitiesAsync(CancellationToken ct)
+        public async Task<Activity?> GetActivityEntityByIdAsync(int id, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT ActivityId, Title, Description, Type, ScheduledAt, CompletedAt, IsActive
-                        FROM crm.Activities
+            var sql = @"SELECT ActivityId, Title, Description, Type, ScheduledAt, CompletedAt, IsActive, LeadId
+                        FROM crm.Activities 
                         WHERE IsActive = 1";
 
-            var activities = await con.QueryAsync<Activity>(new CommandDefinition(sql, cancellationToken: ct));
+            var activity = await con.QueryFirstOrDefaultAsync<Activity>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
+            return activity;
+        }
+
+        public async Task<IEnumerable<ActivityResponseDto>> GetAllActivitiesAsync(CancellationToken ct)
+        {
+            using var con = _context.CreateConnection();
+            var sql = @"SELECT a.ActivityId, a.Title, a.Description, a.Type, a.ScheduledAt, a.CompletedAt, a.IsActive, a.LeadId, l.LeadName
+                        FROM crm.Activities a
+                        LEFT JOIN crm.Leads l ON a.LeadId = l.LeadId
+                        WHERE a.IsActive = 1";
+
+            var activities = await con.QueryAsync<ActivityResponseDto>(new CommandDefinition(sql, cancellationToken: ct));
             return activities;
         }
 
-        public Task<IEnumerable<Activity>> GetAllActivitiesByFilterAsync(CancellationToken ct)
+        public Task<IEnumerable<ActivityResponseDto>> GetAllActivitiesByFilterAsync(CancellationToken ct)
         {
             throw new NotImplementedException();
         }
@@ -109,12 +123,12 @@ namespace WSC.CRM.Infrastructure.Repositories
                             a.IsActive
                         FROM crm.Activities a
                         LEFT JOIN crm.Leads l ON a.LeadId = l.LeadId
-                        WHERE IsActive = 1
+                        WHERE a.IsActive = 1
                         ORDER BY a.ScheduledAt DESC
                         OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;
 
                         SELECT COUNT(1)
-                        FROM crm.Activities
+                        FROM crm.Activities a
                         WHERE a.IsActive = 1;
                     ";
 

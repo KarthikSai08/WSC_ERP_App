@@ -14,6 +14,7 @@ namespace WSC.CRM.Infrastructure.DependencyInjection
 
             service.AddScoped<ILeadRepository, LeadRepository>();
             service.AddScoped<ICustomerRepository, CustomerRepository>();
+            service.AddScoped<IActivityRepository, ActivityRepository>();
 
             return service;
         }

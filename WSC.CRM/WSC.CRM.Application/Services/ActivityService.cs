@@ -13,16 +13,23 @@ namespace WSC.CRM.Application.Services
     public class ActivityService : IActivityService
     {
         private readonly IActivityRepository _repo;
+        private readonly ILeadRepository _leadRepo;
         private readonly IMapper _mapper;
-        public ActivityService(IActivityRepository repo, IMapper mapper)
+        public ActivityService(IActivityRepository repo, IMapper mapper, ILeadRepository leadRepo)
         {
             _mapper = mapper;
             _repo = repo;
+            _leadRepo = leadRepo;
         }
         public async Task<ApiResponse<int>> CreateActivityAsync(CreateActivityDto dto, CancellationToken ct)
         {
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
+            var lead = await _leadRepo.GetLeadByIdAsync(dto.LeadId, ct);
+            if (lead == null)
+                throw new NotFoundException("Lead", dto.LeadId);
+            if (!lead.IsActive)
+                throw new InActiveException("Lead", dto.LeadId);
 
             if (string.IsNullOrWhiteSpace(dto.Title))
                 throw new ValidationException("Title is Required !");
@@ -31,7 +38,7 @@ namespace WSC.CRM.Application.Services
             var activityId = await _repo.CreateActivityAsync(act, ct);
 
             if (activityId <= 0)
-                throw new NotFoundException("Activity", activityId);
+                throw new Exception("Failed to Create Activity");
 
             return ApiResponse<int>.Ok(activityId, "Activity created successfully");
         }
@@ -79,16 +86,14 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<IEnumerable<ActivityResponseDto>>> GetAllActivitiesAsync(CancellationToken ct)
         {
-            var activities =await _repo.GetAllActivitiesAsync(ct);
-            if(activities == null || !activities.Any())
-                return ApiResponse<IEnumerable<ActivityResponseDto>>.Failed("No activities found");
+            var activities = await _repo.GetAllActivitiesAsync(ct);
 
-            var mappedActivities = _mapper.Map<IEnumerable<ActivityResponseDto>>(activities);
+            var mappedActivities = activities != null
+                ? _mapper.Map<IEnumerable<ActivityResponseDto>>(activities)
+                : Enumerable.Empty<ActivityResponseDto>();
 
             return ApiResponse<IEnumerable<ActivityResponseDto>>
-                .Ok(mappedActivities , "Activities retrieved successfully");
-
-
+                .Ok(mappedActivities, "Activities retrieved successfully");
         }
 
         public Task<ApiResponse<IEnumerable<ActivityResponseDto>>> GetAllActivitiesByFilterAsync(CancellationToken ct)
@@ -101,7 +106,7 @@ namespace WSC.CRM.Application.Services
             var (data, totalCount) =await _repo.GetPagedActivitiesAsync(request, ct);
 
             var mappedData = _mapper.Map<IEnumerable<ActivityResponseDto>>(data);
-            var respone = new PagedResponse<ActivityResponseDto>
+            var response = new PagedResponse<ActivityResponseDto>
             (
                 mappedData,
                 request.PageSize,
@@ -110,7 +115,7 @@ namespace WSC.CRM.Application.Services
             );
 
             return ApiResponse<PagedResponse<ActivityResponseDto>>
-                .Ok(respone, "Paged activities retrieved successfully");
+                .Ok(response, "Paged activities retrieved successfully");
         }
 
         public async Task<ApiResponse<bool>> UpdateActivityAsync(UpdateActivityDto act, CancellationToken ct)
@@ -121,7 +126,9 @@ namespace WSC.CRM.Application.Services
             if(act.ActivityId <= 0)
                 throw new NotFoundException("Activity", act.ActivityId);
 
-            var activity = await _repo.GetActivityByIdAsync(act.ActivityId, ct);
+            var activity = await _repo.GetActivityEntityByIdAsync(act.ActivityId, ct);
+            if (activity == null)
+                throw new NotFoundException("Activity", act.ActivityId);
 
             _mapper.Map(act, activity);
             var updated = await _repo.UpdateActivityAsync(activity, ct);
@@ -135,8 +142,22 @@ namespace WSC.CRM.Application.Services
         {
             if(actId <= 0)
                 throw new NotFoundException("Activity", actId);
+            var act = await _repo.GetActivityEntityByIdAsync(actId, ct);
+            if (act == null)
+                throw new NotFoundException("Activity", actId);
+
+            if (act.ScheduledAt == null)
+                throw new Exception("Scheduled At cannot be null");
+            if (act.CompletedAt != null)
+                throw new Exception("Activity is Already Completed");
+
+            var now = DateTime.UtcNow;
+
+            if (now < act.ScheduledAt)
+                throw new ValidationException("Cannot complete before Scheduled time");
 
             var updated =await _repo.UpdateCompletedAtAsync(actId, ct);
+           
 
             return updated
                 ? ApiResponse<bool>.Ok(true, "Activity completion status updated successfully")
