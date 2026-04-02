@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using WSC.Shared.Contracts.Enums;
 
-namespace WSC.Shared.Contracts.Dtos
+namespace WSC.CRM.Application.Dtos
 {
-    public class OpportunityResponseDto
+    public class CreateOpportunityDto
     {
-        public int OpportunityId { get; set; }
+        [Required]
         public string OpportunityName { get; set; } = null!;
+        [Required]
         public OpportunityStage Stage { get; set; }
         public decimal Amount { get; set; }
-        public DateTime CreatedAt { get; set; } 
         public DateTime? ClosedAt { get; set; }
-
+        [Required]
         public int CustomerId { get; set; }
-        public string CustomerName { get; set; } 
     }
 }
