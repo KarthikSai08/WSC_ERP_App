@@ -7,7 +7,7 @@ namespace WSC.Store.Application.DependencyInjection
 {
     public static class ApplicationService
     {
-        public static IServiceCollection AddApplicationService(this IServiceCollection service)
+        public static IServiceCollection AddStoreApplicationService(this IServiceCollection service)
         {
             // Register application services here (e.g., business logic services, application layer services, etc.)
             // Example:

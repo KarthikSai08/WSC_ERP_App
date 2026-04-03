@@ -12,9 +12,13 @@
 
   <ItemGroup>
     <Folder Include="Dtos\" />
-    <Folder Include="Interfaces\" />
+    <Folder Include="Interfaces\ServiceInterfaces\" />
     <Folder Include="Mappings\" />
     <Folder Include="Service\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WSC.Store.Domain\WSC.Store.Domain.csproj" />
   </ItemGroup>
 
 </Project>

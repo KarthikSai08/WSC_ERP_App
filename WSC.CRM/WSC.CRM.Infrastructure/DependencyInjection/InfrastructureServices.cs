@@ -7,7 +7,7 @@ namespace WSC.CRM.Infrastructure.DependencyInjection
 {
     public static class InfrastructureServices
     {
-        public static IServiceCollection AddInfrastructureService(this IServiceCollection service)
+        public static IServiceCollection AddCRMInfrastructureService(this IServiceCollection service)
         {
 
             service.AddScoped<DapperContext>();

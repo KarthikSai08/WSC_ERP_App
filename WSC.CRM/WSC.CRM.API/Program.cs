@@ -17,8 +17,8 @@ builder.Services.AddControllers()
 builder.Services.AddOpenApi();
 
 
-builder.Services.AddApplicationService();
-builder.Services.AddInfrastructureService();
+builder.Services.AddCRMApplicationService();
+builder.Services.AddCRMInfrastructureService();
 
 builder.Services.AddAutoMapper(cfg =>
 {

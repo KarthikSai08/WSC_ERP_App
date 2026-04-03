@@ -17,4 +17,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WSC.Store.Application\WSC.Store.Application.csproj" />
+    <ProjectReference Include="..\WSC.Store.Infrastructure\WSC.Store.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
