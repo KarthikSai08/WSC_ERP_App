@@ -13,6 +13,7 @@ namespace WSC.CRM.Application.DependencyInjection
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ILeadService, LeadService>();
             services.AddScoped<IActivityService, ActivityService>();
+            services.AddScoped<IOpportunityService, OpportunityService>();
 
             return services;
         }

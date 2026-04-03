@@ -52,9 +52,9 @@ namespace WSC.CRM.Infrastructure.Repositories
         public async Task<IEnumerable<OpportunityResponseDto>> GetAllAOpportunitiesByFilterAsync(CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CustomerName
+            var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CxName
                         FROM crm.Opportunities o
-                        INNER JOIN crm.Customers c ON o.CustomerId = c.CustomerId
+                        INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1 AND o.Stage IN (0,1)
                         ORDER BY CreatedAt DESC";
             var opportunities = await con.QueryAsync<OpportunityResponseDto>(new CommandDefinition( sql, cancellationToken: ct));
@@ -64,9 +64,9 @@ namespace WSC.CRM.Infrastructure.Repositories
         public async Task<IEnumerable<OpportunityResponseDto>> GetAllOpportunitiesAsync(CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CustomerName
+            var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CxName
                         FROM crm.Opportunities o
-                        INNER JOIN crm.Customers c ON o.CustomerId = c.CustomerId
+                        INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1
                         ORDER BY CreatedAt DESC";
 
@@ -77,9 +77,9 @@ namespace WSC.CRM.Infrastructure.Repositories
         public async Task<IEnumerable<OpportunityResponseDto>> GetOpportunitiesByCustomerIdAsync(int cxId, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CustomerName
+            var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CxName
                         FROM crm.Opportunities o
-                        INNER JOIN crm.Customers c ON o.CustomerId = c.CustomerId
+                        INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1 AND o.CustomerId = @CustomerId
                         ORDER BY o.CreatedAt DESC";
 
@@ -90,9 +90,9 @@ namespace WSC.CRM.Infrastructure.Repositories
         public async Task<OpportunityResponseDto?> GetOpportunityByIdAsync(int id, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CustomerName
+            var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CxName
                         FROM crm.Opportunities o
-                        INNER JOIN crm.Customers c ON o.CustomerId = c.CustomerId
+                        INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1 AND o.OpportunityId = @OpportunityId";
 
             var opportunity =await con.QueryFirstOrDefaultAsync<OpportunityResponseDto>(new CommandDefinition(sql, new { OpportunityId = id }, cancellationToken: ct));
@@ -123,9 +123,9 @@ namespace WSC.CRM.Infrastructure.Repositories
                             o.CreatedAt,
                             o.ClosedAt,
                             o.CustomerId,
-                            c.CustomerName
+                            c.CxName
                         FROM crm.Opportunities o
-                        INNER JOIN crm.Customers c ON o.CustomerId = c.CustomerId
+                        INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1
                         ORDER BY CreatedAt DESC
                         OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;
