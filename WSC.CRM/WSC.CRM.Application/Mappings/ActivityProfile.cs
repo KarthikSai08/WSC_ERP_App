@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Domain.Entities;
-using WSC.Shared.Contracts.Dtos;
+using WSC.Shared.Contracts.Dtos.CRMLayer;
 
 namespace WSC.CRM.Application.Mappings
 {

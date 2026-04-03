@@ -1,6 +1,6 @@
 ﻿using WSC.CRM.Domain.Entities;
 using WSC.Shared.Contracts.Common;
-using WSC.Shared.Contracts.Dtos;
+using WSC.Shared.Contracts.Dtos.CRMLayer;
 using WSC.Shared.Contracts.Enums;
 
 namespace WSC.CRM.Application.Interfaces.Repository

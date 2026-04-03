@@ -9,9 +9,9 @@ namespace WSC.Store.Application.Interfaces.RepositoryInterfaces
     {
         Task<IEnumerable<Product>> GetAllProductsAsync(CancellationToken ct);
         Task<Product?> GetProductByIdAsync(int id, CancellationToken ct);
-        Task<int> CreateProductAsync(Product cx, CancellationToken ct);
+        Task<int> CreateProductAsync(Product prd, CancellationToken ct);
         Task<bool> ExistsBySKUAsync(string email, CancellationToken ct);
-        Task<bool> UpdateProductAsync(Product cx, CancellationToken ct);
+        Task<bool> UpdateProductAsync(Product prd, CancellationToken ct);
         Task<bool> DeleteProductAsync(int id, CancellationToken ct);
       //  Task<(IEnumerable<CustomerResponseDto> Data, int TotalCount)> GetPagedCustomersAsync(PaginationRequest request, CancellationToken ct);
     }

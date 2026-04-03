@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime;
 using System.Text;
 
-namespace WSC.Shared.Contracts.Dtos
+namespace WSC.Shared.Contracts.Dtos.CRMLayer
 {
     public class CustomerResponseDto
     {

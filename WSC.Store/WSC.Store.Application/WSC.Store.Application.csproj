@@ -11,13 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\" />
-    <Folder Include="Interfaces\ServiceInterfaces\" />
-    <Folder Include="Mappings\" />
-    <Folder Include="Service\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\WSC.Shared\WSC.Shared.Contracts\WSC.Shared.Contracts.csproj" />
     <ProjectReference Include="..\WSC.Store.Domain\WSC.Store.Domain.csproj" />
   </ItemGroup>
 

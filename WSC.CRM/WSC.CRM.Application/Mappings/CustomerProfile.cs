@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Domain.Entities;
-using WSC.Shared.Contracts.Dtos;
+using WSC.Shared.Contracts.Dtos.CRMLayer;
 using WSC.Shared.Contracts.ValueObjects;
 
 namespace WSC.CRM.Application.Mappings

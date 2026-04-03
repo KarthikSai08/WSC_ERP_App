@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using WSC.Shared.Contracts.Enums;
 
-namespace WSC.Shared.Contracts.Dtos
+namespace WSC.Shared.Contracts.Dtos.CRMLayer
 {
     public class OpportunityResponseDto
     {
