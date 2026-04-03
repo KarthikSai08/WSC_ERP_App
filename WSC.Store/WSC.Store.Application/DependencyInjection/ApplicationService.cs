@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Reflection;
+using WSC.Store.Application.Interfaces.ServiceInterfaces;
+using WSC.Store.Application.Service;
 
 namespace WSC.Store.Application.DependencyInjection
 {
@@ -9,10 +9,9 @@ namespace WSC.Store.Application.DependencyInjection
     {
         public static IServiceCollection AddStoreApplicationService(this IServiceCollection service)
         {
-            // Register application services here (e.g., business logic services, application layer services, etc.)
-            // Example:
-            // service.AddScoped<IOrderService, OrderService>();
-            // service.AddScoped<IProductService, ProductService>();
+            var assembly = Assembly.GetExecutingAssembly();
+            service.AddScoped<IProductService, ProductService>();
+
             return service;
         }
     }

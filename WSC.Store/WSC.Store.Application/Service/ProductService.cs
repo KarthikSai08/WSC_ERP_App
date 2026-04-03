@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using System.Text.RegularExpressions;
 using WSC.Shared.Contracts.Common;
-using WSC.Shared.Contracts.Dtos.CRMLayer;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
+using WSC.Shared.Contracts.Exceptions;
 using WSC.Store.Application.Dtos;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 using WSC.Store.Application.Interfaces.ServiceInterfaces;
@@ -24,16 +21,21 @@ namespace WSC.Store.Application.Service
         }
         public async Task<ApiResponse<int>> CreateProductAsync(CreateProductDto dto, CancellationToken ct)
         {
-            if(dto == null)
-                throw new ArgumentNullException("Product data cannot be null.");
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
 
             var regex = new Regex(@"^[A-Z]{3,5}-[A-Z0-9]{2,20}-\d{3,6}$");
+            dto.SKU = dto.SKU.ToUpper();
 
             if (!regex.IsMatch(dto.SKU))
                 throw new ValidationException("Invalid SKU format");
+            var exists = await _repo.ExistsBySKUAsync(dto.SKU, ct);
+
+            if (exists)
+                throw new DuplicateException("Product",dto.SKU);
 
             var product = _mapper.Map<Domain.Entities.Product>(dto);
-            var result =await _repo.CreateProductAsync(product, ct);
+            var result = await _repo.CreateProductAsync(product, ct);
 
             return ApiResponse<int>.Ok(result, "Product created successfully.");
 
@@ -41,57 +43,76 @@ namespace WSC.Store.Application.Service
 
         public async Task<ApiResponse<bool>> DeleteProductAsync(int id, CancellationToken ct)
         {
-            if(id <= 0)
+            if (id <= 0)
                 throw new ArgumentException("Invalid product ID.");
 
             var prd = await _repo.GetProductByIdAsync(id, ct);
+            if (prd == null)
+                throw new NotFoundException("Product", id);
 
-            var result =await _repo.DeleteProductAsync(id, ct);
+            var result = await _repo.DeleteProductAsync(id, ct);
             if (!result)
                 return ApiResponse<bool>.Failed("Product not found or could not be deleted.");
 
             return ApiResponse<bool>.Ok(true, "Product deleted successfully.");
         }
 
+
         public async Task<ApiResponse<IEnumerable<ProductResponseDto>>> GetAllProductsAsync(CancellationToken ct)
         {
-            var products =await _repo.GetAllProductsAsync(ct);
-            if(products == null || !products.Any())
-                return ApiResponse<IEnumerable<ProductResponseDto>>.Ok(new List<ProductResponseDto>(), "No products found.");
+            var products = await _repo.GetAllProductsAsync(ct);
 
             var mappedProducts = _mapper.Map<IEnumerable<ProductResponseDto>>(products);
 
-            return ApiResponse<IEnumerable<ProductResponseDto>>.Ok(mappedProducts, "Products retrieved successfully.");
-        }
+            if (!mappedProducts.Any())
+                return ApiResponse<IEnumerable<ProductResponseDto>>
+                    .Ok(mappedProducts, "No products found.");
 
+            return ApiResponse<IEnumerable<ProductResponseDto>>
+                .Ok(mappedProducts, "Products retrieved successfully.");
+        }
         public async Task<ApiResponse<ProductResponseDto?>> GetProductByIdAsync(int id, CancellationToken ct)
         {
-            if(id <= 0)
+            if (id <= 0)
                 throw new ArgumentException("Invalid product ID.");
 
-            var prd =await _repo.GetProductByIdAsync(id, ct);
+            var prd = await _repo.GetProductByIdAsync(id, ct);
             var mappedPrd = _mapper.Map<ProductResponseDto?>(prd);
 
-            return ApiResponse<ProductResponseDto?>.Ok(mappedPrd, mappedPrd != null 
+            return ApiResponse<ProductResponseDto?>.Ok(mappedPrd, mappedPrd != null
                                                                   ? "Product retrieved successfully."
                                                                   : "Product not found.");
         }
 
-        public async Task<ApiResponse<bool>> UpdateProductAsync(UpdateProductDto prd, CancellationToken ct)
+        public async Task<ApiResponse<bool>> UpdateProductAsync(UpdateProductDto dto, CancellationToken ct)
         {
-            if(prd == null)
-                throw new ArgumentNullException("Product data cannot be null.");
-            
-            if(prd.ProductId <= 0)
-                throw new ArgumentException("Invalid product ID.");
+            var regex = new Regex(@"^[A-Z]{3,5}-[A-Z0-9]{2,20}-\d{3,6}$");
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
 
-            var product = await _repo.GetProductByIdAsync(prd.ProductId, ct);
+            if (dto.ProductId <= 0)
+                throw new ValidationException("Invalid product ID");
 
-            var mappedPrd = _mapper.Map(prd, product);
+            var product = await _repo.GetProductByIdAsync(dto.ProductId, ct);
 
-            return await _repo.UpdateProductAsync(mappedPrd, ct) 
-                    ? ApiResponse<bool>.Ok(true, "Product updated successfully.")
-                    : ApiResponse<bool>.Failed("Product not found or could not be updated.");
+            if (product == null)
+                throw new NotFoundException("Product", dto.ProductId);
+
+            if (!string.IsNullOrEmpty(dto.SKU))
+            {
+                dto.SKU = dto.SKU.ToUpper();
+
+                if (!regex.IsMatch(dto.SKU))
+                    throw new ValidationException("Invalid SKU format");
+            }
+
+            _mapper.Map(dto, product);
+
+            var updated = await _repo.UpdateProductAsync(product, ct);
+
+            return updated
+                ? ApiResponse<bool>.Ok(true, "Product updated successfully.")
+                : ApiResponse<bool>.Failed("Failed to update product.");
         }
     }
 }

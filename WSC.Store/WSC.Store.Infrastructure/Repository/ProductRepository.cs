@@ -41,42 +41,42 @@ namespace WSC.Store.Infrastructure.Repository
         {
             using var con = _context.CreateConnection();    
 
-            var sql = @"UPDATE Products
-                        SET IsActive = 1
-                        WHERE Id = @Id";
+            var sql = @"UPDATE store.Products
+                        SET IsActive = 0
+                        WHERE ProductId = @Id";
 
             var deleted =await con.ExecuteAsync(new CommandDefinition( sql, new { Id = id }, cancellationToken : ct));
             return deleted > 0;
         }
 
-        public async Task<bool> ExistsBySKUAsync(string email, CancellationToken ct)
+        public async Task<bool> ExistsBySKUAsync(string sku, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT COUNT(1) FROM Products WHERE SKU = @SKU";    
+            var sql = @"SELECT COUNT(1) FROM store.Products WHERE SKU = @SKU AND IsActive = 1";    
 
-            var exists =await con.ExecuteScalarAsync<int>(new CommandDefinition(sql, new { SKU = email }, cancellationToken : ct));
+            var exists =await con.ExecuteScalarAsync<int>(new CommandDefinition(sql, new { SKU = sku }, cancellationToken : ct));
 
             return exists > 0;
         }
 
-        public Task<IEnumerable<Product>> GetAllProductsAsync(CancellationToken ct)
+        public async Task<IEnumerable<Product>> GetAllProductsAsync(CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT ProductId, ProductName, SKU, Category, Price
-                        FROM Products WHERE IsActive = 0";
+            var sql = @"SELECT ProductId, ProductName, SKU, Category, Price, IsActive
+                        FROM store.Products WHERE IsActive = 1";
 
 
-            var products = con.QueryAsync<Product>(new CommandDefinition(sql, cancellationToken : ct));
+            var products =await con.QueryAsync<Product>(new CommandDefinition(sql, cancellationToken : ct));
             return products;
         }
 
-        public Task<Product?> GetProductByIdAsync(int id, CancellationToken ct)
+        public async Task<Product?> GetProductByIdAsync(int id, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT ProductId, ProductName, SKU, Category, Price
-                        FROM Products WHERE IsActive = 0 AND ProductId = @Id";
+            var sql = @"SELECT ProductId, ProductName, SKU, Category, Price, IsActive
+                        FROM store.Products WHERE IsActive = 1 AND ProductId = @Id";
 
-            var product = con.QuerySingleOrDefaultAsync<Product>(new CommandDefinition(sql, new { Id = id }, cancellationToken : ct));
+            var product =await con.QuerySingleOrDefaultAsync<Product>(new CommandDefinition(sql, new { Id = id }, cancellationToken : ct));
 
             return product;
 
@@ -112,7 +112,7 @@ namespace WSC.Store.Infrastructure.Repository
                 sql.Append(", Price = @Price");
                 parameters.Add("@Price", prd.Price);
             }
-            sql.Append(" WHERE ProductId = @ProductId AND IsActive = 0");
+            sql.Append(" WHERE ProductId = @ProductId AND IsActive = 1");
 
             var updated =await con.ExecuteAsync(new CommandDefinition(sql.ToString(), parameters, cancellationToken : ct));
 

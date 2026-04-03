@@ -1,5 +1,4 @@
 using Scalar.AspNetCore;
-using System.Reflection;
 using WSC.CRM.Application.DependencyInjection;
 using WSC.CRM.Infrastructure.DependencyInjection;
 
