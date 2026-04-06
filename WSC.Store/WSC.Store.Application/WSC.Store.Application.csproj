@@ -9,9 +9,11 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\WSC.CRM\WSC.CRM.Application\WSC.CRM.Application.csproj" />
     <ProjectReference Include="..\..\WSC.Shared\WSC.Shared.Contracts\WSC.Shared.Contracts.csproj" />
     <ProjectReference Include="..\WSC.Store.Domain\WSC.Store.Domain.csproj" />
   </ItemGroup>

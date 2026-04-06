@@ -1,7 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using WSC.Store.Application.Interfaces.ServiceInterfaces;
 using WSC.Store.Application.Service;
+using WSC.Store.Application.Validators.InventoryValidator;
+using WSC.Store.Application.Validators.OrderValidator;
+using WSC.Store.Application.Validators.ProductValidator;
 
 namespace WSC.Store.Application.DependencyInjection
 {
@@ -11,6 +15,8 @@ namespace WSC.Store.Application.DependencyInjection
         {
             var assembly = Assembly.GetExecutingAssembly();
             service.AddScoped<IProductService, ProductService>();
+
+            service.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             return service;
         }
