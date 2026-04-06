@@ -7,7 +7,7 @@ namespace WSC.Store.Application.Dtos
         [Required]
         public string ProductName { get; set; } = null!;
         [Required]
-        public string SKU { get; set; }
+        public string SKU { get; set; } = null!;
         public string? Category { get; set; }
         [Required]
         public decimal Price { get; set; }
