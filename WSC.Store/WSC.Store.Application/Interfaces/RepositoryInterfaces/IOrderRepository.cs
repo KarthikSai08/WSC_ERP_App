@@ -9,7 +9,7 @@ namespace WSC.Store.Application.Interfaces.RepositoryInterfaces
     {
         Task<IEnumerable<Order>> GetAllOrdersAsync(CancellationToken ct);
 
-        Task<Order> GetByIdAsync(int id, CancellationToken ct);
+        Task<Order> GetOrderByIdAsync(int id, CancellationToken ct);
         Task<int> CreateOrderAsync(Order order, CancellationToken ct);
         Task<bool> UpdateOrderAsync(Order order, CancellationToken ct);
         Task<bool> DeleteOrderAsync(int id, CancellationToken ct);

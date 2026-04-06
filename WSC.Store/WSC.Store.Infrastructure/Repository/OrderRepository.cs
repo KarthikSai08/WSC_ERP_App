@@ -61,7 +61,7 @@ namespace WSC.Store.Infrastructure.Repository
             return orders.ToList();
         }
 
-        public async Task<Order> GetByIdAsync(int id, CancellationToken ct)
+        public async Task<Order> GetOrderByIdAsync(int id, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
 
