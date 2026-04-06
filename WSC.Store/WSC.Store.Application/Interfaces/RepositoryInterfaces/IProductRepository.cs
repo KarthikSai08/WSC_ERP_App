@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WSC.Store.Domain.Entities;
+﻿using WSC.Store.Domain.Entities;
 
 namespace WSC.Store.Application.Interfaces.RepositoryInterfaces
 {
@@ -13,6 +10,6 @@ namespace WSC.Store.Application.Interfaces.RepositoryInterfaces
         Task<bool> ExistsBySKUAsync(string email, CancellationToken ct);
         Task<bool> UpdateProductAsync(Product prd, CancellationToken ct);
         Task<bool> DeleteProductAsync(int id, CancellationToken ct);
-      //  Task<(IEnumerable<CustomerResponseDto> Data, int TotalCount)> GetPagedCustomersAsync(PaginationRequest request, CancellationToken ct);
+        //  Task<(IEnumerable<CustomerResponseDto> Data, int TotalCount)> GetPagedCustomersAsync(PaginationRequest request, CancellationToken ct);
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Services;
 using WSC.Shared.Contracts.Common;
@@ -64,7 +63,7 @@ namespace WSC.CRM.API.Controllers
             return BadRequest(result);
         }
         [HttpPut("Update")]
-         public async Task<IActionResult> UpdateOpportunityAsync([FromBody] UpdateOpportunityDto dto, CancellationToken ct)
+        public async Task<IActionResult> UpdateOpportunityAsync([FromBody] UpdateOpportunityDto dto, CancellationToken ct)
         {
             var result = await _service.UpdateOpportunityAsync(dto, ct);
             if (result is not null)

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Shared.Contracts.Common
+﻿namespace WSC.Shared.Contracts.Common
 {
     public class PaginationRequest
     {
@@ -13,13 +9,13 @@ namespace WSC.Shared.Contracts.Common
 
         public int PageNumber
         {
-            get => _pageNumber; 
+            get => _pageNumber;
             set => _pageNumber = value <= 0 ? 1 : value;
         }
 
         public int PageSize
         {
-            get => _pageSize; 
+            get => _pageSize;
             set => _pageSize = value <= 0 ? 10 : (value > MaxPageSize ? MaxPageSize : value);
         }
     }

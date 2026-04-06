@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Services;
 using WSC.Shared.Contracts.Common;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Shared.Contracts.Common
+﻿namespace WSC.Shared.Contracts.Common
 {
     public class PagedResponse<T>
     {

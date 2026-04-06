@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WSC.Shared.Contracts.Enums;
-
-namespace WSC.CRM.Application.Dtos
+﻿namespace WSC.CRM.Application.Dtos
 {
     public class CreateLeadDto
     {

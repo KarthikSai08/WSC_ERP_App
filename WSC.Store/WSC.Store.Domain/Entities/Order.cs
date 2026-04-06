@@ -9,9 +9,9 @@ namespace WSC.Store.Domain.Entities
         [Required]
         public int CustomerId { get; set; }  // integrates with CRM
         public decimal TotalAmount { get; set; }
-        public OrderStatus Status { get; set; } 
+        public OrderStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public bool IsActive { get; set; } 
+        public bool IsActive { get; set; }
     }
 }

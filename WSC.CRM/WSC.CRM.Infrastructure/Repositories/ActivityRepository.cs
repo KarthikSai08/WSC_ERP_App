@@ -1,6 +1,4 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using WSC.CRM.Application.Interfaces.Repository;
@@ -48,7 +46,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                         WHERE ActivityId = @Id AND IsActive = 1
                         ";
 
-            var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id },cancellationToken :ct));
+            var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
             return affectedRows > 0;
         }
 
@@ -60,7 +58,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                         LEFT JOIN crm.Leads l ON a.LeadId = l.LeadId
                         WHERE a.LeadId = @Id AND a.IsActive = 1 ";
 
-            var activity = await con.QueryAsync<ActivityResponseDto>(new CommandDefinition(sql, new { Id = leadId }, cancellationToken : ct));
+            var activity = await con.QueryAsync<ActivityResponseDto>(new CommandDefinition(sql, new { Id = leadId }, cancellationToken: ct));
 
             return activity;
         }
@@ -73,7 +71,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                         LEFT JOIN crm.Leads l ON a.LeadId = l.LeadId
                         WHERE a.ActivityId = @Id AND a.IsActive = 1";
 
-            var activity = await con.QueryFirstOrDefaultAsync<ActivityResponseDto>(new CommandDefinition(sql, new { Id = id }, cancellationToken : ct));
+            var activity = await con.QueryFirstOrDefaultAsync<ActivityResponseDto>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
 
             return activity;
         }
@@ -154,12 +152,12 @@ namespace WSC.CRM.Infrastructure.Repositories
             var parameters = new DynamicParameters();
             parameters.Add("ActivityId", act.ActivityId);
 
-            if(!string.IsNullOrWhiteSpace(act.Title))
+            if (!string.IsNullOrWhiteSpace(act.Title))
             {
                 sql.Append(", Title = @Title");
                 parameters.Add("Title", act.Title);
             }
-            if(!string.IsNullOrWhiteSpace(act.Description))
+            if (!string.IsNullOrWhiteSpace(act.Description))
             {
                 sql.Append(", Description = @Description");
                 parameters.Add("Description", act.Description);

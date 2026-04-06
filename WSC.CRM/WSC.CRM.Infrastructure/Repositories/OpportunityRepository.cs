@@ -19,7 +19,7 @@ namespace WSC.CRM.Infrastructure.Repositories
 
             parameters.Add("@OpportunityName", opp.OpportunityName);
             parameters.Add("@Stage", opp.Stage);
-            parameters.Add("@Amount", opp.Amount);  
+            parameters.Add("@Amount", opp.Amount);
 
             parameters.Add("@ClosedAt", opp.ClosedAt);
             parameters.Add("@CustomerId", opp.CustomerId);
@@ -27,8 +27,8 @@ namespace WSC.CRM.Infrastructure.Repositories
                             "@NewId",
                             dbType: System.Data.DbType.Int32,
                             direction: System.Data.ParameterDirection.Output);
-            
-            var created =await con.ExecuteAsync("crm.sp_CreateOpportunity", 
+
+            var created = await con.ExecuteAsync("crm.sp_CreateOpportunity",
                                        parameters,
                                        commandType: System.Data.CommandType.StoredProcedure);
 
@@ -45,7 +45,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                         WHERE OpportunityId = @Id AND IsActive = 1
                         ";
 
-            var affectedRows =await con.ExecuteAsync(new CommandDefinition( sql, new { Id = id }, cancellationToken: ct));
+            var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
             return affectedRows > 0;
         }
 
@@ -57,7 +57,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                         INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1 AND o.Stage IN (0,1)
                         ORDER BY CreatedAt DESC";
-            var opportunities = await con.QueryAsync<OpportunityResponseDto>(new CommandDefinition( sql, cancellationToken: ct));
+            var opportunities = await con.QueryAsync<OpportunityResponseDto>(new CommandDefinition(sql, cancellationToken: ct));
             return opportunities;
         }
 
@@ -95,7 +95,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                         INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1 AND o.OpportunityId = @OpportunityId";
 
-            var opportunity =await con.QueryFirstOrDefaultAsync<OpportunityResponseDto>(new CommandDefinition(sql, new { OpportunityId = id }, cancellationToken: ct));
+            var opportunity = await con.QueryFirstOrDefaultAsync<OpportunityResponseDto>(new CommandDefinition(sql, new { OpportunityId = id }, cancellationToken: ct));
             return opportunity;
 
         }
@@ -155,7 +155,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                         SET ClosedAt = SYSUTCDATETIME()
                         WHERE OpportunityId = @OpportunityId AND IsActive = 1";
 
-            var affectedRows =await con.ExecuteAsync(new CommandDefinition(sql, new { OpportunityId = oppId }, cancellationToken : ct));
+            var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, new { OpportunityId = oppId }, cancellationToken: ct));
             return affectedRows > 0;
         }
 
@@ -168,17 +168,17 @@ namespace WSC.CRM.Infrastructure.Repositories
             var parameters = new DynamicParameters();
             parameters.Add("@OpportunityId", opp.OpportunityId);
 
-            if(!string.IsNullOrEmpty(opp.OpportunityName))
+            if (!string.IsNullOrEmpty(opp.OpportunityName))
             {
                 sql.Append("OpportunityName = @OpportunityName");
                 parameters.Add("@OpportunityName", opp.OpportunityName);
             }
-            if(opp.Stage != default)
+            if (opp.Stage != default)
             {
                 sql.Append(", Stage = @Stage");
                 parameters.Add("@Stage", opp.Stage);
             }
-            if(opp.Amount != default)
+            if (opp.Amount != default)
             {
                 sql.Append(", Amount = @Amount");
                 parameters.Add("@Amount", opp.Amount);
@@ -186,7 +186,7 @@ namespace WSC.CRM.Infrastructure.Repositories
 
             sql.Append(" WHERE OpportunityId = @OpportunityId AND IsActive = 1");
 
-            var updatedRows = await con.ExecuteAsync(new CommandDefinition(sql.ToString(), parameters, cancellationToken : ct));
+            var updatedRows = await con.ExecuteAsync(new CommandDefinition(sql.ToString(), parameters, cancellationToken: ct));
 
             return updatedRows > 0;
         }

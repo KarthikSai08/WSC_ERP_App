@@ -10,7 +10,7 @@ namespace WSC.Store.Domain.Entities
         public int ProductId { get; set; }
         public int InStock { get; set; }
         public int MinStock { get; set; }
-        public DateTime UpdatedAt { get; set; } 
+        public DateTime UpdatedAt { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsDeleted { get; set; }
     }

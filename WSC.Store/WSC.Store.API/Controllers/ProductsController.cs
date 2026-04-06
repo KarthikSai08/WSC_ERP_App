@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
 using WSC.Store.Application.Dtos;
 using WSC.Store.Application.Interfaces.ServiceInterfaces;
 
@@ -16,8 +15,8 @@ namespace WSC.Store.API.Controllers
         public async Task<IActionResult> GetAllProducts(CancellationToken ct)
         {
             var products = await _service.GetAllProductsAsync(ct);
-                return Ok(products);
-           
+            return Ok(products);
+
         }
         [HttpPost("Create")]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto dto, CancellationToken ct)

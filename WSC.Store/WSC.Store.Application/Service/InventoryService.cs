@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Shared.Contracts.Exceptions;
@@ -29,13 +26,13 @@ namespace WSC.Store.Application.Service
         {
             if (record == null) throw new ArgumentNullException(nameof(record));
 
-            if(record.ProductId <= 0) throw new ValidationException("ProductId must be greater than 0");
+            if (record.ProductId <= 0) throw new ValidationException("ProductId must be greater than 0");
             if (record.InStock < 0) throw new ValidationException("InStock cannot be negative");
 
             var prd = await _productRepo.GetProductByIdAsync(record.ProductId, ct);
             if (prd == null)
-                throw new NotFoundException("ProductId ",record.ProductId);
-            if(prd.IsActive == false)
+                throw new NotFoundException("ProductId ", record.ProductId);
+            if (prd.IsActive == false)
                 throw new ValidationException("Cannot create inventory record for inactive product");
             var exists = await _repo.RecordExistsByProductAsync(record.ProductId, ct);
             if (exists)
@@ -54,14 +51,14 @@ namespace WSC.Store.Application.Service
 
         public async Task<ApiResponse<bool>> DeleteInventoryRecordAsync(int id, CancellationToken ct)
         {
-            if(id <= 0) throw new ValidationException("Id must be greater than 0");
+            if (id <= 0) throw new ValidationException("Id must be greater than 0");
 
-            var existingRecord =await _repo.GetInventoryRecordByIdAsync(id, ct);
+            var existingRecord = await _repo.GetInventoryRecordByIdAsync(id, ct);
 
-            if(existingRecord == null)
+            if (existingRecord == null)
                 throw new NotFoundException("Inventory ", id);
 
-            var deleted =await _repo.DeleteInventoryRecordAsync(id, ct);
+            var deleted = await _repo.DeleteInventoryRecordAsync(id, ct);
 
             return deleted
                         ? ApiResponse<bool>.Ok(true, "Inventory record deleted successfully")
@@ -73,16 +70,16 @@ namespace WSC.Store.Application.Service
         {
             var records = await _repo.GetAllInventoryRecordsAsync(ct);
 
-            var mappedRecords = _mapper.Map<IEnumerable<InventoryResponseDto>>(records);    
+            var mappedRecords = _mapper.Map<IEnumerable<InventoryResponseDto>>(records);
 
             return ApiResponse<IEnumerable<InventoryResponseDto>>.Ok(mappedRecords, "Inventory records retrieved successfully");
         }
 
         public async Task<ApiResponse<InventoryResponseDto>> GetInventoryRecordByIdAsync(int id, CancellationToken ct)
         {
-            if(id <= 0) throw new ValidationException("Id must be greater than 0");
+            if (id <= 0) throw new ValidationException("Id must be greater than 0");
 
-            var record =await _repo.GetInventoryRecordByIdAsync(id, ct);
+            var record = await _repo.GetInventoryRecordByIdAsync(id, ct);
             if (record == null)
                 throw new NotFoundException("Inventory ", id);
 
@@ -94,11 +91,11 @@ namespace WSC.Store.Application.Service
         {
             if (id <= 0)
                 throw new ValidationException("Id must be greater than 0");
-            if(quantity < 0)
+            if (quantity < 0)
                 throw new ValidationException("Quantity cannot be negative");
 
-            var existingRecord =await _repo.GetInventoryRecordByIdAsync(id, ct);
-            if(existingRecord == null)
+            var existingRecord = await _repo.GetInventoryRecordByIdAsync(id, ct);
+            if (existingRecord == null)
                 throw new NotFoundException("Inventory ", id);
 
 

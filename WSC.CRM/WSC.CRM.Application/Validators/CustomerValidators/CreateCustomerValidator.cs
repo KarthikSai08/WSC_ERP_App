@@ -1,12 +1,9 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.CRM.Application.Dtos;
 
 namespace WSC.CRM.Application.Validators.CustomerValidators
 {
-    public  class CreateCustomerValidator : AbstractValidator<CreateCustomerDto>
+    public class CreateCustomerValidator : AbstractValidator<CreateCustomerDto>
     {
         public CreateCustomerValidator()
         {

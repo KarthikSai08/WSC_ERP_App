@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
-using System.Text;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Application.Interfaces.Services;
@@ -27,33 +23,33 @@ namespace WSC.CRM.Application.Services
         }
         public async Task<ApiResponse<int>> CreateOpportunityAsync(CreateOpportunityDto dto, CancellationToken ct)
         {
-            if(dto == null)
+            if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
 
             var cxExists = await _cxRepo.GetCustomerByIdAsync(dto.CustomerId, ct);
             if (cxExists is null)
                 throw new NotFoundException("Customer", dto.CustomerId);
 
-            if(!cxExists.IsActive)
+            if (!cxExists.IsActive)
                 throw new InActiveException("Customer", dto.CustomerId);
 
             var opp = _mapper.Map<Opportunity>(dto);
 
-            var created =await _repo.CreateOpportunityAsync(opp, ct);
-            if(created <= 0)
+            var created = await _repo.CreateOpportunityAsync(opp, ct);
+            if (created <= 0)
                 return ApiResponse<int>.Failed("Failed to create opportunity");
-           
+
             return ApiResponse<int>.Ok(created, "Opportunity created successfully");
         }
 
         public async Task<ApiResponse<bool>> DeleteOpportunityAsync(int id, CancellationToken ct)
         {
-            if(id <= 0)
+            if (id <= 0)
                 throw new ArgumentException("Invalid opportunity id", nameof(id));
 
-            var deleted =await _repo.DeleteOpportunityAsync(id, ct);
-            
-            return deleted ? ApiResponse<bool>.Ok(true, "Opportunity deleted successfully") 
+            var deleted = await _repo.DeleteOpportunityAsync(id, ct);
+
+            return deleted ? ApiResponse<bool>.Ok(true, "Opportunity deleted successfully")
                     : ApiResponse<bool>.Failed("Failed to delete opportunity");
         }
 
@@ -76,10 +72,10 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<IEnumerable<OpportunityResponseDto>>> GetOpportunitiesByCustomerIdAsync(int cxId, CancellationToken ct)
         {
-            if(cxId <= 0)
+            if (cxId <= 0)
                 throw new ArgumentException("Invalid customer id", nameof(cxId));
 
-            var opp =await _repo.GetOpportunitiesByCustomerIdAsync(cxId, ct);
+            var opp = await _repo.GetOpportunitiesByCustomerIdAsync(cxId, ct);
 
             var mappedOpportunities = opp != null
                 ? _mapper.Map<IEnumerable<OpportunityResponseDto>>(opp)
@@ -91,12 +87,12 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<OpportunityResponseDto?>> GetOpportunityByIdAsync(int id, CancellationToken ct)
         {
-            if(id <= 0)
+            if (id <= 0)
                 throw new ArgumentException("Invalid opportunity id", nameof(id));
 
-            var opp =await _repo.GetOpportunityByIdAsync(id, ct);
+            var opp = await _repo.GetOpportunityByIdAsync(id, ct);
             if (opp == null)
-                throw new NotFoundException("Opportunity" , id);
+                throw new NotFoundException("Opportunity", id);
 
             var mappedOpportunity = _mapper.Map<OpportunityResponseDto>(opp);
             return ApiResponse<OpportunityResponseDto?>.Ok(mappedOpportunity, "Opportunity retrieved successfully");
@@ -104,10 +100,10 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<Opportunity?>> GetOpportunityEntityByIdAsync(int id, CancellationToken ct)
         {
-            if(id <= 0)
+            if (id <= 0)
                 throw new ArgumentException("Invalid opportunity id", nameof(id));
 
-            var opp =await _repo.GetOpportunityEntityByIdAsync(id, ct);
+            var opp = await _repo.GetOpportunityEntityByIdAsync(id, ct);
             var mappedOpportunity = opp != null
                 ? _mapper.Map<Opportunity>(opp)
                 : null;
@@ -143,30 +139,30 @@ namespace WSC.CRM.Application.Services
             if (opp.ClosedAt != null)
                 throw new ValidationException("Opportunity already closed");
 
-            var updated =await _repo.UpdateClosedAtAsync(oppId, ct);
+            var updated = await _repo.UpdateClosedAtAsync(oppId, ct);
 
-                
-            return ApiResponse<bool>.Ok(updated, updated ? "Opportunity closed successfully" : "Failed to close opportunity");  
+
+            return ApiResponse<bool>.Ok(updated, updated ? "Opportunity closed successfully" : "Failed to close opportunity");
 
         }
 
         public async Task<ApiResponse<bool>> UpdateOpportunityAsync(UpdateOpportunityDto dto, CancellationToken ct)
         {
-            if(dto == null)
+            if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
-            
-            if(dto.OpportunityId <= 0)
+
+            if (dto.OpportunityId <= 0)
                 throw new ArgumentException("Invalid opportunity id", nameof(dto.OpportunityId));
 
             var opp = await _repo.GetOpportunityEntityByIdAsync(dto.OpportunityId, ct);
-            if(opp == null)
+            if (opp == null)
                 throw new NotFoundException("Opportunity", dto.OpportunityId);
-            
-            _mapper.Map(dto, opp);
-            var updated =await _repo.UpdateOpportunityAsync(opp, ct);
 
-            return updated 
-                    ? ApiResponse<bool>.Ok(true, "Opportunity updated successfully") 
+            _mapper.Map(dto, opp);
+            var updated = await _repo.UpdateOpportunityAsync(opp, ct);
+
+            return updated
+                    ? ApiResponse<bool>.Ok(true, "Opportunity updated successfully")
                     : ApiResponse<bool>.Failed("Failed to update opportunity");
         }
     }

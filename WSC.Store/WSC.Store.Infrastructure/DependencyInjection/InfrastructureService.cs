@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 using WSC.Store.Infrastructure.Persistence.Context;
 using WSC.Store.Infrastructure.Repository;

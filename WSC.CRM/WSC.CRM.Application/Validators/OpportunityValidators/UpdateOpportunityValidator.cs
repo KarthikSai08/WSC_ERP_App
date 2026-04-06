@@ -1,14 +1,11 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.CRM.Application.Dtos;
 
 namespace WSC.CRM.Application.Validators.OpportunityValidators
 {
-    public  class UpdateOpportunityValidator : AbstractValidator<UpdateOpportunityDto>
+    public class UpdateOpportunityValidator : AbstractValidator<UpdateOpportunityDto>
     {
-        public UpdateOpportunityValidator() 
+        public UpdateOpportunityValidator()
         {
             RuleFor(x => x.OpportunityId)
                 .GreaterThan(0).WithMessage("Opportunity ID must be a positive integer.");

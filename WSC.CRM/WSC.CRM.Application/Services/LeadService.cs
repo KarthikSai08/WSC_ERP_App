@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Application.Interfaces.Services;
@@ -25,7 +22,7 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<int>> CreateLeadAsync(CreateLeadDto dto, CancellationToken ct)
         {
-            if(dto == null)
+            if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
 
             var exists = await _repo.ExistsByLeadAsync(dto.LeadEmail, ct);
@@ -40,22 +37,22 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<bool>> DeleteLeadAsync(int id, CancellationToken ct)
         {
-            if(id <= 0)
+            if (id <= 0)
                 throw new ArgumentOutOfRangeException("id");
 
-            var exists =await _repo.GetLeadByIdAsync(id, ct);
+            var exists = await _repo.GetLeadByIdAsync(id, ct);
             if (exists == null)
                 throw new NotFoundException("Lead", id);
 
-            var res =await _repo.DeleteLeadAsync(id, ct);
-            return res 
+            var res = await _repo.DeleteLeadAsync(id, ct);
+            return res
                 ? ApiResponse<bool>.Ok(true, "Lead deleted successfully.")
                 : ApiResponse<bool>.Failed("Failed to delete lead.");
         }
 
         public async Task<ApiResponse<IEnumerable<LeadResponseDto>>> GetAllLeadsAsync(CancellationToken ct)
         {
-            var leads =await _repo.GetAllLeadsAsync(ct);
+            var leads = await _repo.GetAllLeadsAsync(ct);
             if (leads == null || !leads.Any())
                 return ApiResponse<IEnumerable<LeadResponseDto>>.Ok(Enumerable.Empty<LeadResponseDto>(), "No leads found.");
 
@@ -65,28 +62,28 @@ namespace WSC.CRM.Application.Services
         }
 
         public async Task<ApiResponse<LeadResponseDto?>> GetLeadByIdAsync(int id, CancellationToken ct)
-        { 
-            if(id <= 0)
+        {
+            if (id <= 0)
                 throw new ArgumentOutOfRangeException("id");
 
-            var lead =await _repo.GetLeadByIdAsync(id, ct);
+            var lead = await _repo.GetLeadByIdAsync(id, ct);
             if (lead == null)
-                throw new NotFoundException("Lead" , id);
+                throw new NotFoundException("Lead", id);
 
             var result = _mapper.Map<LeadResponseDto>(lead);
-            return ApiResponse<LeadResponseDto>.Ok(result,"Lead Found!");
+            return ApiResponse<LeadResponseDto>.Ok(result, "Lead Found!");
         }
 
         public async Task<ApiResponse<bool>> UpdateLeadAsync(UpdateLeadDto dto, CancellationToken ct)
         {
-            var lead =await _repo.GetLeadEntityByIdAsync(dto.LeadId, ct);
+            var lead = await _repo.GetLeadEntityByIdAsync(dto.LeadId, ct);
             if (lead == null)
                 throw new NotFoundException("Lead", dto.LeadId);
 
             _mapper.Map(dto, lead);
-            var updated =await _repo.UpdateLeadAsync(lead, ct);
+            var updated = await _repo.UpdateLeadAsync(lead, ct);
 
-            return updated 
+            return updated
                 ? ApiResponse<bool>.Ok(true, "Lead updated successfully.")
                 : ApiResponse<bool>.Failed("Failed to update lead.");
         }
@@ -95,11 +92,11 @@ namespace WSC.CRM.Application.Services
         {
             if (id <= 0)
                 throw new ArgumentOutOfRangeException("id");
-            if(!Enum.IsDefined(typeof(LeadStatus), newStatus))
+            if (!Enum.IsDefined(typeof(LeadStatus), newStatus))
                 throw new ArgumentException("Invalid lead status.", nameof(newStatus));
-            
-            var updated =await _repo.UpdateLeadStatusAsync(id, newStatus, ct);
-            return updated 
+
+            var updated = await _repo.UpdateLeadStatusAsync(id, newStatus, ct);
+            return updated
                 ? ApiResponse<bool>.Ok(true, "Lead status updated successfully.")
                 : ApiResponse<bool>.Failed("Failed to update lead status.");
         }

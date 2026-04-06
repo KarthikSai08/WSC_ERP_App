@@ -1,14 +1,11 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.Store.Application.Dtos;
 
 namespace WSC.Store.Application.Validators.ProductValidator
 {
     internal class CreateProductValidator : AbstractValidator<CreateProductDto>
     {
-        public CreateProductValidator() 
+        public CreateProductValidator()
         {
             RuleFor(p => p.ProductName)
                 .NotEmpty().WithMessage("Product name is required.")

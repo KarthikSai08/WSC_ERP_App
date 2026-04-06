@@ -12,6 +12,6 @@ namespace WSC.Store.Domain.Entities
         public decimal Price { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public bool IsActive { get; set; }  
+        public bool IsActive { get; set; }
     }
 }

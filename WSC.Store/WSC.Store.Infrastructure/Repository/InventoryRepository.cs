@@ -1,9 +1,4 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Security.Cryptography.Pkcs;
-using System.Text;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 using WSC.Store.Domain.Entities;
 using WSC.Store.Infrastructure.Persistence.Context;
@@ -62,7 +57,7 @@ namespace WSC.Store.Infrastructure.Repository
                         INNER JOIN store.Products p ON i.ProductId = p.ProductId
                         WHERE i.IsDeleted = 0";
 
-            var inventoryRecords =await con.QueryAsync<Inventory>(new CommandDefinition(sql, cancellationToken: ct));
+            var inventoryRecords = await con.QueryAsync<Inventory>(new CommandDefinition(sql, cancellationToken: ct));
 
             return inventoryRecords.ToList();
         }
@@ -76,7 +71,7 @@ namespace WSC.Store.Infrastructure.Repository
                         INNER JOIN store.Products p ON i.ProductId = p.ProductId
                         WHERE i.InventoryId = @Id AND i.IsDeleted = 0";
 
-            var inventoryRecord =await con.QuerySingleOrDefaultAsync<Inventory>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
+            var inventoryRecord = await con.QuerySingleOrDefaultAsync<Inventory>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
 
             return inventoryRecord;
         }
@@ -86,27 +81,27 @@ namespace WSC.Store.Infrastructure.Repository
             using var con = _context.CreateConnection();
             var sql = @"SELECT COUNT(1) FROM store.Inventory WHERE ProductId = @ProductId AND IsDeleted = 0";
 
-            var exists =await con.ExecuteScalarAsync<int>(new CommandDefinition(sql, new { ProductId = prdId }, cancellationToken: ct));
+            var exists = await con.ExecuteScalarAsync<int>(new CommandDefinition(sql, new { ProductId = prdId }, cancellationToken: ct));
 
             return exists > 0;
         }
 
-       /* public Task<bool> UpdateInventoryRecordAsync(Inventory inv, CancellationToken ct)
-        {
-            using var con = _context.CreateConnection();
-            var sql = new StringBuilder(@"UPDATE store.Inventory 
-                                            SET UpdatedAt = SYSUTCDATETIME()");
+        /* public Task<bool> UpdateInventoryRecordAsync(Inventory inv, CancellationToken ct)
+         {
+             using var con = _context.CreateConnection();
+             var sql = new StringBuilder(@"UPDATE store.Inventory 
+                                             SET UpdatedAt = SYSUTCDATETIME()");
 
-            var parameters = new DynamicParameters();
-            parameters.Add("@InventoryId", inv.InventoryId);
+             var parameters = new DynamicParameters();
+             parameters.Add("@InventoryId", inv.InventoryId);
 
-            if(inv.InStock > 0)
-            {
-                sql.Append(", InStock = @InStock");
-                parameters.Add("@InStock", inv.InStock);
-            }
+             if(inv.InStock > 0)
+             {
+                 sql.Append(", InStock = @InStock");
+                 parameters.Add("@InStock", inv.InStock);
+             }
 
-        }*/
+         }*/
 
         public async Task<bool> UpdateStockAsync(int id, int quantity, CancellationToken ct)
         {
@@ -122,7 +117,7 @@ namespace WSC.Store.Infrastructure.Repository
                 InStock = quantity
             };
 
-            var affectedRows =await con.ExecuteAsync(new CommandDefinition(sql, parameters, cancellationToken: ct));
+            var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, parameters, cancellationToken: ct));
 
             return affectedRows > 0;
         }

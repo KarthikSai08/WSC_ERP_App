@@ -1,14 +1,11 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.CRM.Application.Dtos;
 
 namespace WSC.CRM.Application.Validators.LeadValidators
 {
-    public  class CreateLeadValidator : AbstractValidator<CreateLeadDto>
+    public class CreateLeadValidator : AbstractValidator<CreateLeadDto>
     {
-        public CreateLeadValidator() 
+        public CreateLeadValidator()
         {
             RuleFor(x => x.LeadName)
                 .NotEmpty().WithMessage("Lead name is required.")

@@ -45,7 +45,7 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<bool>> DeleteActivityAsync(int id, CancellationToken ct)
         {
-            if(id <= 0)
+            if (id <= 0)
                 throw new NotFoundException("Activity ", id);
 
             var deleted = await _repo.DeleteActivityAsync(id, ct);
@@ -56,12 +56,12 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<IEnumerable<ActivityResponseDto>>> GetActivitiesByLeadIdAsync(int leadId, CancellationToken ct)
         {
-            if(leadId <= 0)
+            if (leadId <= 0)
                 throw new NotFoundException("Lead", leadId);
 
-            var activities =await  _repo.GetActivitiesByLeadIdAsync(leadId, ct);
+            var activities = await _repo.GetActivitiesByLeadIdAsync(leadId, ct);
 
-            if(activities == null || !activities.Any())
+            if (activities == null || !activities.Any())
                 return ApiResponse<IEnumerable<ActivityResponseDto>>.Failed("No activities found for the given lead ID");
 
             var mappedActivities = _mapper.Map<IEnumerable<ActivityResponseDto>>(activities);
@@ -71,15 +71,15 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<ActivityResponseDto?>> GetActivityByIdAsync(int id, CancellationToken ct)
         {
-            if(id <= 0)
+            if (id <= 0)
                 throw new NotFoundException("Activity", id);
-                
-            var activity =await _repo.GetActivityByIdAsync(id, ct);
-            if(activity == null)
+
+            var activity = await _repo.GetActivityByIdAsync(id, ct);
+            if (activity == null)
                 return ApiResponse<ActivityResponseDto?>.Failed("Activity not found");
 
             var mappedActivity = _mapper.Map<ActivityResponseDto?>(activity);
-            
+
             return ApiResponse<ActivityResponseDto?>.Ok(mappedActivity, "Activity retrieved successfully");
 
         }
@@ -103,7 +103,7 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<PagedResponse<ActivityResponseDto>>> GetPagedActivitiesAsync(PaginationRequest request, CancellationToken ct)
         {
-            var (data, totalCount) =await _repo.GetPagedActivitiesAsync(request, ct);
+            var (data, totalCount) = await _repo.GetPagedActivitiesAsync(request, ct);
 
             var mappedData = _mapper.Map<IEnumerable<ActivityResponseDto>>(data);
             var response = new PagedResponse<ActivityResponseDto>
@@ -120,10 +120,10 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<bool>> UpdateActivityAsync(UpdateActivityDto act, CancellationToken ct)
         {
-            if(act == null)
+            if (act == null)
                 throw new ArgumentNullException(nameof(act));
 
-            if(act.ActivityId <= 0)
+            if (act.ActivityId <= 0)
                 throw new NotFoundException("Activity", act.ActivityId);
 
             var activity = await _repo.GetActivityEntityByIdAsync(act.ActivityId, ct);
@@ -140,7 +140,7 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<bool>> UpdateCompletedAtAsync(int actId, CancellationToken ct)
         {
-            if(actId <= 0)
+            if (actId <= 0)
                 throw new NotFoundException("Activity", actId);
             var act = await _repo.GetActivityEntityByIdAsync(actId, ct);
             if (act == null)
@@ -156,8 +156,8 @@ namespace WSC.CRM.Application.Services
             if (now < act.ScheduledAt)
                 throw new ValidationException("Cannot complete before Scheduled time");
 
-            var updated =await _repo.UpdateCompletedAtAsync(actId, ct);
-           
+            var updated = await _repo.UpdateCompletedAtAsync(actId, ct);
+
 
             return updated
                 ? ApiResponse<bool>.Ok(true, "Activity completion status updated successfully")

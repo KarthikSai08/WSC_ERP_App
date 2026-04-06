@@ -1,7 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.CRM.Application.Dtos;
 
 namespace WSC.CRM.Application.Validators.LeadValidators

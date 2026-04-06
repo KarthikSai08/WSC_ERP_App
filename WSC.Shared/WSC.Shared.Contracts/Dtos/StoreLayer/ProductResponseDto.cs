@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace WSC.Shared.Contracts.Dtos.StoreLayer
+﻿namespace WSC.Shared.Contracts.Dtos.StoreLayer
 {
     public class ProductResponseDto
     {

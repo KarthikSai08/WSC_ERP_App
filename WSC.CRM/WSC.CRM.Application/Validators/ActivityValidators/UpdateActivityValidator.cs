@@ -1,14 +1,11 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.CRM.Application.Dtos;
 
 namespace WSC.CRM.Application.Validators.ActivityValidators
 {
-    public  class UpdateActivityValidator : AbstractValidator<UpdateActivityDto>
+    public class UpdateActivityValidator : AbstractValidator<UpdateActivityDto>
     {
-        public UpdateActivityValidator() 
+        public UpdateActivityValidator()
         {
             RuleFor(x => x.ActivityId)
                 .GreaterThan(0).WithMessage("ActivityId must be greater than 0.");

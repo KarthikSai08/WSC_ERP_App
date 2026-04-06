@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WSC.CRM.Application.Dtos;
+﻿using WSC.CRM.Application.Dtos;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.CRMLayer;
 

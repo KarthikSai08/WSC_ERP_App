@@ -32,7 +32,7 @@ namespace WSC.Store.Application.Service
             var exists = await _repo.ExistsBySKUAsync(dto.SKU, ct);
 
             if (exists)
-                throw new DuplicateException("Product",dto.SKU);
+                throw new DuplicateException("Product", dto.SKU);
 
             var product = _mapper.Map<Domain.Entities.Product>(dto);
             var result = await _repo.CreateProductAsync(product, ct);

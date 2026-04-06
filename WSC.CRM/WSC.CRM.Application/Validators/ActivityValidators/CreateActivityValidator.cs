@@ -1,14 +1,11 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.CRM.Application.Dtos;
 
 namespace WSC.CRM.Application.Validators.ActivityValidators
 {
     public class CreateActivityValidator : AbstractValidator<CreateActivityDto>
     {
-        public CreateActivityValidator() 
+        public CreateActivityValidator()
         {
             RuleFor(x => x.Title)
                 .NotEmpty().WithMessage("Activity name is required.")
