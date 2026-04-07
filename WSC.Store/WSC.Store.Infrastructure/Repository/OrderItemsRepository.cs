@@ -97,12 +97,14 @@ namespace WSC.Store.Infrastructure.Repository
 		{
 			using var con = _context.CreateConnection();
 			var sql = @"UPDATE OrderItems 
-						SET UpdatedAt = SYSUTCDATETIME(), UnitPrice = @UnitPrice
+						SET UpdatedAt = SYSUTCDATETIME(),ProductId = @ProductId, Quantity = @Quantity, UnitPrice = @UnitPrice
 						WHERE OrderItemId = @Id AND IsActive = 1";
 			var parameters = new
 			{
 				Id = items.OrderItemId,
-				items.UnitPrice
+				items.ProductId,
+				items.Quantity,
+                items.UnitPrice
 			};
 
 			var affectedRows =await con.ExecuteAsync(new CommandDefinition(sql, parameters, cancellationToken: ct));
