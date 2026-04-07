@@ -33,23 +33,24 @@ namespace WSC.Store.API.Filters
                 {
                     errors.AddRange(result.Errors);
                 }
-
-                if (errors.Count > 0)
-                {
-                    context.Result = new BadRequestObjectResult(new
-                    {
-                        Message = "Validation Failed",
-                        Errors = errors.Select(e => new
-                        {
-                            Field = e.PropertyName,
-                            Error = e.ErrorMessage
-                        })
-                    });
-
-                    return;
-                }
-                await next();
             }
+
+            if (errors.Count > 0)
+            {
+                context.Result = new BadRequestObjectResult(new
+                {
+                    Message = "Validation Failed",
+                    Errors = errors.Select(e => new
+                    {
+                        Field = e.PropertyName,
+                        Error = e.ErrorMessage
+                    })
+                });
+
+                return;
+            }
+
+            await next();
         }
     } 
 }

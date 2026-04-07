@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 using WSC.Store.Domain.Entities;
 using WSC.Store.Infrastructure.Persistence.Context;
@@ -19,7 +20,7 @@ namespace WSC.Store.Infrastructure.Repository
         {
             using var con = _context.CreateConnection();
             var sql = @"INSERT INTO store.Orders (CustomerId, TotalAmount, Status, CreatedAt, IsActive)
-                        VALUES (@CustomerId, @TotalAmount, @Status, SYSUTCDATETIME, 1);
+                        VALUES (@CustomerId, @TotalAmount, @Status, SYSUTCDATETIME(), 1);
                         SELECT CAST(SCOPE_IDENTITY() as int);";
 
             var parameters = new
@@ -48,29 +49,41 @@ namespace WSC.Store.Infrastructure.Repository
             return deleted > 0;
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrdersAsync(CancellationToken ct)
+        public async Task<IEnumerable<OrderResponseDto>> GetAllOrdersAsync(CancellationToken ct)
         {
             using var con = _context.CreateConnection();
             var sql = @"SELECT o.OrderId, o.CustomerId,c.CxName As CustomerName,  o.TotalAmount, o.Status, o.CreatedAt, o.UpdatedAt, o.IsActive
                         FROM store.Orders o
-                        LEFT JOIN store.Customers c ON o.CustomerId = c.CxId
+                        LEFT JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1";
 
-            var orders = await con.QueryAsync<Order>(new CommandDefinition(sql, cancellationToken: ct));
-
+            var orders = await con.QueryAsync<OrderResponseDto>(new CommandDefinition(sql, cancellationToken: ct));
             return orders.ToList();
         }
 
-        public async Task<Order> GetOrderByIdAsync(int id, CancellationToken ct)
+        public async Task<OrderResponseDto> GetOrderByIdAsync(int id, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
 
             var sql = @"SELECT o.OrderId, o.CustomerId,c.CxName As CustomerName,  o.TotalAmount, o.Status, o.CreatedAt, o.UpdatedAt, o.IsActive
                         FROM store.Orders o
-                        LEFT JOIN store.Customers c ON o.CustomerId = c.CxId
+                        LEFT JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.OrderId = @Id AND o.IsActive = 1";
 
-            var order =await con.QuerySingleOrDefaultAsync<Order>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
+            var order =await con.QuerySingleOrDefaultAsync<OrderResponseDto>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
+
+            return order;
+        }
+
+        public async Task<Order> GetOrderEntityByIdAsync(int id, CancellationToken ct)
+        {
+            using var con = _context.CreateConnection();
+
+            var sql = @"SELECT OrderId, CustomerId, TotalAmount, Status, CreatedAt, UpdatedAt, IsActive
+                        FROM store.Orders 
+                        WHERE OrderId = @Id AND IsActive = 1";
+
+            var order = await con.QuerySingleOrDefaultAsync<Order>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
 
             return order;
         }
@@ -79,7 +92,7 @@ namespace WSC.Store.Infrastructure.Repository
         {
             using var con = _context.CreateConnection();
             var sql = new StringBuilder(@"UPDATE store.Orders SET 
-                                          ScheduledAt = SYSUTCDATETIME()");
+                                          UpdatedAt = SYSUTCDATETIME()");
 
             var parameters = new DynamicParameters(sql);
 

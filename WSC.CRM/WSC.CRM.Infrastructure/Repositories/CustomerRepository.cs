@@ -91,7 +91,6 @@ namespace WSC.CRM.Infrastructure.Repositories
 
             var customer = await con.QueryFirstOrDefaultAsync<Customer>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
             return customer;
-
         }
 
         public async Task<(IEnumerable<CustomerResponseDto> Data, int TotalCount)> GetPagedCustomersAsync(PaginationRequest request, CancellationToken ct)

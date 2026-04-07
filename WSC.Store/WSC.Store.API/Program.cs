@@ -1,4 +1,6 @@
 using Scalar.AspNetCore;
+using WSC.Shared.Contracts.Interfaces.CRMClients;
+using WSC.Shared.Infrastructure.Clients;
 using WSC.Store.API.Filters;
 using WSC.Store.Application.DependencyInjection;
 using WSC.Store.Infrastructure.DependencyInjection;
@@ -15,7 +17,13 @@ builder.Services.AddControllers(opts =>
          .Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
  });
 
+var crmUrl = builder.Configuration["Services:CRM"];
 
+builder.Services.AddHttpClient<ICustomerClient, CustomerClient>(client =>
+{
+    client.BaseAddress = new Uri(crmUrl);
+    client.Timeout = TimeSpan.FromSeconds(60);
+});
 builder.Services.AddOpenApi();
 
 builder.Services.AddStoreApplicationService();

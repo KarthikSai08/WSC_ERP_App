@@ -13,7 +13,7 @@ namespace WSC.CRM.API.Filters
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var errors = new List<ValidationFailure>();
-            
+
             foreach(var argument in context.ActionArguments.Values)
             {
                 if(argument == null) continue;
@@ -30,23 +30,24 @@ namespace WSC.CRM.API.Filters
                 {
                     errors.AddRange(result.Errors);
                 }
-
-                if(errors.Count > 0)
-                {
-                    context.Result = new BadRequestObjectResult(new
-                    {
-                        Message = "Validation Failed",
-                        Errors = errors.Select(e => new
-                        {
-                            Field = e.PropertyName,
-                            Error = e.ErrorMessage
-                        })
-                    });
-
-                    return;
-                }
-                await next();
             }
+
+            if(errors.Count > 0)
+            {
+                context.Result = new BadRequestObjectResult(new
+                {
+                    Message = "Validation Failed",
+                    Errors = errors.Select(e => new
+                    {
+                        Field = e.PropertyName,
+                        Error = e.ErrorMessage
+                    })
+                });
+
+                return;
+            }
+
+            await next();
         }
     }
 }

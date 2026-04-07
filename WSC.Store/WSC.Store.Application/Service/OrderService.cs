@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using WSC.CRM.Application.Interfaces.Repository;
+using WSC.CRM.Application.Interfaces.Services;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Shared.Contracts.Exceptions;
+using WSC.Shared.Contracts.Interfaces.CRMClients;
 using WSC.Store.Application.Dtos;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 using WSC.Store.Application.Interfaces.ServiceInterfaces;
@@ -16,21 +18,21 @@ namespace WSC.Store.Application.Service
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepo;
-        private readonly ICustomerRepository _cstRepo;
+        private readonly ICustomerClient _cstService;
         private readonly IMapper _mapper;
 
 
-        public OrderService(IOrderRepository orderRepo, ICustomerRepository cstRepo, IMapper mapper)
+        public OrderService(IOrderRepository orderRepo, ICustomerClient cstService, IMapper mapper)
         {
             _orderRepo = orderRepo;
-            _cstRepo = cstRepo;
+            _cstService = cstService;
             _mapper = mapper;
         }
 
         public async Task<ApiResponse<int>> CreateOrderAsync(CreateOrderDto dto, CancellationToken ct)
         {
          
-            var customer =await _cstRepo.GetCustomerByIdAsync(dto.CustomerId, ct);
+            var customer =await _cstService.GetCustomerByIdAsync(dto.CustomerId, ct);
             if(customer == null)
                 throw new NotFoundException("Customer", dto.CustomerId);
 
@@ -58,8 +60,7 @@ namespace WSC.Store.Application.Service
             if(orders == null || !orders.Any())
                 return ApiResponse<IEnumerable<OrderResponseDto>>.Ok(new List<OrderResponseDto>(), "No orders found.");
 
-            var mappedOrders = _mapper.Map<IEnumerable<OrderResponseDto>>(orders);
-            return ApiResponse<IEnumerable<OrderResponseDto>>.Ok(mappedOrders.ToList(), "Orders retrieved successfully");
+            return ApiResponse<IEnumerable<OrderResponseDto>>.Ok(orders.ToList(), "Orders retrieved successfully");
 
         }
 
@@ -72,14 +73,12 @@ namespace WSC.Store.Application.Service
             if(order == null)
                 return ApiResponse<OrderResponseDto>.Failed("Order not found.");
 
-            var mappedOrder = _mapper.Map<OrderResponseDto>(order);
-
-            return ApiResponse<OrderResponseDto>.Ok(mappedOrder, "Order retrieved successfully");
+            return ApiResponse<OrderResponseDto>.Ok(order, "Order retrieved successfully");
         }
 
         public async Task<ApiResponse<bool>> UpdateOrderAsync(UpdateOrderDto dto, CancellationToken ct)
         {
-           var order = await _orderRepo.GetOrderByIdAsync(dto.OrderId, ct);
+           var order = await _orderRepo.GetOrderEntityByIdAsync(dto.OrderId, ct);
            if(order == null)
                throw new NotFoundException("Order", dto.OrderId);
 

@@ -14,7 +14,7 @@ namespace WSC.CRM.API.Controllers
         {
             _service = service;
         }
-        [HttpGet("leadId-{leadId}")]
+        [HttpGet("leadId/{leadId}")]
         public async Task<IActionResult> GetActivitiesByLeadId(int leadId, CancellationToken ct)
         {
             var result = await _service.GetActivitiesByLeadIdAsync(leadId, ct);
@@ -39,7 +39,7 @@ namespace WSC.CRM.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("activityId-{activityId}")]
+        [HttpGet("activityId/{activityId}")]
         public async Task<IActionResult> GetActivityById(int activityId, CancellationToken ct)
         {
             var result = await _service.GetActivityByIdAsync(activityId, ct);
