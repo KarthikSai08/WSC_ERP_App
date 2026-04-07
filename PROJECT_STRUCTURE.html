@@ -1,921 +1,367 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WSC_ERP_App - Project Structure & Overview</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-        
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        
-        header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        
-        .content {
-            padding: 30px;
-        }
-        
-        .section {
-            margin-bottom: 40px;
-        }
-        
-        .section h2 {
-            color: #667eea;
-            font-size: 1.8em;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .info-card {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            border-radius: 5px;
-        }
-        
-        .info-card h3 {
-            color: #667eea;
-            margin-bottom: 8px;
-        }
-        
-        .info-card p {
-            color: #555;
-            font-size: 0.95em;
-        }
-        
-        .info-card code {
-            background: #e8eef7;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .modules {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .module-card {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .module-card:hover {
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-            transform: translateY(-3px);
-            border-color: #667eea;
-        }
-        
-        .module-card .module-name {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-        
-        .module-card .module-type {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 0.8em;
-            margin-bottom: 10px;
-        }
-        
-        .module-card .module-type.api {
-            background: #28a745;
-        }
-        
-        .module-card .module-type.domain {
-            background: #667eea;
-        }
-        
-        .module-card .module-type.application {
-            background: #ffc107;
-            color: #333;
-        }
-        
-        .module-card .module-type.infrastructure {
-            background: #dc3545;
-        }
-        
-        .module-card .module-type.shared {
-            background: #17a2b8;
-        }
-        
-        .module-card .module-type.gateway {
-            background: #6f42c1;
-        }
-        
-        .module-card .layer {
-            color: #666;
-            font-size: 0.9em;
-            margin: 8px 0;
-        }
-        
-        .module-card .files {
-            background: white;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 10px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        
-        .module-card .files ul {
-            list-style: none;
-            font-size: 0.85em;
-        }
-        
-        .module-card .files li {
-            padding: 3px 0;
-            color: #555;
-        }
-        
-        .module-card .files li:before {
-            content: "📄 ";
-            margin-right: 5px;
-        }
-        
-        .architecture {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .architecture h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-        }
-        
-        .layer-box {
-            background: white;
-            border: 2px solid #667eea;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-        
-        .layer-box h4 {
-            color: #667eea;
-            margin-bottom: 8px;
-        }
-        
-        .layer-box ul {
-            margin-left: 20px;
-            color: #555;
-        }
-        
-        .layer-box li {
-            margin: 5px 0;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        table thead {
-            background: #667eea;
-            color: white;
-        }
-        
-        table th {
-            padding: 12px;
-            text-align: left;
-            font-weight: bold;
-        }
-        
-        table td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        table tbody tr:hover {
-            background: #f8f9fa;
-        }
-        
-        .git-info {
-            background: #e8f5e9;
-            border-left: 4px solid #4caf50;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        
-        .git-info h4 {
-            color: #2e7d32;
-            margin-bottom: 10px;
-        }
-        
-        .git-info p {
-            color: #333;
-            margin: 5px 0;
-        }
-        
-        .git-info code {
-            background: #c8e6c9;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .tech-stack {
-            background: #f3e5f5;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .tech-stack h3 {
-            color: #6f42c1;
-            margin-bottom: 15px;
-        }
-        
-        .tech-item {
-            display: inline-block;
-            background: #6f42c1;
-            color: white;
-            padding: 8px 15px;
-            margin: 5px;
-            border-radius: 20px;
-            font-size: 0.9em;
-        }
-        
-        footer {
-            background: #f8f9fa;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-            border-top: 1px solid #ddd;
-        }
-        
-        .summary-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .summary-box h3 {
-            margin-bottom: 15px;
-        }
-        
-        .summary-box .stat {
-            display: inline-block;
-            margin-right: 30px;
-            margin-bottom: 10px;
-        }
-        
-        .summary-box .stat-number {
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-        
-        .summary-box .stat-label {
-            font-size: 0.9em;
-            opacity: 0.9;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WSC_ERP_App - Project Structure & Overview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#0f1117;--surface:#1a1d27;--surface2:#222537;--border:#2e3148;
+      --accent:#7c6af7;--accent2:#5eead4;--green:#22c55e;--yellow:#f59e0b;
+      --red:#ef4444;--blue:#3b82f6;--cyan:#06b6d4;--purple:#a855f7;
+      --text:#e2e8f0;--muted:#94a3b8;--code-bg:#0d1117;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:24px 16px;}
+    a{color:var(--accent);text-decoration:none;}
+    .header{text-align:center;padding:48px 24px 36px;background:linear-gradient(135deg,#1a1d27 0%,#12142070 100%);border:1px solid var(--border);border-radius:16px;margin-bottom:32px;position:relative;overflow:hidden;}
+    .header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(124,106,247,0.15) 0%,transparent 70%);pointer-events:none;}
+    .header h1{font-size:2.4em;font-weight:700;letter-spacing:-0.5px;}
+    .header h1 span{color:var(--accent);}
+    .header p{color:var(--muted);margin-top:8px;font-size:1.05em;}
+    .badge-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:20px;}
+    .badge{background:rgba(124,106,247,0.15);border:1px solid rgba(124,106,247,0.35);color:var(--accent);padding:4px 12px;border-radius:999px;font-size:0.8em;font-weight:600;}
+    .badge.green{background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.3);color:var(--green);}
+    .badge.cyan{background:rgba(6,182,212,0.12);border-color:rgba(6,182,212,0.3);color:var(--cyan);}
+    .badge.yellow{background:rgba(245,158,11,0.12);border-color:rgba(245,158,11,0.3);color:var(--yellow);}
+    .container{max-width:1400px;margin:0 auto;}
+    .section{margin-bottom:40px;}
+    .section-title{font-size:1.25em;font-weight:700;color:var(--text);border-left:3px solid var(--accent);padding-left:12px;margin-bottom:20px;}
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;}
+    .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;transition:border-color .2s;}
+    .stat-card:hover{border-color:var(--accent);}
+    .stat-number{font-size:2em;font-weight:700;color:var(--accent);}
+    .stat-label{font-size:0.8em;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px;}
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+    .info-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;}
+    .info-card h4{font-size:0.75em;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+    .info-card p{font-size:0.95em;color:var(--text);}
+    .info-card code{font-family:'JetBrains Mono',monospace;background:var(--code-bg);border:1px solid var(--border);padding:2px 7px;border-radius:4px;font-size:0.85em;color:var(--accent2);}
+    .tech-grid{display:flex;flex-wrap:wrap;gap:10px;}
+    .module-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-bottom:24px;}
+    .module-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .25s;}
+    .module-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+    .module-header{padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+    .layer-tag{font-size:0.68em;font-weight:700;letter-spacing:1px;padding:3px 8px;border-radius:5px;text-transform:uppercase;}
+    .lt-domain{background:rgba(124,106,247,0.2);color:var(--accent);}
+    .lt-app{background:rgba(168,85,247,0.2);color:var(--purple);}
+    .lt-infra{background:rgba(59,130,246,0.2);color:var(--blue);}
+    .lt-api{background:rgba(34,197,94,0.2);color:var(--green);}
+    .lt-shared{background:rgba(6,182,212,0.2);color:var(--cyan);}
+    .lt-gateway{background:rgba(245,158,11,0.2);color:var(--yellow);}
+    .module-name{font-weight:600;font-size:0.95em;color:var(--text);}
+    .module-body{padding:14px 16px;}
+    .module-desc{font-size:0.8em;color:var(--muted);margin-bottom:10px;}
+    .file-list{list-style:none;}
+    .file-list li{font-family:'JetBrains Mono',monospace;font-size:0.78em;color:var(--muted);padding:3px 0;display:flex;align-items:center;gap:6px;}
+    .file-list li::before{content:'📄';font-size:0.9em;flex-shrink:0;}
+    .file-list li.dir::before{content:'📁';}
+    .file-list li.enum::before{content:'🔢';}
+    .file-list li.iface::before{content:'🔗';}
+    .file-list li span.hl{color:var(--accent2);}
+    .arch-flow{display:flex;align-items:stretch;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+    .arch-layer{flex:1;padding:20px 16px;border-right:1px solid var(--border);text-align:center;}
+    .arch-layer:last-child{border-right:none;}
+    .arch-layer-num{font-size:1.5em;}
+    .arch-layer-name{font-weight:700;font-size:0.85em;margin:6px 0 10px;}
+    .arch-layer-items{font-size:0.75em;color:var(--muted);line-height:1.8;}
+    .arch-layer.l1{border-top:3px solid var(--green);}
+    .arch-layer.l2{border-top:3px solid var(--purple);}
+    .arch-layer.l3{border-top:3px solid var(--accent);}
+    .arch-layer.l4{border-top:3px solid var(--blue);}
+    .module-group-title{display:flex;align-items:center;gap:10px;margin:28px 0 14px;}
+    .module-group-title h3{font-size:1em;font-weight:600;color:var(--text);}
+    .module-group-title .line{flex:1;height:1px;background:var(--border);}
+    .pkg-table,.status-table{width:100%;border-collapse:collapse;}
+    .pkg-table thead tr,.status-table thead tr{background:var(--surface2);}
+    .pkg-table th,.status-table th{padding:11px 14px;text-align:left;font-size:0.8em;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1px solid var(--border);}
+    .pkg-table td,.status-table td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.875em;}
+    .pkg-table tbody tr,.status-table tbody tr{background:var(--surface);}
+    .pkg-table tbody tr:hover,.status-table tbody tr:hover{background:var(--surface2);}
+    .pkg-name{font-family:'JetBrains Mono',monospace;color:var(--accent2);font-size:0.9em;}
+    .pkg-ver{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:0.85em;}
+    .status-dot{display:inline-flex;align-items:center;gap:6px;}
+    .dot{width:8px;height:8px;border-radius:50%;}
+    .dot.green{background:var(--green);box-shadow:0 0 6px var(--green);}
+    .dot.yellow{background:var(--yellow);box-shadow:0 0 6px var(--yellow);}
+    footer{text-align:center;padding:28px;color:var(--muted);font-size:0.8em;border-top:1px solid var(--border);margin-top:48px;}
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🏢 WSC_ERP_App</h1>
-            <p>Enterprise Resource Planning Application - Project Structure & Overview</p>
-        </header>
-        
-        <div class="content">
-            <!-- Summary Section -->
-            <div class="summary-box">
-                <h3>📊 Project Summary</h3>
-                <div class="stat">
-                    <div class="stat-number">19</div>
-                    <div class="stat-label">Total Projects</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">4</div>
-                    <div class="stat-label">Main Modules</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">.NET 10</div>
-                    <div class="stat-label">Framework</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">C# 14.0</div>
-                    <div class="stat-label">Language</div>
-                </div>
-            </div>
-            
-            <!-- Environment & Git Info -->
-            <div class="section">
-                <h2>🔧 Environment & Repository</h2>
-                
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h3>📁 Workspace Location</h3>
-                        <p><code>C:\Users\karth\source\repos\WSC_App\</code></p>
-                    </div>
-                    
-                    <div class="info-card">
-                        <h3>🖥️ IDE</h3>
-                        <p>Microsoft Visual Studio Community 2026 (18.4.2)</p>
-                    </div>
-                    
-                    <div class="info-card">
-                        <h3>⚙️ Target Framework</h3>
-                        <p>.NET 10</p>
-                    </div>
-                    
-                    <div class="info-card">
-                        <h3>🔤 C# Version</h3>
-                        <p>14.0</p>
-                    </div>
-                </div>
-                
-                <div class="git-info">
-                    <h4>🐙 Git Repository</h4>
-                    <p><strong>Repository:</strong> <code>WSC_ERP_App</code></p>
-                    <p><strong>Location:</strong> <code>C:\Users\karth\source\repos\WSC_App</code></p>
-                    <p><strong>Branch:</strong> <code>main</code></p>
-                    <p><strong>Remote:</strong> <code>https://github.com/KarthikSai08/WSC_ERP_App</code></p>
-                </div>
-            </div>
-            
-            <!-- Tech Stack -->
-            <div class="section">
-                <h2>🛠️ Tech Stack & Libraries</h2>
-                <div class="tech-stack">
-                    <div class="tech-item">.NET 10</div>
-                    <div class="tech-item">C# 14.0</div>
-                    <div class="tech-item">Clean Architecture</div>
-                    <div class="tech-item">Domain-Driven Design</div>
-                    <div class="tech-item">REST APIs</div>
-                    <div class="tech-item">Microservices</div>
-                    <div class="tech-item">API Gateway</div>
-                    <div class="tech-item">Dapper ORM</div>
-                    <div class="tech-item">Redis Caching</div>
-                    <div class="tech-item">Serilog</div>
-                    <div class="tech-item">JWT Auth</div>
-                    <div class="tech-item">Rate Limiting</div>
-                </div>
-            </div>
-
-            <!-- Tech Stack Placement -->
-            <div class="section">
-                <h2>📍 Tech Stack Implementation Guide</h2>
-                <p style="margin-bottom: 15px; color: #555;">A quick reference for where each technology should be implemented:</p>
-
-                <div class="architecture">
-                    <h3>Layer-by-Layer Implementation</h3>
-
-                    <div class="layer-box">
-                        <h4>🌐 API Layer (Controllers & Middleware)</h4>
-                        <ul>
-                            <li><strong>JWT Authentication:</strong> AuthenticationMiddleware, JWT tokens generation</li>
-                            <li><strong>Global Exception Middleware:</strong> ErrorHandlingMiddleware for centralized error handling</li>
-                            <li><strong>Rate Limiting:</strong> RateLimitingMiddleware to prevent abuse</li>
-                            <li><strong>API Versioning:</strong> Route versioning (v1, v2) in controllers</li>
-                            <li><strong>Auditing:</strong> Audit logging endpoints and user actions</li>
-                        </ul>
-                    </div>
-
-                    <div class="layer-box">
-                        <h4>⚙️ Application Layer (Services & Business Logic)</h4>
-                        <ul>
-                            <li><strong>Caching Logic (Cache-Aside Pattern):</strong> Check cache → if miss → fetch from DB → store in cache</li>
-                            <li><strong>Idempotency:</strong> IdempotencyService to track & prevent duplicate requests</li>
-                            <li><strong>Auditing:</strong> Log business operations and changes</li>
-                            <li><strong>Use Cases:</strong> Business logic coordination</li>
-                        </ul>
-                    </div>
-
-                    <div class="layer-box">
-                        <h4>💾 Infrastructure Layer (Data Access & Persistence)</h4>
-                        <ul>
-                            <li><strong>Dapper ORM:</strong> DapperContext, data mapping, and query execution</li>
-                            <li><strong>Dynamic Parameters:</strong> DynamicParameters for parameterized queries</li>
-                            <li><strong>Stored Procedures:</strong> Call SPs via Dapper for complex queries</li>
-                            <li><strong>Transactions:</strong> TransactionManager for ACID operations</li>
-                            <li><strong>Unit of Work Pattern:</strong> UnitOfWork class managing repositories & transactions</li>
-                            <li><strong>Redis Caching:</strong> CacheRepository for cache operations</li>
-                            <li><strong>Repositories:</strong> Generic Repository pattern with Dapper</li>
-                            <li><strong>Schema Separation:</strong> Different schemas (dbo, audit, cache) in database</li>
-                        </ul>
-                    </div>
-
-                    <div class="layer-box">
-                        <h4>🔗 Shared & Infrastructure (Cross-Cutting Concerns)</h4>
-                        <ul>
-                            <li><strong>Serilog Logging:</strong> Structured logging across all layers</li>
-                            <li><strong>JWT Configuration:</strong> TokenProvider service for token generation</li>
-                            <li><strong>Auditing Service:</strong> AuditService to log changes and user actions</li>
-                            <li><strong>Exception Handling:</strong> Custom exception classes & handlers</li>
-                            <li><strong>Constants & Configurations:</strong> Shared settings for all modules</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Architecture Overview -->
-            <div class="section">
-                <h2>🏗️ Architecture Overview</h2>
-                <p style="margin-bottom: 15px; color: #555;">The application follows <strong>Clean Architecture</strong> with a <strong>Microservices</strong> approach. Each module contains layered structure:</p>
-                
-                <div class="architecture">
-                    <h3>Layered Architecture Pattern</h3>
-                    <div class="layer-box">
-                        <h4>1️⃣ API Layer (Entry Point)</h4>
-                        <ul>
-                            <li>REST API endpoints</li>
-                            <li>Request/Response handling</li>
-                            <li>Program.cs configuration</li>
-                            <li>Dependency injection setup</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="layer-box">
-                        <h4>2️⃣ Application Layer (Business Logic)</h4>
-                        <ul>
-                            <li>Use cases and workflows</li>
-                            <li>Application services</li>
-                            <li>DTOs (Data Transfer Objects)</li>
-                            <li>Business logic orchestration</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="layer-box">
-                        <h4>3️⃣ Domain Layer (Core Business)</h4>
-                        <ul>
-                            <li>Entities (business objects)</li>
-                            <li>Value Objects</li>
-                            <li>Enums (constants)</li>
-                            <li>Business rules</li>
-                            <li>Domain services</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="layer-box">
-                        <h4>4️⃣ Infrastructure Layer (Technical Details)</h4>
-                        <ul>
-                            <li>Database access (EF Core)</li>
-                            <li>External service integrations</li>
-                            <li>Repository implementations</li>
-                            <li>Configuration</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Main Modules -->
-            <div class="section">
-                <h2>📦 Main Modules</h2>
-                <p style="margin-bottom: 15px; color: #555;">The application is organized into 4 main business domains, each with complete microservice architecture:</p>
-                
-                <!-- CRM Module -->
-                <h3 style="color: #667eea; margin: 30px 0 15px 0;">1. CRM Module (Customer Relationship Management)</h3>
-                <div class="modules">
-                    <div class="module-card">
-                        <div class="module-type domain">DOMAIN</div>
-                        <div class="module-name">WSC.CRM.Domain</div>
-                        <div class="layer">Core business entities and rules</div>
-                        <div class="files">
-                            <strong>Key Files:</strong>
-                            <ul>
-                                <li>Customer.cs (Entity)</li>
-                                <li>Lead.cs (Entity)</li>
-                                <li>Opportunity.cs (Entity)</li>
-                                <li>Activity.cs (Entity)</li>
-                                <li>Address.cs (Value Object)</li>
-                                <li>LeadStatus.cs (Enum)</li>
-                                <li>OpportunityStatus.cs (Enum)</li>
-                                <li>ActivityType.cs (Enum)</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type application">APPLICATION</div>
-                        <div class="module-name">WSC.CRM.Application</div>
-                        <div class="layer">Business logic and use cases</div>
-                        <div class="files">
-                            <strong>Ready for implementation:</strong>
-                            <ul>
-                                <li>Service classes</li>
-                                <li>Business logic</li>
-                                <li>Request handlers</li>
-                                <li>DTOs</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type infrastructure">INFRASTRUCTURE</div>
-                        <div class="module-name">WSC.CRM.Infrastructure</div>
-                        <div class="layer">Data persistence & external services</div>
-                        <div class="files">
-                            <strong>For:</strong>
-                            <ul>
-                                <li>Database context</li>
-                                <li>Repository implementations</li>
-                                <li>Migrations</li>
-                                <li>Configuration</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type api">API</div>
-                        <div class="module-name">WSC.CRM.API</div>
-                        <div class="layer">REST endpoints & entry point</div>
-                        <div class="files">
-                            <strong>Contains:</strong>
-                            <ul>
-                                <li>Controllers</li>
-                                <li>Program.cs</li>
-                                <li>API configuration</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Store Module -->
-                <h3 style="color: #667eea; margin: 30px 0 15px 0;">2. Store Module (Inventory & Sales)</h3>
-                <div class="modules">
-                    <div class="module-card">
-                        <div class="module-type domain">DOMAIN</div>
-                        <div class="module-name">WSC.Store.Domain</div>
-                        <div class="layer">Store entities and business rules</div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type application">APPLICATION</div>
-                        <div class="module-name">WSC.Store.Application</div>
-                        <div class="layer">Store operations & workflows</div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type infrastructure">INFRASTRUCTURE</div>
-                        <div class="module-name">WSC.Store.Infrastructure</div>
-                        <div class="layer">Store persistence layer</div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type api">API</div>
-                        <div class="module-name">WSC.Store.API</div>
-                        <div class="layer">Store API endpoints</div>
-                    </div>
-                </div>
-                
-                <!-- Delivery Module -->
-                <h3 style="color: #667eea; margin: 30px 0 15px 0;">3. Delivery Module (Logistics & Shipping)</h3>
-                <div class="modules">
-                    <div class="module-card">
-                        <div class="module-type domain">DOMAIN</div>
-                        <div class="module-name">WSC.Delivery.Domain</div>
-                        <div class="layer">Delivery entities and rules</div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type application">APPLICATION</div>
-                        <div class="module-name">WSC.Delivery.Application</div>
-                        <div class="layer">Delivery workflows</div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type infrastructure">INFRASTRUCTURE</div>
-                        <div class="module-name">WSC.Delivery.Infrastructure</div>
-                        <div class="layer">Delivery data layer</div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type api">API</div>
-                        <div class="module-name">WSC.Delivery.API</div>
-                        <div class="layer">Delivery API endpoints</div>
-                    </div>
-                </div>
-                
-                <!-- Dashboard Module -->
-                <h3 style="color: #667eea; margin: 30px 0 15px 0;">4. Dashboard Module (Analytics & Reporting)</h3>
-                <div class="modules">
-                    <div class="module-card">
-                        <div class="module-type domain">DOMAIN</div>
-                        <div class="module-name">WSC.Dashboard.Domain</div>
-                        <div class="layer">Dashboard entities</div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type application">APPLICATION</div>
-                        <div class="module-name">WSC.Dashboard.Application</div>
-                        <div class="layer">Analytics logic</div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type infrastructure">INFRASTRUCTURE</div>
-                        <div class="module-name">WSC.Dashboard.Infrastructure</div>
-                        <div class="layer">Data access for dashboards</div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type api">API</div>
-                        <div class="module-name">WSC.Dashboard.API</div>
-                        <div class="layer">Dashboard API endpoints</div>
-                    </div>
-                </div>
-                
-                <!-- Shared & Gateway -->
-                <h3 style="color: #667eea; margin: 30px 0 15px 0;">5. Shared & Gateway</h3>
-                <div class="modules">
-                    <div class="module-card">
-                        <div class="module-type shared">SHARED</div>
-                        <div class="module-name">WSC.Shared.Contracts</div>
-                        <div class="layer">Shared DTOs and contracts</div>
-                        <div class="files">
-                            <strong>Purpose:</strong>
-                            <ul>
-                                <li>Common interfaces</li>
-                                <li>Shared models</li>
-                                <li>Cross-module contracts</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type shared">SHARED</div>
-                        <div class="module-name">WSC.Shared.Infrastructure</div>
-                        <div class="layer">Shared utilities & helpers</div>
-                        <div class="files">
-                            <strong>Purpose:</strong>
-                            <ul>
-                                <li>Common utilities</li>
-                                <li>Logging</li>
-                                <li>Error handling</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-type gateway">GATEWAY</div>
-                        <div class="module-name">WSC.Gateway.API</div>
-                        <div class="layer">API Gateway & routing</div>
-                        <div class="files">
-                            <strong>Purpose:</strong>
-                            <ul>
-                                <li>Request routing</li>
-                                <li>Load balancing</li>
-                                <li>Authentication</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Project Statistics -->
-            <div class="section">
-                <h2>📊 Project Statistics</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Module</th>
-                            <th>Projects</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th>Framework</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>CRM</strong></td>
-                            <td>4 projects</td>
-                            <td>Domain, Application, Infrastructure, API</td>
-                            <td>🟢 Implemented</td>
-                            <td>.NET 10</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Store</strong></td>
-                            <td>4 projects</td>
-                            <td>Domain, Application, Infrastructure, API</td>
-                            <td>🟡 In Development</td>
-                            <td>.NET 10</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Delivery</strong></td>
-                            <td>4 projects</td>
-                            <td>Domain, Application, Infrastructure, API</td>
-                            <td>🟡 In Development</td>
-                            <td>.NET 10</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Dashboard</strong></td>
-                            <td>4 projects</td>
-                            <td>Domain, Application, Infrastructure, API</td>
-                            <td>🟡 In Development</td>
-                            <td>.NET 10</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Shared</strong></td>
-                            <td>2 projects</td>
-                            <td>Contracts, Infrastructure</td>
-                            <td>🟡 In Development</td>
-                            <td>.NET 10</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Gateway</strong></td>
-                            <td>1 project</td>
-                            <td>API Gateway</td>
-                            <td>🟡 In Development</td>
-                            <td>.NET 10</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Currently Open Files -->
-            <div class="section">
-                <h2>📂 Currently Open Files in IDE</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>File</th>
-                            <th>Module</th>
-                            <th>Type</th>
-                            <th>Location</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Customer.cs</td>
-                            <td>CRM</td>
-                            <td>Entity</td>
-                            <td>Domain/Entities</td>
-                        </tr>
-                        <tr>
-                            <td>Lead.cs</td>
-                            <td>CRM</td>
-                            <td>Entity</td>
-                            <td>Domain/Entities</td>
-                        </tr>
-                        <tr>
-                            <td>Opportunity.cs</td>
-                            <td>CRM</td>
-                            <td>Entity</td>
-                            <td>Domain/Entities</td>
-                        </tr>
-                        <tr>
-                            <td>Activity.cs</td>
-                            <td>CRM</td>
-                            <td>Entity</td>
-                            <td>Domain/Entities</td>
-                        </tr>
-                        <tr>
-                            <td>Address.cs</td>
-                            <td>CRM</td>
-                            <td>Value Object</td>
-                            <td>Domain/ValueObjects</td>
-                        </tr>
-                        <tr>
-                            <td>LeadStatus.cs</td>
-                            <td>CRM</td>
-                            <td>Enum</td>
-                            <td>Domain/Enums</td>
-                        </tr>
-                        <tr>
-                            <td>OpportunityStatus.cs</td>
-                            <td>CRM</td>
-                            <td>Enum</td>
-                            <td>Domain/Enums</td>
-                        </tr>
-                        <tr>
-                            <td>ActivityType.cs</td>
-                            <td>CRM</td>
-                            <td>Enum</td>
-                            <td>Domain/Enums</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Key Features & Next Steps -->
-            <div class="section">
-                <h2>🎯 Key Features</h2>
-                
-                <h3 style="color: #667eea; margin: 20px 0 15px 0;">✅ Completed</h3>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="padding: 8px; margin: 5px 0;"><strong>✓</strong> CRM Domain fully implemented with entities, value objects, and enums</li>
-                    <li style="padding: 8px; margin: 5px 0;"><strong>✓</strong> Project structure for all 4 main modules (CRM, Store, Delivery, Dashboard)</li>
-                    <li style="padding: 8px; margin: 5px 0;"><strong>✓</strong> Shared contracts and infrastructure layers</li>
-                    <li style="padding: 8px; margin: 5px 0;"><strong>✓</strong> API Gateway setup</li>
-                    <li style="padding: 8px; margin: 5px 0;"><strong>✓</strong> Git repository initialized and connected to GitHub</li>
-                </ul>
-                
-                <h3 style="color: #667eea; margin: 20px 0 15px 0;">🚀 Next Steps</h3>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="padding: 8px; margin: 5px 0;">📌 Complete Application layer for each module (business logic, services)</li>
-                    <li style="padding: 8px; margin: 5px 0;">📌 Implement Infrastructure layer (Database context, repositories)</li>
-                    <li style="padding: 8px; margin: 5px 0;">📌 Build API endpoints and controllers for each module</li>
-                    <li style="padding: 8px; margin: 5px 0;">📌 Add database migrations</li>
-                    <li style="padding: 8px; margin: 5px 0;">📌 Implement authentication & authorization</li>
-                    <li style="padding: 8px; margin: 5px 0;">📌 Add Unit tests for domain logic</li>
-                    <li style="padding: 8px; margin: 5px 0;">📌 Configure logging and error handling</li>
-                    <li style="padding: 8px; margin: 5px 0;">📌 Set up inter-service communication</li>
-                </ul>
-            </div>
-            
-            <!-- Development Guidelines -->
-            <div class="section">
-                <h2>📋 Development Guidelines</h2>
-                
-                <div class="layer-box">
-                    <h4>🏛️ Architecture Principles</h4>
-                    <ul>
-                        <li><strong>Clean Architecture:</strong> Keep concerns separated in distinct layers</li>
-                        <li><strong>DDD (Domain-Driven Design):</strong> Focus on business logic in domain layer</li>
-                        <li><strong>SOLID Principles:</strong> Follow single responsibility, dependency inversion, etc.</li>
-                        <li><strong>Microservices:</strong> Each module can run independently</li>
-                        <li><strong>Service-Oriented:</strong> Business logic centralized in application services</li>
-                    </ul>
-                </div>
-                
-                <div class="layer-box">
-                    <h4>📁 File Organization</h4>
-                    <ul>
-                        <li><code>Domain/</code> - Business entities, value objects, enums, business rules</li>
-                        <li><code>Application/</code> - Use cases, services, DTOs, application logic</li>
-                        <li><code>Infrastructure/</code> - Data persistence, external services, configuration</li>
-                        <li><code>API/</code> - Controllers, middleware, entry point (Program.cs)</li>
-                    </ul>
-                </div>
-                
-                <div class="layer-box">
-                    <h4>🔄 Communication Flow</h4>
-                    <ul>
-                        <li><strong>Request:</strong> API Controller → Application Service → Domain Logic → Infrastructure Repository</li>
-                        <li><strong>Response:</strong> Repository → Domain Logic → Application Service → API Controller</li>
-                        <li><strong>Cross-module:</strong> Use Shared.Contracts for common models</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>Generated: <strong>WSC_ERP_App Project Documentation</strong></p>
-            <p>Framework: .NET 10 | Language: C# 14.0 | Architecture: Clean Architecture with Microservices</p>
-            <p style="margin-top: 10px; opacity: 0.7;">Repository: <code>https://github.com/KarthikSai08/WSC_ERP_App</code></p>
-        </footer>
+<div class="container">
+  <div class="header">
+    <h1>&#127970; <span>WSC</span>_ERP_App</h1>
+    <p>Enterprise Resource Planning &middot; Clean Architecture &middot; Microservices</p>
+    <div class="badge-row">
+      <span class="badge">.NET 10</span>
+      <span class="badge">C# 14.0</span>
+      <span class="badge green">Clean Architecture</span>
+      <span class="badge green">Microservices</span>
+      <span class="badge cyan">Dapper ORM</span>
+      <span class="badge cyan">Redis</span>
+      <span class="badge yellow">JWT Auth</span>
+      <span class="badge yellow">Rate Limiting</span>
     </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-number">19</div><div class="stat-label">Total Projects</div></div>
+    <div class="stat-card"><div class="stat-number">6</div><div class="stat-label">Solution Modules</div></div>
+    <div class="stat-card"><div class="stat-number">.NET 10</div><div class="stat-label">Framework</div></div>
+    <div class="stat-card"><div class="stat-number">C# 14</div><div class="stat-label">Language</div></div>
+    <div class="stat-card"><div class="stat-number">15</div><div class="stat-label">NuGet Packages</div></div>
+    <div class="stat-card"><div class="stat-number">SQL Server</div><div class="stat-label">Database</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">&#128295; Environment &amp; Repository</div>
+    <div class="info-grid">
+      <div class="info-card"><h4>&#128193; Workspace</h4><p><code>C:\Users\karth\source\repos\WSC_App</code></p></div>
+      <div class="info-card"><h4>&#128187; IDE</h4><p>Visual Studio Community 2026 (18.4.2)</p></div>
+      <div class="info-card"><h4>&#9881;&#65039; Target Framework</h4><p>.NET 10 &middot; <code>net10.0</code></p></div>
+      <div class="info-card"><h4>&#128288; Language</h4><p>C# 14.0 &mdash; Implicit usings &middot; Nullable enable</p></div>
+      <div class="info-card"><h4>&#128025; GitHub Remote</h4><p><code>KarthikSai08/WSC_ERP_App</code> &middot; branch <code>main</code></p></div>
+      <div class="info-card"><h4>&#128452; Database</h4><p>SQL Server LocalDB &middot; <code>WSC_App.mdf</code></p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">&#128230; NuGet Packages</div>
+    <div style="overflow-x:auto;">
+      <table class="pkg-table">
+        <thead><tr><th>Package</th><th>Version</th><th>Layer</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td class="pkg-name">Dapper</td><td class="pkg-ver">2.1.72</td><td>Infrastructure</td><td>Micro-ORM for raw SQL &amp; stored procedures</td></tr>
+          <tr><td class="pkg-name">Microsoft.Data.SqlClient</td><td class="pkg-ver">7.0.0</td><td>Infrastructure</td><td>SQL Server driver (IDbConnection)</td></tr>
+          <tr><td class="pkg-name">Microsoft.EntityFrameworkCore.SqlServer</td><td class="pkg-ver">10.0.5</td><td>Infrastructure</td><td>EF Core SQL Server provider</td></tr>
+          <tr><td class="pkg-name">Microsoft.EntityFrameworkCore.Design</td><td class="pkg-ver">10.0.5</td><td>Infrastructure</td><td>Migration tooling (build-only)</td></tr>
+          <tr><td class="pkg-name">StackExchange.Redis</td><td class="pkg-ver">2.12.8</td><td>Infrastructure</td><td>Redis cache client</td></tr>
+          <tr><td class="pkg-name">AutoMapper</td><td class="pkg-ver">16.1.1</td><td>Application</td><td>Object-to-object mapping (profiles per entity)</td></tr>
+          <tr><td class="pkg-name">FluentValidation</td><td class="pkg-ver">12.1.1</td><td>Application</td><td>Request validation rules</td></tr>
+          <tr><td class="pkg-name">FluentValidation.DependencyInjectionExtensions</td><td class="pkg-ver">12.1.1</td><td>Application</td><td>DI registration of validators</td></tr>
+          <tr><td class="pkg-name">Microsoft.AspNetCore.Authentication.JwtBearer</td><td class="pkg-ver">10.0.5</td><td>API / Gateway</td><td>JWT token validation middleware</td></tr>
+          <tr><td class="pkg-name">AspNetCoreRateLimit</td><td class="pkg-ver">5.0.0</td><td>API / Gateway</td><td>IP &amp; client rate limiting</td></tr>
+          <tr><td class="pkg-name">Serilog.AspNetCore</td><td class="pkg-ver">10.0.0</td><td>API</td><td>Structured logging integration</td></tr>
+          <tr><td class="pkg-name">Serilog.Sinks.File</td><td class="pkg-ver">7.0.0</td><td>API</td><td>File sink for Serilog</td></tr>
+          <tr><td class="pkg-name">Swashbuckle.AspNetCore</td><td class="pkg-ver">10.1.7</td><td>API</td><td>Swagger / OpenAPI doc generation</td></tr>
+          <tr><td class="pkg-name">Microsoft.AspNetCore.OpenApi</td><td class="pkg-ver">10.0.5</td><td>API</td><td>Native OpenAPI support</td></tr>
+          <tr><td class="pkg-name">Scalar.AspNetCore</td><td class="pkg-ver">2.13.15</td><td>API</td><td>Modern API reference UI</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">&#127959;&#65039; Clean Architecture Layers</div>
+    <div class="arch-flow">
+      <div class="arch-layer l1"><div class="arch-layer-num">&#127760;</div><div class="arch-layer-name">API Layer</div><div class="arch-layer-items">Controllers<br/>Program.cs<br/>JWT Auth<br/>Rate Limiting<br/>Serilog<br/>Swagger / Scalar<br/>ValidationFilter</div></div>
+      <div class="arch-layer l2"><div class="arch-layer-num">&#9881;&#65039;</div><div class="arch-layer-name">Application Layer</div><div class="arch-layer-items">Services<br/>Interfaces<br/>DTOs<br/>AutoMapper Profiles<br/>FluentValidation<br/>DI Registration</div></div>
+      <div class="arch-layer l3"><div class="arch-layer-num">&#127919;</div><div class="arch-layer-name">Domain Layer</div><div class="arch-layer-items">Entities<br/>Enums<br/>Value Objects<br/>Business Rules<br/>(no external deps)</div></div>
+      <div class="arch-layer l4"><div class="arch-layer-num">&#128190;</div><div class="arch-layer-name">Infrastructure Layer</div><div class="arch-layer-items">DapperContext<br/>Repositories<br/>Redis Client<br/>SQL Server<br/>DI Registration</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">&#128202; Module Status</div>
+    <div style="overflow-x:auto;">
+      <table class="status-table">
+        <thead><tr><th>Module</th><th>Projects</th><th>Layers</th><th>Status</th><th>Framework</th></tr></thead>
+        <tbody>
+          <tr><td><strong>CRM</strong></td><td>4</td><td>Domain &middot; Application &middot; Infrastructure &middot; API</td><td><span class="status-dot"><span class="dot green"></span> Implemented</span></td><td>.NET 10</td></tr>
+          <tr><td><strong>Store</strong></td><td>4</td><td>Domain &middot; Application &middot; Infrastructure &middot; API</td><td><span class="status-dot"><span class="dot green"></span> Implemented</span></td><td>.NET 10</td></tr>
+          <tr><td><strong>Delivery</strong></td><td>4</td><td>Domain &middot; Application &middot; Infrastructure &middot; API</td><td><span class="status-dot"><span class="dot yellow"></span> Scaffolded</span></td><td>.NET 10</td></tr>
+          <tr><td><strong>Dashboard</strong></td><td>4</td><td>Domain &middot; Application &middot; Infrastructure &middot; API</td><td><span class="status-dot"><span class="dot yellow"></span> Scaffolded</span></td><td>.NET 10</td></tr>
+          <tr><td><strong>Shared</strong></td><td>2</td><td>Contracts &middot; Infrastructure</td><td><span class="status-dot"><span class="dot green"></span> Implemented</span></td><td>.NET 10</td></tr>
+          <tr><td><strong>Gateway</strong></td><td>1</td><td>API Gateway</td><td><span class="status-dot"><span class="dot green"></span> Implemented</span></td><td>.NET 10</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">&#128230; Detailed Module Breakdown</div>
+
+    <div class="module-group-title"><h3>1. WSC.CRM &mdash; Customer Relationship Management</h3><div class="line"></div></div>
+    <div class="module-row">
+      <div class="module-card">
+        <div class="module-header"><span class="layer-tag lt-domain">DOMAIN</span><span class="module-name">WSC.CRM.Domain</span></div>
+        <div class="module-body"><p class="module-desc">Core business entities &mdash; no external dependencies</p>
+          <ul class="file-list"><li class="dir">Entities/</li><li><span class="hl">Customer.cs</span></li><li><span class="hl">Lead.cs</span></li><li><span class="hl">Opportunity.cs</span></li><li><span class="hl">Activity.cs</span></li></ul></div>
+      </div>
+      <div class="module-card">
+        <div class="module-header"><span class="layer-tag lt-app">APPLICATION</span><span class="module-name">WSC.CRM.Application</span></div>
+        <div class="module-body"><p class="module-desc">Services, DTOs, AutoMapper, FluentValidation</p>
+          <ul class="file-list">
+            <li class="dir">Dtos/ (8 files)</li>
+            <li>CreateCustomerDto &middot; UpdateCustomerDto</li>
+            <li>CreateLeadDto &middot; UpdateLeadDto</li>
+            <li>CreateOpportunityDto &middot; UpdateOpportunityDto</li>
+            <li>CreateActivityDto &middot; UpdateActivityDto</li>
+            <li class="dir">Services/</li>
+            <li><span class="hl">CustomerService.cs</span></li><li><span class="hl">LeadService.cs</span></li>
+            <li><span class="hl">OpportunityService.cs</span></li><li><span class="hl">ActivityService.cs</span></li>
+            <li class="dir">Interfaces/ &middot; Mappings/ &middot; Validators/ &middot; DI/</li>
+          </ul></div>
+      </div>
+      <div class="module-card">
+        <div class="module-header"><span class="layer-tag lt-infra">INFRASTRUCTURE</span><span class="module-name">WSC.CRM.Infrastructure</span></div>
+        <div class="module-body"><p class="module-desc">Dapper repositories &middot; SQL Server &middot; Redis</p>
+          <ul class="file-list">
+            <li class="dir">Repositories/</li>
+            <li><span class="hl">CustomerRepository.cs</span></li><li><span class="hl">LeadRepository.cs</span></li>
+            <li><span class="hl">OpportunityRepository.cs</span></li><li><span class="hl">ActivityRepository.cs</span></li>
+            <li class="dir">Persistence/ &middot; DependencyInjection/</li>
+          </ul></div>
+      </div>
+      <div class="module-card">
+        <div class="module-header"><span class="layer-tag lt-api">API</span><span class="module-name">WSC.CRM.API</span></div>
+        <div class="module-body"><p class="module-desc">REST endpoints &middot; JWT &middot; Swagger &middot; Scalar &middot; Serilog</p>
+          <ul class="file-list">
+            <li class="dir">Controllers/</li>
+            <li><span class="hl">CustomersController.cs</span></li><li><span class="hl">LeadsController.cs</span></li>
+            <li><span class="hl">OpportunityController.cs</span></li><li><span class="hl">ActivityController.cs</span></li>
+            <li class="dir">Filters/</li><li>ValidationFilter.cs</li>
+            <li>Program.cs &middot; appsettings.json</li>
+          </ul></div>
+      </div>
+    </div>
+
+    <div class="module-group-title"><h3>2. WSC.Store &mdash; Inventory &amp; Sales</h3><div class="line"></div></div>
+    <div class="module-row">
+      <div class="module-card">
+        <div class="module-header"><span class="layer-tag lt-domain">DOMAIN</span><span class="module-name">WSC.Store.Domain</span></div>
+        <div class="module-body"><p class="module-desc">Product, Order, Inventory entities &amp; enums</p>
+          <ul class="file-list">
+            <li class="dir">Entities/</li>
+            <li><span class="hl">Product.cs</span></li><li><span class="hl">Order.cs</span></li>
+            <li><span class="hl">OrderItems.cs</span></li><li><span class="hl">Inventory.cs</span></li>
+            <li class="dir">Enums/</li><li class="enum">OrderStatus.cs</li>
+          </ul></div>
+      </div>
+      <div class="module-card">
+        <div class="module-header"><span class="layer-tag lt-app">APPLICATION</span><span class="module-name">WSC.Store.Application</span></div>
+        <div class="module-body"><p class="module-desc">Services, DTOs, AutoMapper profiles, FluentValidation</p>
+          <ul class="file-list">
+            <li class="dir">Dtos/ (5 files)</li>
+            <li>CreateProductDto &middot; UpdateProductDto</li>
+            <li>CreateOrderDto &middot; UpdateOrderDto</li>
+            <li>CreateInventoryRecordDto</li>
+            <li class="dir">Service/</li>
+            <li><span class="hl">ProductService.cs</span></li><li><span class="hl">OrderService.cs</span></li><li><span class="hl">InventoryService.cs</span></li>
+            <li class="dir">Interfaces/RepositoryInterfaces/</li>
+            <li class="iface">IProductRepository &middot; IOrderRepository &middot; IInventoryRepository</li>
+            <li class="dir">Interfaces/ServiceInterfaces/</li>
+            <li class="iface">IProductService &middot; IOrderService &middot; IInventoryService</li>
+            <li class="dir">Mappings/ &middot; Validators/ &middot; DependencyInjection/</li>
+          </ul></div>
+      </div>
+      <div class="module-card">
+        <div class="module-header"><span class="layer-tag lt-infra">INFRASTRUCTURE</span><span class="module-name">WSC.Store.Infrastructure</span></div>
+        <div class="module-body"><p class="module-desc">Dapper repositories &middot; DapperContext &middot; Redis</p>
+          <ul class="file-list">
+            <li class="dir">Persistence/Context/</li><li><span class="hl">DapperContext.cs</span></li>
+            <li class="dir">Repository/</li>
+            <li><span class="hl">ProductRepository.cs</span></li><li><span class="hl">OrderRepository.cs</span></li><li><span class="hl">InventoryRepository.cs</span></li>
+            <li class="dir">DependencyInjection/</li>
+          </ul></div>
+      </div>
+      <div class="module-card">
+        <div class="module-header"><span class="layer-tag lt-api">API</span><span class="module-name">WSC.Store.API</span></div>
+        <div class="module-body"><p class="module-desc">REST endpoints &middot; JWT &middot; Rate Limiting &middot; Swagger &middot; Scalar</p>
+          <ul class="file-list">
+            <li class="dir">Controllers/</li>
+            <li><span class="hl">ProductsController.cs</span></li><li><span class="hl">OrdersController.cs</span></li><li><span class="hl">InventoryController.cs</span></li>
+            <li class="dir">Filters/</li><li>ValidationFilter.cs</li>
+            <li>Program.cs &middot; appsettings.json</li>
+          </ul></div>
+      </div>
+    </div>
+
+    <div class="module-group-title"><h3>3. WSC.Delivery &mdash; Logistics &amp; Shipping <span style="color:var(--yellow);font-size:0.75em;font-weight:400;">(Scaffolded)</span></h3><div class="line"></div></div>
+    <div class="module-row">
+      <div class="module-card"><div class="module-header"><span class="layer-tag lt-domain">DOMAIN</span><span class="module-name">WSC.Delivery.Domain</span></div><div class="module-body"><p class="module-desc">Awaiting entity definitions</p></div></div>
+      <div class="module-card"><div class="module-header"><span class="layer-tag lt-app">APPLICATION</span><span class="module-name">WSC.Delivery.Application</span></div><div class="module-body"><p class="module-desc">Awaiting service implementation</p></div></div>
+      <div class="module-card"><div class="module-header"><span class="layer-tag lt-infra">INFRASTRUCTURE</span><span class="module-name">WSC.Delivery.Infrastructure</span></div><div class="module-body"><p class="module-desc">Awaiting repository implementation</p></div></div>
+      <div class="module-card"><div class="module-header"><span class="layer-tag lt-api">API</span><span class="module-name">WSC.Delivery.API</span></div><div class="module-body"><ul class="file-list"><li>Program.cs &middot; appsettings.json</li></ul></div></div>
+    </div>
+
+    <div class="module-group-title"><h3>4. WSC.Dashboard &mdash; Analytics &amp; Reporting <span style="color:var(--yellow);font-size:0.75em;font-weight:400;">(Scaffolded)</span></h3><div class="line"></div></div>
+    <div class="module-row">
+      <div class="module-card"><div class="module-header"><span class="layer-tag lt-domain">DOMAIN</span><span class="module-name">WSC.Dashboard.Domain</span></div><div class="module-body"><p class="module-desc">Awaiting entity definitions</p></div></div>
+      <div class="module-card"><div class="module-header"><span class="layer-tag lt-app">APPLICATION</span><span class="module-name">WSC.Dashboard.Application</span></div><div class="module-body"><p class="module-desc">Awaiting analytics services</p></div></div>
+      <div class="module-card"><div class="module-header"><span class="layer-tag lt-infra">INFRASTRUCTURE</span><span class="module-name">WSC.Dashboard.Infrastructure</span></div><div class="module-body"><p class="module-desc">Awaiting repository implementation</p></div></div>
+      <div class="module-card"><div class="module-header"><span class="layer-tag lt-api">API</span><span class="module-name">WSC.Dashboard.API</span></div><div class="module-body"><ul class="file-list"><li>Program.cs &middot; appsettings.json</li></ul></div></div>
+    </div>
+
+    <div class="module-group-title"><h3>5. WSC.Shared &mdash; Cross-Cutting Contracts &amp; Infrastructure</h3><div class="line"></div></div>
+    <div class="module-row">
+      <div class="module-card">
+        <div class="module-header"><span class="layer-tag lt-shared">SHARED</span><span class="module-name">WSC.Shared.Contracts</span></div>
+        <div class="module-body"><p class="module-desc">Common models, exceptions, enums and value objects shared across all modules</p>
+          <ul class="file-list">
+            <li class="dir">Common/</li><li>ApiResponse &middot; PagedResponse &middot; PaginationRequest</li>
+            <li class="dir">Dtos/CRMLayer/</li><li>CustomerResponseDto &middot; LeadResponseDto &middot; OpportunityResponseDto &middot; ActivityResponseDto</li>
+            <li class="dir">Dtos/StoreLayer/</li><li>ProductResponseDto &middot; OrderResponseDto &middot; InventoryResponseDto</li>
+            <li class="dir">Enums/</li><li class="enum">LeadStatus &middot; OpportunityStage &middot; ActivityType</li>
+            <li class="dir">Exceptions/</li><li>NotFoundException &middot; DuplicateException &middot; InActiveException</li>
+            <li class="dir">Interfaces/CRMClients/</li><li class="iface">ICustomerClient.cs</li>
+            <li class="dir">ValueObjects/</li><li>Address.cs</li>
+            <li class="dir">Filters/</li><li>ValidationFilter.cs</li>
+          </ul></div>
+      </div>
+      <div class="module-card">
+        <div class="module-header"><span class="layer-tag lt-shared">SHARED</span><span class="module-name">WSC.Shared.Infrastructure</span></div>
+        <div class="module-body"><p class="module-desc">Shared DapperContext and HTTP clients for inter-service calls</p>
+          <ul class="file-list">
+            <li class="dir">Persistence/Context/</li><li><span class="hl">DapperContext.cs</span></li>
+            <li class="dir">Clients/</li><li><span class="hl">CustomerClient.cs</span></li>
+          </ul></div>
+      </div>
+    </div>
+
+    <div class="module-group-title"><h3>6. WSC.Gateway &mdash; API Gateway &amp; Routing</h3><div class="line"></div></div>
+    <div class="module-row">
+      <div class="module-card">
+        <div class="module-header"><span class="layer-tag lt-gateway">GATEWAY</span><span class="module-name">WSC.Gateway.API</span></div>
+        <div class="module-body"><p class="module-desc">Single entry-point: JWT auth, Rate Limiting, Serilog, Swagger, Scalar</p>
+          <ul class="file-list">
+            <li><span class="hl">Program.cs</span></li>
+            <li>appsettings.json &middot; appsettings.Development.json</li>
+          </ul>
+          <p class="module-desc" style="margin-top:10px;"><strong>Packages:</strong> JwtBearer &middot; AspNetCoreRateLimit &middot; Serilog &middot; Swashbuckle &middot; Scalar</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">&#128279; Project Reference Graph</div>
+    <div style="overflow-x:auto;">
+      <table class="pkg-table">
+        <thead><tr><th>Project</th><th>References</th></tr></thead>
+        <tbody>
+          <tr><td class="pkg-name">WSC.CRM.Domain</td><td><em style="color:var(--muted)">No project references (pure domain)</em></td></tr>
+          <tr><td class="pkg-name">WSC.CRM.Application</td><td>WSC.CRM.Domain &middot; WSC.Shared.Contracts</td></tr>
+          <tr><td class="pkg-name">WSC.CRM.Infrastructure</td><td>WSC.CRM.Application</td></tr>
+          <tr><td class="pkg-name">WSC.CRM.API</td><td>WSC.CRM.Application &middot; WSC.CRM.Infrastructure &middot; WSC.Shared.Infrastructure</td></tr>
+          <tr><td class="pkg-name">WSC.Store.Domain</td><td><em style="color:var(--muted)">No project references (pure domain)</em></td></tr>
+          <tr><td class="pkg-name">WSC.Store.Application</td><td>WSC.Store.Domain &middot; WSC.CRM.Application &middot; WSC.Shared.Contracts</td></tr>
+          <tr><td class="pkg-name">WSC.Store.Infrastructure</td><td>WSC.Store.Application &middot; WSC.CRM.Infrastructure</td></tr>
+          <tr><td class="pkg-name">WSC.Store.API</td><td>WSC.Store.Application &middot; WSC.Store.Infrastructure &middot; WSC.Shared.Infrastructure</td></tr>
+          <tr><td class="pkg-name">WSC.Shared.Contracts</td><td><em style="color:var(--muted)">No project references</em></td></tr>
+          <tr><td class="pkg-name">WSC.Shared.Infrastructure</td><td>WSC.Shared.Contracts</td></tr>
+          <tr><td class="pkg-name">WSC.Gateway.API</td><td>WSC.Shared.Contracts &middot; WSC.Shared.Infrastructure</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<footer>
+  <p>WSC_ERP_App &middot; Last updated: April 2026 &middot; .NET 10 &middot; C# 14 &middot; Clean Architecture &middot; Microservices</p>
+  <p style="margin-top:6px;">Repository: <a href="https://github.com/KarthikSai08/WSC_ERP_App" target="_blank">github.com/KarthikSai08/WSC_ERP_App</a></p>
+</footer>
 </body>
 </html>
