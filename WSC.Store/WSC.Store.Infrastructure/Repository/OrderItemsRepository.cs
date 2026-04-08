@@ -80,15 +80,15 @@ namespace WSC.Store.Infrastructure.Repository
 
         }
 
-		public async Task<IEnumerable<OrderItemResponseDto>> GetOrderItemEntityByIdAsync(int orderId, CancellationToken ct)
+		public async Task<OrderItems> GetOrderItemEntityByIdAsync(int orderId, CancellationToken ct)
 		{
 			using var con = _context.CreateConnection();
-			var sql = @"SELECT OrderItemId, OrderId
+			var sql = @"SELECT OrderItemId, OrderId, ProductId, Quantity, UnitPrice
 							FROM OrderItems	
 							WHERE OrderItemId = @Id";
 
 			var parameters = new { Id = orderId };
-			var orderItems =await con.QueryAsync<OrderItemResponseDto>(new CommandDefinition(sql, parameters, cancellationToken: ct));
+			var orderItems =await con.QuerySingleOrDefaultAsync<OrderItems>(new CommandDefinition(sql, parameters, cancellationToken: ct));
 			return orderItems;
 
         }

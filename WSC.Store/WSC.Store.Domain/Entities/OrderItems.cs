@@ -16,5 +16,5 @@ namespace WSC.Store.Domain.Entities
         public DateTime? UpdatedAt { get; set; }
         public bool IsActive { get; set; } = true;
 
-    }0
+    }
 }

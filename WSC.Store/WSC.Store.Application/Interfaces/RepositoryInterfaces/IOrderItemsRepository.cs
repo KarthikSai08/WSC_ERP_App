@@ -8,7 +8,7 @@ namespace WSC.Store.Application.Interfaces.RepositoryInterfaces
         Task<IEnumerable<OrderItemResponseDto>> GetAllOrderItemsAsync(CancellationToken ct);
 
         Task<OrderItemResponseDto> GetItemByIdAsync(int orderItemId, CancellationToken ct);
-        Task<IEnumerable<OrderItemResponseDto>> GetOrderItemEntityByIdAsync(int orderId, CancellationToken ct);
+        Task<OrderItems> GetOrderItemEntityByIdAsync(int orderId, CancellationToken ct);
         Task<int> CreateOrderItemAsync(OrderItems items, CancellationToken ct);
         Task<bool> UpdateOrderItemAsync(OrderItems items, CancellationToken ct);
         Task<bool> DeleteOrderItemAsync(int orderItemId, CancellationToken ct);
