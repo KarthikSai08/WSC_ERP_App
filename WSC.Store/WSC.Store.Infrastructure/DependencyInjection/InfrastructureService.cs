@@ -16,6 +16,7 @@ namespace WSC.Store.Infrastructure.DependencyInjection
             service.AddScoped<IProductRepository, ProductRepository>();
             service.AddScoped<IInventoryRepository, InventoryRepository>();
             service.AddScoped<IOrderRepository, OrderRepository>();
+            service.AddScoped<IOrderItemsRepository, OrderItemsRepository>();
 
             return service;
         }

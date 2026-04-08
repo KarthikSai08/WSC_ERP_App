@@ -20,7 +20,7 @@ namespace WSC.Store.Infrastructure.Repository
 		public async Task<int> CreateOrderItemAsync(OrderItems items, CancellationToken ct)
 		{
 			using var con = _context.CreateConnection();
-			var sql = @"INSERT INTO OrderItems (OrderId, ProductId, Quantity, UnitPrice, TotalPrice, CreatedAt, IsActive) 
+			var sql = @"INSERT INTO store.OrderItems (OrderId, ProductId, Quantity, UnitPrice, TotalPrice, CreatedAt, IsActive) 
 						VALUES (@OrderId, @ProductId, @Quantity, @UnitPrice, @TotalPrice, SYSUTCDATETIME(), 1);
 						SELECT CAST(SCOPE_IDENTITY() as int)";
 
@@ -41,7 +41,7 @@ namespace WSC.Store.Infrastructure.Repository
 		public async Task<bool> DeleteOrderItemAsync(int orderItemId, CancellationToken ct)
 		{
 			using var con = _context.CreateConnection();
-			var sql = @"UPDATE OrderItems
+			var sql = @"UPDATE store.OrderItems
 						SET IsActive = 0, UpdatedAt = SYSUTCDATETIME()
 						WHERE OrderItemId = @Id";
 
@@ -56,8 +56,8 @@ namespace WSC.Store.Infrastructure.Repository
 		{
 			using var con = _context.CreateConnection();
 			var sql = @"SELECT oi.OrderItemId, oi.OrderId, oi.ProductId, oi.Quantity, oi.UnitPrice, oi.TotalPrice, p.ProductName
-						FROM OrderItems oi
-						LEFT JOIN Products p ON oi.ProductId = p.ProductId
+						FROM store.OrderItems oi
+						LEFT JOIN store.Products p ON oi.ProductId = p.ProductId
 						WHERE oi.IsActive = 1";
 
 			var orderItems =await con.QueryAsync<OrderItemResponseDto>(new CommandDefinition(sql, cancellationToken: ct));
@@ -68,12 +68,11 @@ namespace WSC.Store.Infrastructure.Repository
 		{
 			using var con = _context.CreateConnection();
 			var sql = @"SELECT oi.OrderItemId, oi.OrderId, oi.ProductId, oi.Quantity, oi.UnitPrice, oi.TotalPrice, p.ProductName
-						FROM OrderItems oi
-						LEFT JOIN Products p ON oi.ProductId = p.ProductId
+						FROM store.OrderItems oi
+						LEFT JOIN store.Products p ON oi.ProductId = p.ProductId
 						WHERE oi.IsActive = 1 AND oi.OrderItemId = @Id";
 
 			var parameters = new { Id = orderItemId };
-
 			var orderItem =await con.QuerySingleOrDefaultAsync<OrderItemResponseDto>(new CommandDefinition(sql, parameters, cancellationToken: ct));
 
 			return orderItem;
@@ -84,7 +83,7 @@ namespace WSC.Store.Infrastructure.Repository
 		{
 			using var con = _context.CreateConnection();
 			var sql = @"SELECT OrderItemId, OrderId, ProductId, Quantity, UnitPrice
-							FROM OrderItems	
+							FROM store.OrderItems	
 							WHERE OrderItemId = @Id";
 
 			var parameters = new { Id = orderId };
@@ -96,7 +95,7 @@ namespace WSC.Store.Infrastructure.Repository
 		public async Task<bool> UpdateOrderItemAsync(OrderItems items, CancellationToken ct)
 		{
 			using var con = _context.CreateConnection();
-			var sql = @"UPDATE OrderItems 
+			var sql = @"UPDATE store.OrderItems 
 						SET UpdatedAt = SYSUTCDATETIME(),ProductId = @ProductId, Quantity = @Quantity, UnitPrice = @UnitPrice
 						WHERE OrderItemId = @Id AND IsActive = 1";
 			var parameters = new

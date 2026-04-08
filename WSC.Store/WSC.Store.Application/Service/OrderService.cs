@@ -39,6 +39,8 @@ namespace WSC.Store.Application.Service
             var data = _mapper.Map<Order>(dto);
             var createdOrder = await _orderRepo.CreateOrderAsync(data, ct);
 
+            if (createdOrder == null)
+                return ApiResponse<int>.Failed("Failed To Create Order");
             return ApiResponse<int>.Ok(createdOrder, "Order created successfully");
         }
 
@@ -87,10 +89,7 @@ namespace WSC.Store.Application.Service
 
             if(!updated)
                 return ApiResponse<bool>.Failed("Failed to update order. Order may not exist.");
-
             return ApiResponse<bool>.Ok(true, "Order updated successfully");
-
-
         }
     }
 }

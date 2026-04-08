@@ -17,6 +17,7 @@ namespace WSC.Store.Application.DependencyInjection
             service.AddScoped<IProductService, ProductService>();
             service.AddScoped<IOrderService, OrderService>();
             service.AddScoped<IInventoryService, InventoryService>();
+            service.AddScoped<IOrderItemsService, OrderItemService>();
 
             service.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
