@@ -97,10 +97,9 @@ namespace WSC.Store.Application.Service
             if (quantity < 0)
                 throw new ValidationException("Quantity cannot be negative");
 
-            var existingRecord = await _repo.GetInventoryRecordByIdAsync(id, ct);
+            var existingRecord = await _repo.GetInventoryRecordEntityByIdAsync(id, ct);
             if (existingRecord == null)
                 throw new NotFoundException("Inventory ", id);
-
 
             existingRecord.InStock = quantity;
             var updated = await _repo.UpdateStockAsync(id, quantity,_uow.Transaction, ct);
