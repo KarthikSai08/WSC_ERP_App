@@ -63,7 +63,7 @@ namespace WSC.Store.Infrastructure.Repository
         }
 
 
-        public async Task<Inventory?> GetInventoryRecordByIdAsync(int id, CancellationToken ct)
+        public async Task<Inventory> GetInventoryRecordByIdAsync(int id, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
             var sql = @"SELECT i.InventoryId, i.ProductId, i.InStock, i.MinStock, i.IsDeleted, p.ProductName
@@ -75,6 +75,19 @@ namespace WSC.Store.Infrastructure.Repository
 
             return inventoryRecord;
         }
+
+        public async Task<Inventory?> GetInventoryRecordByProductIdAsync(int prdId, CancellationToken ct)
+        {
+            using var con = _context.CreateConnection();
+            var sql = @"SELECT InventoryId, ProductId, InStock, IsDeleted
+                        FROM store.Inventory 
+                        WHERE ProductId = @Id AND IsDeleted = 0";
+
+            var inventoryRecord = await con.QueryFirstOrDefaultAsync<Inventory>(new CommandDefinition(sql, new { Id = prdId }, cancellationToken: ct));
+
+            return inventoryRecord;
+        }
+
 
         public async Task<bool> RecordExistsByProductAsync(int prdId, CancellationToken ct)
         {

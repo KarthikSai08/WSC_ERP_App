@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation.Results;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
@@ -33,17 +34,34 @@ namespace WSC.Store.Application.Service
 
         public async Task<ApiResponse<int>> CreateOrderItemAsync(CreateItemsDto items, CancellationToken ct)
         {
-            var prd = _productRepo.GetProductByIdAsync(items.ProductId, ct);
-            var order = _orderRepo.GetOrderByIdAsync(items.OrderId, ct);
-            var inventory = _inventoryRepo.RecordExistsByProductAsync(items.ProductId, ct);
+            
+            var prdTask = _productRepo.GetProductByIdAsync(items.ProductId, ct);
+            var orderTask = _orderRepo.GetOrderByIdAsync(items.OrderId, ct);
+            var inventoryTask = _inventoryRepo.GetInventoryRecordByProductIdAsync(items.ProductId, ct);
 
-            await Task.WhenAll(prd, order, inventory);
+            await Task.WhenAll(prdTask, orderTask, inventoryTask);
+
+            var prd = await prdTask;
+            var order = await orderTask;
+            var inventory = await inventoryTask;
+
             if (prd == null )
                 throw new NotFoundException("Product", items.ProductId);
             if(order == null)
                 throw new NotFoundException("Order", items.OrderId);
             if(inventory == null)
                 throw new NotFoundException("Inventory record for Product", items.ProductId);
+
+
+            var stock = inventory.InStock;
+            var prdName = prd.ProductName;
+            var inventoryId = inventory.InventoryId;
+
+            if (stock < items.Quantity)
+                throw new InSufficientException(prdName, items.Quantity);
+
+            var remainingStock = stock - items.Quantity;
+            var updatedStock = await _inventoryRepo.UpdateStockAsync(inventoryId,remainingStock, ct);
 
             var created = _mapper.Map<OrderItems>(items);
             var orderItems = await _itemsRepo.CreateOrderItemAsync(created, ct);
