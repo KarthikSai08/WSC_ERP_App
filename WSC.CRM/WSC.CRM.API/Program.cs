@@ -2,6 +2,7 @@ using Scalar.AspNetCore;
 using WSC.CRM.API.Filters;
 using WSC.CRM.Application.DependencyInjection;
 using WSC.CRM.Infrastructure.DependencyInjection;
+using WSC.Store.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,8 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

@@ -4,6 +4,7 @@ using System.Data;
 using WSC.Shared.Contracts.Interfaces.CRMClients;
 using WSC.Shared.Infrastructure.Clients;
 using WSC.Store.API.Filters;
+using WSC.Store.API.Middleware;
 using WSC.Store.Application.DependencyInjection;
 using WSC.Store.Infrastructure.DependencyInjection;
 
@@ -45,12 +46,14 @@ builder.Services.AddAutoMapper(cfg =>
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
