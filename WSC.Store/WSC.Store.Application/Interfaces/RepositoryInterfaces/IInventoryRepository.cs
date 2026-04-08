@@ -1,4 +1,5 @@
-﻿using WSC.Store.Domain.Entities;
+﻿using System.Data;
+using WSC.Store.Domain.Entities;
 
 namespace WSC.Store.Application.Interfaces.RepositoryInterfaces
 {
@@ -10,8 +11,9 @@ namespace WSC.Store.Application.Interfaces.RepositoryInterfaces
 
         //Task<int> UpdateInventoryRecordAsync( inv, CancellationToken ct);
         Task<bool> DeleteInventoryRecordAsync(int id, CancellationToken ct);
-        Task<bool> UpdateStockAsync(int id, int quantity, CancellationToken ct);
+        Task<bool> UpdateStockAsync(int id, int quantity, IDbTransaction transaction, CancellationToken ct);
         Task<bool> RecordExistsByProductAsync(int prdId, CancellationToken ct);
         Task<int> CreateInventoryRecordAsync(Inventory record, CancellationToken ct);
+        Task<bool> ReduceStockAsync(int productId, int quantity, IDbTransaction transaction, CancellationToken ct);
     }
 }

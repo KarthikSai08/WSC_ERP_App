@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Shared.Contracts.Exceptions;
@@ -15,12 +16,14 @@ namespace WSC.Store.Application.Service
         private readonly IInventoryRepository _repo;
         private readonly IProductRepository _productRepo;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _uow;
 
-        public InventoryService(IInventoryRepository repo, IProductRepository productRepository, IMapper mapper)
+        public InventoryService(IInventoryRepository repo, IProductRepository productRepository, IMapper mapper, IUnitOfWork uow)
         {
             _mapper = mapper;
             _repo = repo;
             _productRepo = productRepository;
+            _uow = uow;
         }
         public async Task<ApiResponse<int>> CreateInventoryRecordAsync(CreateInventoryRecordDto record, CancellationToken ct)
         {
@@ -100,7 +103,7 @@ namespace WSC.Store.Application.Service
 
 
             existingRecord.InStock = quantity;
-            var updated = await _repo.UpdateStockAsync(id, quantity, ct);
+            var updated = await _repo.UpdateStockAsync(id, quantity,_uow.Transaction, ct);
 
             return ApiResponse<bool>.Ok(updated, "Stock updated successfully");
         }

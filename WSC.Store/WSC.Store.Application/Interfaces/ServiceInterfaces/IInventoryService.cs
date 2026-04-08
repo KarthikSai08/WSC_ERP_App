@@ -1,4 +1,5 @@
-﻿using WSC.Shared.Contracts.Common;
+﻿using System.Data;
+using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Store.Application.Dtos;
 

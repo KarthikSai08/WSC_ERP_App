@@ -1,4 +1,5 @@
-﻿using WSC.Shared.Contracts.Dtos;
+﻿using System.Data;
+using WSC.Shared.Contracts.Dtos;
 using WSC.Store.Domain.Entities;
 
 namespace WSC.Store.Application.Interfaces.RepositoryInterfaces
@@ -9,7 +10,7 @@ namespace WSC.Store.Application.Interfaces.RepositoryInterfaces
 
         Task<OrderItemResponseDto> GetItemByIdAsync(int orderItemId, CancellationToken ct);
         Task<OrderItems> GetOrderItemEntityByIdAsync(int orderId, CancellationToken ct);
-        Task<int> CreateOrderItemAsync(OrderItems items, CancellationToken ct);
+        Task<int> CreateOrderItemAsync(OrderItems items, IDbTransaction transaction, CancellationToken ct);
         Task<bool> UpdateOrderItemAsync(OrderItems items, CancellationToken ct);
         Task<bool> DeleteOrderItemAsync(int orderItemId, CancellationToken ct);
     }

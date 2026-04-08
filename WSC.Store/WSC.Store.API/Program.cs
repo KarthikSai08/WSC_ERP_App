@@ -1,4 +1,6 @@
+using Microsoft.Data.SqlClient;
 using Scalar.AspNetCore;
+using System.Data;
 using WSC.Shared.Contracts.Interfaces.CRMClients;
 using WSC.Shared.Infrastructure.Clients;
 using WSC.Store.API.Filters;
@@ -30,6 +32,11 @@ builder.Services.AddStoreApplicationService();
 builder.Services.AddStoreInfrastructureService();
 
 builder.Services.AddScoped<ValidationFilter>();
+
+
+builder.Services.AddScoped<IDbConnection>(sp =>
+    new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddMaps(typeof(Program).Assembly);

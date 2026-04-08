@@ -18,58 +18,56 @@ namespace WSC.Store.Application.Service
         private readonly IProductRepository _productRepo;
         private readonly IInventoryRepository _inventoryRepo;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _uow;
 
         public OrderItemService(IOrderItemsRepository itemsRepo,
                                 IOrderRepository orderRepo,
                                 IProductRepository productRepo,
                                 IInventoryRepository inventoryRepo,
-                                IMapper mapper)
+                                IMapper mapper,
+                                IUnitOfWork uow)
         {
             _itemsRepo = itemsRepo;
             _orderRepo = orderRepo;
             _productRepo = productRepo;
             _inventoryRepo = inventoryRepo;
             _mapper = mapper;
+            _uow = uow;
         }
 
         public async Task<ApiResponse<int>> CreateOrderItemAsync(CreateItemsDto items, CancellationToken ct)
         {
+            await _uow.BeginAsync();
+            try
+            {
+                var prdTask = _productRepo.GetProductByIdAsync(items.ProductId, ct);
+                var orderTask = _orderRepo.GetOrderByIdAsync(items.OrderId, ct);
+
+                await Task.WhenAll(prdTask, orderTask);
+
+                var prd = await prdTask;
+                var order = await orderTask;
+
+                if (prd == null)
+                    throw new NotFoundException("Product", items.ProductId);
+                if (order == null)
+                    throw new NotFoundException("Order", items.OrderId);
+
+                var updatedStock = await _inventoryRepo.ReduceStockAsync(items.ProductId, items.Quantity, _uow.Transaction, ct);
+
+                var created = _mapper.Map<OrderItems>(items);
+                var orderItems = await _itemsRepo.CreateOrderItemAsync(created, _uow.Transaction, ct);
+
+                await _uow.CommitAsync();
+
+                return ApiResponse<int>.Ok(orderItems, "OrdeItem created Successfully");
             
-            var prdTask = _productRepo.GetProductByIdAsync(items.ProductId, ct);
-            var orderTask = _orderRepo.GetOrderByIdAsync(items.OrderId, ct);
-            var inventoryTask = _inventoryRepo.GetInventoryRecordByProductIdAsync(items.ProductId, ct);
-
-            await Task.WhenAll(prdTask, orderTask, inventoryTask);
-
-            var prd = await prdTask;
-            var order = await orderTask;
-            var inventory = await inventoryTask;
-
-            if (prd == null )
-                throw new NotFoundException("Product", items.ProductId);
-            if(order == null)
-                throw new NotFoundException("Order", items.OrderId);
-            if(inventory == null)
-                throw new NotFoundException("Inventory record for Product", items.ProductId);
-
-
-            var stock = inventory.InStock;
-            var prdName = prd.ProductName;
-            var inventoryId = inventory.InventoryId;
-
-            if (stock < items.Quantity)
-                throw new InSufficientException(prdName, items.Quantity);
-
-            var remainingStock = stock - items.Quantity;
-            var updatedStock = await _inventoryRepo.UpdateStockAsync(inventoryId,remainingStock, ct);
-
-            var created = _mapper.Map<OrderItems>(items);
-            var orderItems = await _itemsRepo.CreateOrderItemAsync(created, ct);
-
-            if (orderItems == null)
-                return ApiResponse<int>.Failed("Failed to create OrderItems");
-            return ApiResponse<int>.Ok(orderItems, "OrdeItem created Successfully");
-            
+            }
+            catch
+            {
+                await _uow.RollbackAsync();
+                throw;
+            }
         }
 
         public async Task<ApiResponse<bool>> DeleteOrderItemAsync(int orderItemId, CancellationToken ct)

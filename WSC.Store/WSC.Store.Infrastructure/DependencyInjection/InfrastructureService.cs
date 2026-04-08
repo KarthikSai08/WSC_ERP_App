@@ -18,6 +18,8 @@ namespace WSC.Store.Infrastructure.DependencyInjection
             service.AddScoped<IOrderRepository, OrderRepository>();
             service.AddScoped<IOrderItemsRepository, OrderItemsRepository>();
 
+            service.AddScoped<IUnitOfWork, UnitOfWork>();
+
             return service;
         }
     }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Text;
 using WSC.Shared.Contracts.Dtos;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
@@ -17,11 +18,12 @@ namespace WSC.Store.Infrastructure.Repository
 		{
 			_context = context;
 		}
-		public async Task<int> CreateOrderItemAsync(OrderItems items, CancellationToken ct)
+		public async Task<int> CreateOrderItemAsync(OrderItems items,IDbTransaction transaction, CancellationToken ct)
 		{
-			using var con = _context.CreateConnection();
-			var sql = @"INSERT INTO store.OrderItems (OrderId, ProductId, Quantity, UnitPrice, TotalPrice, CreatedAt, IsActive) 
-						VALUES (@OrderId, @ProductId, @Quantity, @UnitPrice, @TotalPrice, SYSUTCDATETIME(), 1);
+			var sql = @"INSERT INTO store.OrderItems
+						(OrderId, ProductId, Quantity, UnitPrice, TotalPrice, CreatedAt, IsActive) 
+						VALUES 
+						(@OrderId, @ProductId, @Quantity, @UnitPrice, @TotalPrice, SYSUTCDATETIME(), 1);
 						SELECT CAST(SCOPE_IDENTITY() as int)";
 
 			var totalPrice = items.Quantity * items.UnitPrice;
@@ -31,10 +33,10 @@ namespace WSC.Store.Infrastructure.Repository
 				items.ProductId,
 				items.Quantity,
 				items.UnitPrice,
-				totalPrice
+				TotalPrice = totalPrice
 			};
 
-			var orderItemId =await con.QuerySingleAsync<int>(new CommandDefinition(sql, parameters, cancellationToken: ct));
+			var orderItemId =await transaction.Connection.QuerySingleAsync<int>(new CommandDefinition(sql, parameters, transaction, cancellationToken: ct));
 			return orderItemId;
 		}
 

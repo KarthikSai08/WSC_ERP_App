@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System.Data;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 using WSC.Store.Domain.Entities;
 using WSC.Store.Infrastructure.Persistence.Context;
@@ -99,6 +100,23 @@ namespace WSC.Store.Infrastructure.Repository
             return exists > 0;
         }
 
+        public async Task<bool> ReduceStockAsync(int productId, int quantity, IDbTransaction transaction, CancellationToken ct)
+        {
+            var sql = @"
+                        UPDATE store.Inventory
+                        SET InStock = InStock - @Quantity,
+                            UpdatedAt = SYSUTCDATETIME()
+                        WHERE ProductId = @ProductId
+                          AND InStock >= @Quantity
+                          AND IsDeleted = 0;";
+
+            var rows = await transaction.Connection.ExecuteAsync(new CommandDefinition(sql,
+                                                                    new { ProductId = productId, Quantity = quantity },
+                                                                    transaction,
+                                                                    cancellationToken: ct));
+            return rows > 0;
+        }
+
         /* public Task<bool> UpdateInventoryRecordAsync(Inventory inv, CancellationToken ct)
          {
              using var con = _context.CreateConnection();
@@ -116,21 +134,24 @@ namespace WSC.Store.Infrastructure.Repository
 
          }*/
 
-        public async Task<bool> UpdateStockAsync(int id, int quantity, CancellationToken ct)
+        public async Task<bool> UpdateStockAsync(int id, int quantity,IDbTransaction transaction, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
 
-            var sql = @"UPDATE store.Inventory 
-                        SET InStock = @InStock, UpdatedAt = SYSUTCDATETIME()
-                        WHERE InventoryId = @Id AND IsDeleted = 0";
+            var sql = @"UPDATE store.Inventory
+                        SET InStock = InStock - @Quantity,
+                            UpdatedAt = SYSUTCDATETIME()
+                        WHERE ProductId = @ProductId
+                          AND InStock >= @Quantity
+                          AND IsDeleted = 0;";
 
             var parameters = new
             {
-                Id = id,
-                InStock = quantity
+                ProductId = id,
+                Quantity = quantity
             };
 
-            var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, parameters, cancellationToken: ct));
+            var affectedRows = await transaction.Connection.ExecuteAsync(new CommandDefinition(sql, parameters, transaction, cancellationToken: ct));
 
             return affectedRows > 0;
         }
