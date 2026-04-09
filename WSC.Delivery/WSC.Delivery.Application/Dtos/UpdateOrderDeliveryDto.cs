@@ -1,4 +1,5 @@
-using WSC.Shared.Contracts.Enums;
+using WSC.Delivery.Domain.Enums;
+
 
 namespace WSC.Delivery.Application.Dtos
 {

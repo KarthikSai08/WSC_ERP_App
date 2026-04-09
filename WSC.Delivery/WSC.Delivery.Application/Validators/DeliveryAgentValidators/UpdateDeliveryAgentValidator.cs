@@ -7,16 +7,16 @@ namespace WSC.Delivery.Application.Validators.DeliveryAgentValidators
     {
         public UpdateDeliveryAgentValidator()
         {
-            RuleFor(x => x.DeliveryAgentId)
+            RuleFor(x => x.AgentId)
                 .GreaterThan(0).WithMessage("Invalid agent ID.");
 
-            RuleFor(x => x.AgentName)
+            RuleFor(x => x.Name)
                 .MaximumLength(100).WithMessage("Agent name cannot exceed 100 characters.")
-                .When(x => !string.IsNullOrWhiteSpace(x.AgentName));
+                .When(x => !string.IsNullOrWhiteSpace(x.Name));
 
-            RuleFor(x => x.AgentPhone)
+            RuleFor(x => x.Phone)
                 .Matches(@"^\+?[1-9]\d{1,14}$").WithMessage("Invalid phone number format.")
-                .When(x => !string.IsNullOrWhiteSpace(x.AgentPhone));
+                .When(x => !string.IsNullOrWhiteSpace(x.Phone));
 
             RuleFor(x => x.VehicleNumber)
                 .MaximumLength(50).WithMessage("Vehicle number cannot exceed 50 characters.")

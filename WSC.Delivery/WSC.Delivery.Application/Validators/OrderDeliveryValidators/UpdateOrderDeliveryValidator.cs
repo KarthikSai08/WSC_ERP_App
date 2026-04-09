@@ -17,10 +17,6 @@ namespace WSC.Delivery.Application.Validators.OrderDeliveryValidators
             RuleFor(x => x.ScheduledDate)
                 .GreaterThan(DateTime.UtcNow).WithMessage("Scheduled date must be in the future.")
                 .When(x => x.ScheduledDate.HasValue);
-
-            RuleFor(x => x.DeliveryAddress)
-                .MaximumLength(500).WithMessage("Delivery address cannot exceed 500 characters.")
-                .When(x => !string.IsNullOrWhiteSpace(x.DeliveryAddress));
         }
     }
 }
