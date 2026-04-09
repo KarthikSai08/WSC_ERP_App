@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WSC.Delivery.Domain.Enums;
 
 namespace WSC.Delivery.Domain.Entities
 {
@@ -11,7 +12,6 @@ namespace WSC.Delivery.Domain.Entities
         public DeliveryStatus Status { get; set; }
         public string Location { get; set; }
         public string Remarks { get; set; }
-
         public DateTime Timestamp { get; set; }
     }
 }
