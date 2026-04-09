@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System.Data;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Shared.Contracts.Exceptions;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
@@ -158,6 +159,5 @@ namespace WSC.Store.Infrastructure.Repository
 
             return affectedRows > 0;
         }
-
     }
 }

@@ -6,7 +6,7 @@ using WSC.Store.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddGrpc();
 builder.Services.AddControllers(opts =>
 {
     opts.Filters.Add<ValidationFilter>();
@@ -29,6 +29,8 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 var app = builder.Build();
+
+app.MapGrpcService<WSC.CRM.API.Services.CustomerServiceImpl>();
 
 app.UseMiddleware<ExceptionMiddleware>();
 

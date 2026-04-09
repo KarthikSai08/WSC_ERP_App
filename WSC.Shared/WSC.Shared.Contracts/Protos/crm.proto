@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option csharp_namespace = "WSC.Shared.Contracts.Protos";
+
+package crm;
+
+message CustomerRequest {
+  int32 customerId = 1;
+}
+
+message CustomerResponse {
+  int32 customerId = 1;
+  string name = 2;
+}
+
+service CustomerService {
+  rpc GetCustomer (CustomerRequest) returns (CustomerResponse);
+}
