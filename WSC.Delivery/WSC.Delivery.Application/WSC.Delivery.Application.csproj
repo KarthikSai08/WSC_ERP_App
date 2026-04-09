@@ -12,4 +12,9 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\WSC.Shared\WSC.Shared.Contracts\WSC.Shared.Contracts.csproj" />
+    <ProjectReference Include="..\WSC.Delivery.Domain\WSC.Delivery.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

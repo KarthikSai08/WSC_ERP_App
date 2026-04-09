@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\WSC.Delivery\WSC.Delivery.Domain\WSC.Delivery.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
