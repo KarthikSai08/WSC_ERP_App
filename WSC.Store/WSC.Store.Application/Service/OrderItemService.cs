@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using FluentValidation.Results;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos;
-using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Shared.Contracts.Exceptions;
 using WSC.Store.Application.Dtos;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
@@ -61,7 +59,7 @@ namespace WSC.Store.Application.Service
                 await _uow.CommitAsync();
 
                 return ApiResponse<int>.Ok(orderItems, "OrdeItem created Successfully");
-            
+
             }
             catch
             {

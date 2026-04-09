@@ -52,5 +52,5 @@ namespace WSC.Store.API.Filters
 
             await next();
         }
-    } 
+    }
 }

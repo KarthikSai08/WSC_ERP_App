@@ -138,7 +138,7 @@ namespace WSC.Store.Infrastructure.Repository
 
          }*/
 
-        public async Task<bool> UpdateStockAsync(int id, int quantity,IDbTransaction transaction, CancellationToken ct)
+        public async Task<bool> UpdateStockAsync(int id, int quantity, IDbTransaction transaction, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
 

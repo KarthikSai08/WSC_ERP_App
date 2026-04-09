@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using WSC.CRM.Application.Interfaces.Repository;
-using WSC.CRM.Infrastructure.Repositories;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 using WSC.Store.Infrastructure.Persistence.Context;
 using WSC.Store.Infrastructure.Repository;

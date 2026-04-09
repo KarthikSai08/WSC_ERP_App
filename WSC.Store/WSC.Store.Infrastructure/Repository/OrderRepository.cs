@@ -1,6 +1,4 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Text;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
@@ -33,7 +31,7 @@ namespace WSC.Store.Infrastructure.Repository
                 order.IsActive
             };
 
-            var created =await con.QuerySingleAsync<int>(new CommandDefinition(sql, parameters, cancellationToken : ct));
+            var created = await con.QuerySingleAsync<int>(new CommandDefinition(sql, parameters, cancellationToken: ct));
             return created;
         }
 
@@ -45,7 +43,7 @@ namespace WSC.Store.Infrastructure.Repository
                         SET IsActive = 0
                         WHERE OrderId = @Id";
 
-            var deleted =await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
+            var deleted = await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
             return deleted > 0;
         }
 
@@ -70,7 +68,7 @@ namespace WSC.Store.Infrastructure.Repository
                         LEFT JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.OrderId = @Id AND o.IsActive = 1";
 
-            var order =await con.QuerySingleOrDefaultAsync<OrderResponseDto>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
+            var order = await con.QuerySingleOrDefaultAsync<OrderResponseDto>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
 
             return order;
         }
@@ -98,24 +96,24 @@ namespace WSC.Store.Infrastructure.Repository
 
             parameters.Add("@OrderId", order.OrderId);
 
-            if(order.CustomerId != default)
+            if (order.CustomerId != default)
             {
                 sql.Append(", CustomerId = @CustomerId");
                 parameters.Add("@CustomerId", order.CustomerId);
             }
-            if(order.TotalAmount != default)
+            if (order.TotalAmount != default)
             {
                 sql.Append(", TotalAmount = @TotalAmount");
                 parameters.Add("@TotalAmount", order.TotalAmount);
             }
-            if(order.Status != default)
+            if (order.Status != default)
             {
                 sql.Append(", Status = @Status");
                 parameters.Add("@Status", order.Status);
             }
             sql.Append(" WHERE OrderId = @OrderId");
 
-            var updated =await con.ExecuteAsync(new CommandDefinition(sql.ToString(), parameters, cancellationToken: ct));
+            var updated = await con.ExecuteAsync(new CommandDefinition(sql.ToString(), parameters, cancellationToken: ct));
 
             return updated > 0;
         }

@@ -14,25 +14,25 @@ namespace WSC.CRM.API.Filters
         {
             var errors = new List<ValidationFailure>();
 
-            foreach(var argument in context.ActionArguments.Values)
+            foreach (var argument in context.ActionArguments.Values)
             {
-                if(argument == null) continue;
+                if (argument == null) continue;
 
                 var validatorType = typeof(IValidator<>).MakeGenericType(argument.GetType());
                 var validator = _service.GetService(validatorType) as IValidator;
 
-                if(validator == null) continue;
+                if (validator == null) continue;
 
                 var validationContext = new ValidationContext<object>(argument);
                 var result = await validator.ValidateAsync(validationContext);
 
-                if(!result.IsValid)
+                if (!result.IsValid)
                 {
                     errors.AddRange(result.Errors);
                 }
             }
 
-            if(errors.Count > 0)
+            if (errors.Count > 0)
             {
                 context.Result = new BadRequestObjectResult(new
                 {

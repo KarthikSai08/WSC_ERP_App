@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WSC.Store.Application.Dtos;
 using WSC.Store.Application.Interfaces.ServiceInterfaces;
 

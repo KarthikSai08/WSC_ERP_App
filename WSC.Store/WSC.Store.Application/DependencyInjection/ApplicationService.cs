@@ -3,9 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using WSC.Store.Application.Interfaces.ServiceInterfaces;
 using WSC.Store.Application.Service;
-using WSC.Store.Application.Validators.InventoryValidator;
-using WSC.Store.Application.Validators.OrderValidator;
-using WSC.Store.Application.Validators.ProductValidator;
 
 namespace WSC.Store.Application.DependencyInjection
 {

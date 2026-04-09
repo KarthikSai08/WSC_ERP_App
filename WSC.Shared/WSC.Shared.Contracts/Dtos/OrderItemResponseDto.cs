@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace WSC.Shared.Contracts.Dtos
+﻿namespace WSC.Shared.Contracts.Dtos
 {
     public class OrderItemResponseDto
     {

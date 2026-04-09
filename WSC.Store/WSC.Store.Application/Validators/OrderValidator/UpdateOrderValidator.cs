@@ -1,14 +1,11 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.Store.Application.Dtos;
 
 namespace WSC.Store.Application.Validators.OrderValidator
 {
     public class UpdateOrderValidator : AbstractValidator<UpdateOrderDto>
     {
-        public UpdateOrderValidator() 
+        public UpdateOrderValidator()
         {
             RuleFor(x => x.OrderId)
                 .GreaterThan(0).WithMessage("OrderId must be greater than 0.");

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Shared.Contracts.Exceptions;
@@ -102,7 +101,7 @@ namespace WSC.Store.Application.Service
                 throw new NotFoundException("Inventory ", id);
 
             existingRecord.InStock = quantity;
-            var updated = await _repo.UpdateStockAsync(id, quantity,_uow.Transaction, ct);
+            var updated = await _repo.UpdateStockAsync(id, quantity, _uow.Transaction, ct);
 
             return ApiResponse<bool>.Ok(updated, "Stock updated successfully");
         }

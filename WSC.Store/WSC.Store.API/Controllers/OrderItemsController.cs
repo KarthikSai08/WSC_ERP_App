@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WSC.Store.Application.Dtos;
 using WSC.Store.Application.Interfaces.ServiceInterfaces;
 
@@ -16,13 +15,13 @@ namespace WSC.Store.API.Controllers
         public async Task<IActionResult> GetAll(CancellationToken ct)
         {
             var result = await _service.GetAllOrderItemsAsync(ct);
-            if(result.Success)
+            if (result.Success)
                 return Ok(result);
             return NotFound(result);
 
         }
         [HttpGet("order-item/{oiId}")]
-        public async Task<IActionResult> GetById([FromQuery]int oiId, CancellationToken ct)
+        public async Task<IActionResult> GetById([FromQuery] int oiId, CancellationToken ct)
         {
             var result = await _service.GetItemByIdAsync(oiId, ct);
             if (result.Success)

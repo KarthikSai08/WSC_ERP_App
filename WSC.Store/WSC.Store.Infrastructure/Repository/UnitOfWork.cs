@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
+﻿using System.Data;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 
 namespace WSC.Store.Infrastructure.Repository
@@ -20,7 +17,7 @@ namespace WSC.Store.Infrastructure.Repository
 
             Transaction = _connection.BeginTransaction();
         }
-        public  Task CommitAsync()
+        public Task CommitAsync()
         {
             Transaction?.Commit();
             Dispose();
@@ -34,7 +31,7 @@ namespace WSC.Store.Infrastructure.Repository
             return Task.CompletedTask;
         }
 
-        public void  Dispose()
+        public void Dispose()
         {
             Transaction?.Dispose();
             _connection?.Close();
