@@ -76,8 +76,7 @@ namespace WSC.Delivery.Infrastructure.Repositories
 
             return tracking;
         }
-
-        public async Task<IEnumerable<DeliveryTracking>> GetLatestTrackingByDeliveryIdAsync(int deliveryId, int count, CancellationToken ct)
+        public async Task<IEnumerable<DeliveryTrackingResponseDto>> GetLatestTrackingByDeliveryIdAsync(int deliveryId, int count, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
 
@@ -86,7 +85,7 @@ namespace WSC.Delivery.Infrastructure.Repositories
                         WHERE DeliveryId = @DeliveryId
                         ORDER BY Timestamp DESC";
 
-            var tracking = await con.QueryAsync<DeliveryTracking>(
+            var tracking = await con.QueryAsync<DeliveryTrackingResponseDto>(
                 new CommandDefinition(sql, new { DeliveryId = deliveryId, Count = count }, cancellationToken: ct));
 
             return tracking;

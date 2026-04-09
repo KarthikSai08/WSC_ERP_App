@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\WSC.Shared\WSC.Shared.Contracts\WSC.Shared.Contracts.csproj" />
     <ProjectReference Include="..\WSC.Delivery.Application\WSC.Delivery.Application.csproj" />
+    <ProjectReference Include="..\WSC.Delivery.Infrastructure\WSC.Delivery.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
