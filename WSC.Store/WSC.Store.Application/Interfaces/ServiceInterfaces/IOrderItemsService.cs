@@ -1,5 +1,5 @@
 ﻿using WSC.Shared.Contracts.Common;
-using WSC.Shared.Contracts.Dtos;
+using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Store.Application.Dtos;
 
 namespace WSC.Store.Application.Interfaces.ServiceInterfaces

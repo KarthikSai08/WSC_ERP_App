@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using WSC.Shared.Contracts.Dtos;
+using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Store.Domain.Entities;
 
 namespace WSC.Store.Application.Interfaces.RepositoryInterfaces

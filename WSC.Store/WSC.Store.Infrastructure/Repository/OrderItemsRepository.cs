@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using System.Data;
-using WSC.Shared.Contracts.Dtos;
+using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 using WSC.Store.Domain.Entities;
 using WSC.Store.Infrastructure.Persistence.Context;

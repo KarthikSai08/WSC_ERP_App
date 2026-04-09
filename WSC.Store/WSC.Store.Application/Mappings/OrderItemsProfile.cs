@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using WSC.Shared.Contracts.Dtos;
+using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Store.Application.Dtos;
 using WSC.Store.Domain.Entities;
 
