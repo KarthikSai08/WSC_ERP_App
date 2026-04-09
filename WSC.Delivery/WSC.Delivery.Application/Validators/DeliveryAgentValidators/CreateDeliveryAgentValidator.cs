@@ -1,5 +1,5 @@
 using FluentValidation;
-using WSC.Shared.Contracts.Dtos.DeliveryLayer;
+using WSC.Delivery.Application.Dtos;
 
 namespace WSC.Delivery.Application.Validators.DeliveryAgentValidators
 {
@@ -7,11 +7,11 @@ namespace WSC.Delivery.Application.Validators.DeliveryAgentValidators
     {
         public CreateDeliveryAgentValidator()
         {
-            RuleFor(x => x.AgentName)
+            RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Agent name is required.")
                 .MaximumLength(100).WithMessage("Agent name cannot exceed 100 characters.");
 
-            RuleFor(x => x.AgentPhone)
+            RuleFor(x => x.Phone)
                 .NotEmpty().WithMessage("Agent phone is required.")
                 .Matches(@"^\+?[1-9]\d{1,14}$").WithMessage("Invalid phone number format.");
 

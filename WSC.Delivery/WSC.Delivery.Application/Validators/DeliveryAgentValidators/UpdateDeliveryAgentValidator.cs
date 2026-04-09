@@ -1,5 +1,5 @@
 using FluentValidation;
-using WSC.Shared.Contracts.Dtos.DeliveryLayer;
+using WSC.Delivery.Application.Dtos;
 
 namespace WSC.Delivery.Application.Validators.DeliveryAgentValidators
 {

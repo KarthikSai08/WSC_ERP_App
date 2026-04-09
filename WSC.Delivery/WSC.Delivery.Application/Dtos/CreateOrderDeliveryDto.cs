@@ -1,0 +1,11 @@
+namespace WSC.Delivery.Application.Dtos
+{
+    public class CreateOrderDeliveryDto
+    {
+        public int OrderId { get; set; }
+        public int CustomerId { get; set; }
+        public int? AssignedAgentId { get; set; }
+        public DateTime ScheduledDate { get; set; }
+        public string DeliveryAddress { get; set; }
+    }
+}

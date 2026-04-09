@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// This file is deprecated - use WSC.Shared.Contracts.Enums.DeliveryStatus instead
+// Kept for backward compatibility, but all new code should reference the Shared version
+
+using WSC.Shared.Contracts.Enums;
 
 namespace WSC.Delivery.Domain.Enums
 {
-    public enum DeliveryStatus
-    {
-        Pending = 0,
-        Assigned = 1,
-        PickedUp = 2,
-        InTransit = 3,
-        OutForDelivery = 4,
-        Delivered = 5,
-        Failed = 6,
-        Cancelled = 7
-    }
+    // Re-export for backward compatibility
+    using DeliveryStatus = Shared.Contracts.Enums.DeliveryStatus;
 }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using WSC.Delivery.Application.Dtos;
 using WSC.Delivery.Domain.Entities;
 using WSC.Shared.Contracts.Dtos.DeliveryLayer;
 
@@ -9,9 +10,9 @@ namespace WSC.Delivery.Application.Mappings
         public DeliveryItemProfile()
         {
             CreateMap<DeliveryItem, DeliveryItemResponseDto>();
-            
+
             CreateMap<CreateDeliveryItemDto, DeliveryItem>();
-            
+
             CreateMap<UpdateDeliveryItemDto, DeliveryItem>()
                 .ForMember(dest => dest.DeliveryItemId, opt => opt.Ignore())
                 .ForMember(dest => dest.DeliveryId, opt => opt.Ignore());

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using WSC.Delivery.Domain.Enums;
+using WSC.Shared.Contracts.Enums;
 
 namespace WSC.Shared.Contracts.Dtos.DeliveryLayer
 {

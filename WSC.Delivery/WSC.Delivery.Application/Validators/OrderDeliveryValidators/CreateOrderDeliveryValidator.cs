@@ -1,5 +1,5 @@
 using FluentValidation;
-using WSC.Shared.Contracts.Dtos.DeliveryLayer;
+using WSC.Delivery.Application.Dtos;
 
 namespace WSC.Delivery.Application.Validators.OrderDeliveryValidators
 {
@@ -12,10 +12,6 @@ namespace WSC.Delivery.Application.Validators.OrderDeliveryValidators
 
             RuleFor(x => x.CustomerId)
                 .GreaterThan(0).WithMessage("Valid customer ID is required.");
-
-            RuleFor(x => x.TrackingNumber)
-                .NotEmpty().WithMessage("Tracking number is required.")
-                .MaximumLength(100).WithMessage("Tracking number cannot exceed 100 characters.");
 
             RuleFor(x => x.ScheduledDate)
                 .GreaterThan(DateTime.UtcNow).WithMessage("Scheduled date must be in the future.");
