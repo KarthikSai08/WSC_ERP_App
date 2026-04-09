@@ -39,7 +39,7 @@ namespace WSC.CRM.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id, CancellationToken ct)
         {
-            var res = await _service.GetByIdAsync(id, ct);
+            var res = await _service.GetByIdAsync(id);
             if (res.Success)
                 return Ok(res);
             return BadRequest(res);

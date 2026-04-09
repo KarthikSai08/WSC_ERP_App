@@ -57,12 +57,12 @@ namespace WSC.CRM.Application.Services
             return ApiResponse<IEnumerable<CustomerResponseDto>>.Ok(allCustomers, "Customers retrived Successfully");
         }
 
-        public async Task<ApiResponse<CustomerResponseDto?>> GetByIdAsync(int id, CancellationToken ct)
+        public async Task<ApiResponse<CustomerResponseDto?>> GetByIdAsync(int id)
         {
             if (id <= 0)
                 throw new Exception("Id must be greater than 0");
 
-            var customer = await _repo.GetCustomerByIdAsync(id, ct);
+            var customer = await _repo.GetCustomerByIdAsync(id);
 
             if (customer == null)
                 throw new NotFoundException("Customer", id);
@@ -74,7 +74,7 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<bool>> UpdateCustomerAsync(UpdateCustomerDto dto, CancellationToken ct)
         {
-            var customer = await _repo.GetCustomerByIdAsync(dto.CxId, ct);
+            var customer = await _repo.GetCustomerByIdAsync(dto.CxId);
             if (customer == null)
                 throw new NotFoundException("Customer", dto.CxId);
 

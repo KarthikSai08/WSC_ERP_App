@@ -9,8 +9,9 @@ message CustomerRequest {
 }
 
 message CustomerResponse {
-  int32 customerId = 1;
+  int32 id = 1;
   string name = 2;
+  string phone = 4;
 }
 
 service CustomerService {

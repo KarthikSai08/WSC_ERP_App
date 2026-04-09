@@ -25,9 +25,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
   </ItemGroup>
 
-	<ItemGroup>
-		<Protobuf Include="..\..\WSC.Shared\WSC.Shared.Contracts\Protos\crm.proto" GrpcServices="Server" />
-	</ItemGroup>
 	
   <ItemGroup>
     <ProjectReference Include="..\..\WSC.Shared\WSC.Shared.Contracts\WSC.Shared.Contracts.csproj" />

@@ -26,7 +26,7 @@ namespace WSC.CRM.Application.Services
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
 
-            var cxExists = await _cxRepo.GetCustomerByIdAsync(dto.CustomerId, ct);
+            var cxExists = await _cxRepo.GetCustomerByIdAsync(dto.CustomerId);
             if (cxExists is null)
                 throw new NotFoundException("Customer", dto.CustomerId);
 

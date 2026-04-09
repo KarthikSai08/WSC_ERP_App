@@ -7,7 +7,7 @@ namespace WSC.CRM.Application.Interfaces.Repository
     public interface ICustomerRepository
     {
         Task<IEnumerable<Customer>> GetAllCustomersAsync(CancellationToken ct);
-        Task<Customer?> GetCustomerByIdAsync(int id, CancellationToken ct);
+        Task<Customer?> GetCustomerByIdAsync(int id);
         Task<int> CreateCustomerAsync(Customer cx, CancellationToken ct);
         Task<bool> ExistsByEmailAsync(string email, CancellationToken ct);
         Task<bool> UpdateCustomerAsync(Customer cx, CancellationToken ct);

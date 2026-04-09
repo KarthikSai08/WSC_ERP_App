@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\WSC.CRM\WSC.CRM.Application\WSC.CRM.Application.csproj" />
     <ProjectReference Include="..\..\WSC.Shared\WSC.Shared.Contracts\WSC.Shared.Contracts.csproj" />
     <ProjectReference Include="..\WSC.Store.Domain\WSC.Store.Domain.csproj" />
   </ItemGroup>

@@ -81,7 +81,7 @@ namespace WSC.CRM.Infrastructure.Repositories
             return customers;
         }
 
-        public async Task<Customer?> GetCustomerByIdAsync(int id, CancellationToken ct)
+        public async Task<Customer?> GetCustomerByIdAsync(int id)
         {
             using var con = _context.CreateConnection();
 
@@ -89,7 +89,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                         FROM crm.Customers 
                         WHERE CxId = @Id";
 
-            var customer = await con.QueryFirstOrDefaultAsync<Customer>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
+            var customer = await con.QueryFirstOrDefaultAsync<Customer>(new CommandDefinition(sql, new { Id = id }));
             return customer;
         }
 
