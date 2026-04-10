@@ -10,7 +10,7 @@ namespace WSC.Delivery.Application.Validators.DeliveryItemValidators
             RuleFor(x => x.DeliveryId)
                 .GreaterThan(0).WithMessage("Valid delivery ID is required.");
 
-            RuleFor(x => x.OrderItemId)
+            RuleFor(x => x.ProductId)
                 .GreaterThan(0).WithMessage("Valid order item ID is required.");
 
             RuleFor(x => x.Quantity)

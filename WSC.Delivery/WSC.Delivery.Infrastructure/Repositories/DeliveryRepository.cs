@@ -27,14 +27,16 @@ namespace WSC.Delivery.Infrastructure.Repositories
             parameters.Add("@DeliveryAddress", delivery.DeliveryAddress);
             parameters.Add("@CreatedAt", DateTime.UtcNow);
             parameters.Add("@IsActive", delivery.IsActive);
+            parameters.Add("@NewId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             var sql = @"INSERT INTO delivery.OrderDeliveries 
                         (OrderId, CustomerId, TrackingNumber, Status, AssignedAgentId, ScheduledDate, DeliveryAddress, CreatedAt, IsActive)
-                        VALUES (@OrderId, @CustomerId, @TrackingNumber, @Status, @AssignedAgentId, @ScheduledDate, @DeliveryAddress, @CreatedAt, @IsActive)";
+                        VALUES (@OrderId, @CustomerId, @TrackingNumber, @Status, @AssignedAgentId, @ScheduledDate, @DeliveryAddress, @CreatedAt, @IsActive)
+                        SET @NewId = SCOPE_IDENTITY()";
 
             var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, parameters, cancellationToken: ct));
 
-            return affectedRows;
+            return parameters.Get<int>("@NewId");
         }
 
         public async Task<bool> DeleteDeliveryByIdAsync(int deliveryId, CancellationToken ct)

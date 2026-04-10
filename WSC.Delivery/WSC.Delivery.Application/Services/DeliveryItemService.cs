@@ -7,6 +7,7 @@ using WSC.Delivery.Application.Interfaces.RepositoryInterfaces;
 using WSC.Delivery.Application.Interfaces.ServiceInterfaces;
 using WSC.Delivery.Domain.Entities;
 using Microsoft.Extensions.Logging;
+using WSC.Shared.Contracts.Interfaces.StoreClients;
 
 namespace WSC.Delivery.Application.Services
 {
@@ -14,22 +15,29 @@ namespace WSC.Delivery.Application.Services
     {
         private readonly IDeliveryItemRepository _itemRepository;
         private readonly IMapper _mapper;
+        private readonly IProductClient _prdClient;
         private readonly ILogger<DeliveryItemService> _logger;
 
         public DeliveryItemService(
             IDeliveryItemRepository itemRepository,
             IMapper mapper,
+            IProductClient prdClient,
             ILogger<DeliveryItemService> logger)
         {
             _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _prdClient = prdClient ?? throw new ArgumentNullException(nameof(prdClient));
         }
 
         public async Task<ApiResponse<int>> CreateDeliveryItemAsync(CreateDeliveryItemDto dto, CancellationToken ct)
         {
             try
             {
+                var prd = await _prdClient.GetProductByIdAsync(dto.ProductId, ct);
+                if(prd == null) 
+                    return ApiResponse<int>.Failed($"Product with ID {dto.ProductId} not found.");
+
                 if (dto == null)
                     return ApiResponse<int>.Failed("Invalid delivery item data.");
 
