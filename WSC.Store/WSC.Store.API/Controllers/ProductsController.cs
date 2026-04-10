@@ -14,7 +14,7 @@ namespace WSC.Store.API.Controllers
         public ProductsController(IProductService service) => _service = service;
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllProducts(CancellationToken ct)
+        public async Task<ActionResult<ApiResponse<IEnumerable<ProductResponseDto>>>> GetAllProducts(CancellationToken ct)
         {
             var products = await _service.GetAllProductsAsync(ct);
             return Ok(products);
