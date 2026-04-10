@@ -7,11 +7,11 @@ namespace WSC.Delivery.Application.Validators.DeliveryAgentValidators
     {
         public CreateDeliveryAgentValidator()
         {
-            RuleFor(x => x.Name)
+            RuleFor(x => x.AgentName)
                 .NotEmpty().WithMessage("Agent name is required.")
                 .MaximumLength(100).WithMessage("Agent name cannot exceed 100 characters.");
 
-            RuleFor(x => x.Phone)
+            RuleFor(x => x.AgentPhone)
                 .NotEmpty().WithMessage("Agent phone is required.")
                 .Matches(@"^\+?[1-9]\d{1,14}$").WithMessage("Invalid phone number format.");
 

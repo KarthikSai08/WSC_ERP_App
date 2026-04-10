@@ -22,6 +22,7 @@ namespace WSC.Delivery.Infrastructure.Repositories
             parameters.Add("@Location", tracking.Location);
             parameters.Add("@Remarks", tracking.Remarks);
             parameters.Add("@Timestamp", DateTime.UtcNow);
+
             parameters.Add("@TrackingId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             var sql = @"INSERT INTO delivery.DeliveryTracking 
