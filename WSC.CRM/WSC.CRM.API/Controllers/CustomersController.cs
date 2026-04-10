@@ -2,6 +2,7 @@
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Services;
 using WSC.Shared.Contracts.Common;
+using WSC.Shared.Contracts.Dtos.CRMLayer;
 
 namespace WSC.CRM.API.Controllers
 {
@@ -13,7 +14,7 @@ namespace WSC.CRM.API.Controllers
         public CustomersController(ICustomerService service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(CancellationToken ct)
+        public async Task<ActionResult<ApiResponse<IEnumerable<CustomerResponseDto>>>> GetAll(CancellationToken ct)
         {
             var result = await _service.GetAllAsync(ct);
             if (result.Success)
@@ -21,7 +22,7 @@ namespace WSC.CRM.API.Controllers
             return NotFound(result);
         }
         [HttpPost("add-customer")]
-        public async Task<IActionResult> CreateCustomer(CreateCustomerDto dto, CancellationToken ct)
+        public async Task<ActionResult<ApiResponse<int>>> CreateCustomer(CreateCustomerDto dto, CancellationToken ct)
         {
             var result = await _service.CreateCustomerAsync(dto, ct);
             if (result.Success)
@@ -29,7 +30,7 @@ namespace WSC.CRM.API.Controllers
             return BadRequest(result);
         }
         [HttpDelete("deactivate-customer")]
-        public async Task<IActionResult> DeleteCustomer(int id, CancellationToken ct)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteCustomer(int id, CancellationToken ct)
         {
             var result = await _service.DeleteCustomerAsync(id, ct);
             if (result.Success)
@@ -37,7 +38,7 @@ namespace WSC.CRM.API.Controllers
             return BadRequest(result);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id, CancellationToken ct)
+        public async Task<ActionResult<ApiResponse<CustomerResponseDto>>> GetById(int id, CancellationToken ct)
         {
             var res = await _service.GetByIdAsync(id, ct);
             if (res.Success)
@@ -45,7 +46,7 @@ namespace WSC.CRM.API.Controllers
             return BadRequest(res);
         }
         [HttpPut("update-customer")]
-        public async Task<IActionResult> UpdateAsync(UpdateCustomerDto dto, CancellationToken ct)
+        public async Task<ActionResult<ApiResponse<bool>>> UpdateAsync(UpdateCustomerDto dto, CancellationToken ct)
         {
             var res = await _service.UpdateCustomerAsync(dto, ct);
             if (res.Success)
@@ -54,7 +55,7 @@ namespace WSC.CRM.API.Controllers
 
         }
         [HttpGet("paged-response")]
-        public async Task<IActionResult> GetPagedCustomer([FromQuery] PaginationRequest request, CancellationToken ct)
+        public async Task<ActionResult<ApiResponse<IEnumerable<CustomerResponseDto>>>> GetPagedCustomer([FromQuery] PaginationRequest request, CancellationToken ct)
         {
             var result = await _service.GetCustomersAsync(request, ct);
             return Ok(result);

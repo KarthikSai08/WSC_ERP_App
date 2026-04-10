@@ -20,6 +20,7 @@ namespace WSC.CRM.Infrastructure.Repositories
         public async Task<int> CreateActivityAsync(Activity act, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
+
             var parameters = new DynamicParameters();
             parameters.Add("@Title", act.Title);
             parameters.Add("@Description", act.Description);
