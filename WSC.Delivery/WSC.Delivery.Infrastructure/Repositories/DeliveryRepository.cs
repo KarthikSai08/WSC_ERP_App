@@ -13,7 +13,7 @@ namespace WSC.Delivery.Infrastructure.Repositories
         private readonly DapperContext _context;
         public DeliveryRepository(DapperContext context) => _context = context;
 
-        public async Task<bool> CreateDeliveryAsync(OrderDelivery delivery, CancellationToken ct)
+        public async Task<int> CreateDeliveryAsync(OrderDelivery delivery, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
 
@@ -34,7 +34,7 @@ namespace WSC.Delivery.Infrastructure.Repositories
 
             var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, parameters, cancellationToken: ct));
 
-            return affectedRows > 0;
+            return affectedRows;
         }
 
         public async Task<bool> DeleteDeliveryByIdAsync(int deliveryId, CancellationToken ct)
@@ -90,7 +90,7 @@ namespace WSC.Delivery.Infrastructure.Repositories
             return delivery;
         }
 
-        public async Task<OrderDelivery> GetByDeliveryStatusAsync(string status, CancellationToken ct)
+        public async Task<IEnumerable<OrderDelivery>> GetByDeliveryStatusAsync(string status, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
 
@@ -100,9 +100,9 @@ namespace WSC.Delivery.Infrastructure.Repositories
                         ORDER BY DeliveryId
                         OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY";
 
-            var delivery = await con.QueryFirstOrDefaultAsync<OrderDelivery>(new CommandDefinition(sql, new { Status = status }, cancellationToken: ct));
+            var delivery = await con.QueryFirstOrDefaultAsync<IEnumerable<OrderDelivery>>(new CommandDefinition(sql, new { Status = status }, cancellationToken: ct));
 
-            return delivery;
+            return delivery ;
         }
 
         public async Task<bool> UpdateDeliveryDetailsAsync(OrderDelivery delivery, CancellationToken ct)

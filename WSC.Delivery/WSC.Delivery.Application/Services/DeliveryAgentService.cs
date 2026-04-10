@@ -33,7 +33,7 @@ namespace WSC.Delivery.Application.Services
                 if (dto == null)
                     return ApiResponse<int>.Failed("Invalid delivery agent data.");
 
-                _logger.LogInformation("Creating new delivery agent: {Name}", dto.Name);
+                _logger.LogInformation("Creating new delivery agent: {Name}", dto.AgentName);
 
                 var agent = _mapper.Map<DeliveryAgent>(dto);
                 var agentId = await _agentRepository.CreateDeliveryAgentAsync(agent, ct);
