@@ -1,36 +1,55 @@
 using AutoMapper;
-using WSC.Shared.Contracts.Common;
-using WSC.Shared.Contracts.Dtos.DeliveryLayer;
-using WSC.Shared.Contracts.Exceptions;
+using Microsoft.Extensions.Logging;
+using System.Linq;
 using WSC.Delivery.Application.Dtos;
 using WSC.Delivery.Application.Interfaces.RepositoryInterfaces;
 using WSC.Delivery.Application.Interfaces.ServiceInterfaces;
 using WSC.Delivery.Domain.Entities;
-using Microsoft.Extensions.Logging;
-using System.Linq;
+using WSC.Shared.Contracts.Common;
+using WSC.Shared.Contracts.Dtos.DeliveryLayer;
+using WSC.Shared.Contracts.Exceptions;
+using WSC.Shared.Contracts.Interfaces.CRMClients;
+using WSC.Shared.Contracts.Interfaces.StoreClients;
 
 namespace WSC.Delivery.Application.Services
 {
     public class OrderDeliveryService : IOrderDeliveryService
     {
         private readonly IDeliveryRepository _deliveryRepository;
+        private readonly ICustomerClient _cstClient;
+        private readonly IOrderClient _orderClient;
         private readonly IMapper _mapper;
         private readonly ILogger<OrderDeliveryService> _logger;
 
         public OrderDeliveryService(
             IDeliveryRepository deliveryRepository,
             IMapper mapper,
-            ILogger<OrderDeliveryService> logger)
+            ILogger<OrderDeliveryService> logger,ICustomerClient cstClient, IOrderClient orderClient)
         {
             _deliveryRepository = deliveryRepository ?? throw new ArgumentNullException(nameof(deliveryRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _cstClient = cstClient ?? throw new ArgumentNullException(nameof(cstClient));
+            _orderClient = orderClient ?? throw new ArgumentNullException(nameof(orderClient));
         }
 
         public async Task<ApiResponse<int>> CreateOrderDeliveryAsync(CreateOrderDeliveryDto dto, CancellationToken ct)
         {
             try
             {
+                var orderExists = await _orderClient.GetByOrderIdAsync(dto.OrderId, ct);
+                var customerExists = await _cstClient.GetCustomerByIdAsync(dto.CustomerId, ct);
+                if(orderExists == null)
+                {
+                    return ApiResponse<int>.Failed("Order not found. Please provide a valid Order Id ");
+                }
+
+                if (customerExists == null)
+                {
+                    _logger.LogWarning("Customer not found. ID: {CustomerId}", dto.CustomerId);
+                    return ApiResponse<int>.Failed("Customer not found. Please provide a valid customer ID.");
+                }
+
                 if (dto == null)
                     return ApiResponse<int>.Failed("Invalid delivery data.");
 

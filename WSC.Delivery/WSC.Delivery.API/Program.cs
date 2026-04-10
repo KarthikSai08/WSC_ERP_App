@@ -2,6 +2,9 @@ using Scalar.AspNetCore;
 using WSC.Delivery.Application.DependencyInjection;
 using WSC.Delivery.Infrastructure.DependencyInjection;
 using WSC.Shared.Contracts.Filters;
+using WSC.Shared.Contracts.Interfaces.CRMClients;
+using WSC.Shared.Contracts.Interfaces.StoreClients;
+using WSC.Shared.Infrastructure.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +26,23 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddMaps(typeof(ApplicationService).Assembly);
 });
 
-
+var crmUrl = builder.Configuration["Services:CRM"];
+var storeUrl = builder.Configuration["Services:Store"];
+builder.Services.AddHttpClient<ICustomerClient, CustomerClient>(client =>
+{
+    client.BaseAddress = new Uri(crmUrl);
+    client.Timeout = TimeSpan.FromSeconds(60);
+});
+builder.Services.AddHttpClient<IProductClient, ProductClient>(client =>
+{
+    client.BaseAddress = new Uri(storeUrl);
+    client.Timeout = TimeSpan.FromSeconds(60);
+});
+builder.Services.AddHttpClient<IOrderClient, OrderClient>(client =>
+{
+    client.BaseAddress = new Uri(storeUrl);
+    client.Timeout = TimeSpan.FromSeconds(60);
+});
 var app = builder.Build();
 
 //app.UseMiddleware<ExceptionMiddleware>();
