@@ -1,4 +1,5 @@
 using Scalar.AspNetCore;
+using StackExchange.Redis;
 using WSC.CRM.API.Filters;
 using WSC.CRM.Application.DependencyInjection;
 using WSC.CRM.Infrastructure.DependencyInjection;
@@ -22,6 +23,13 @@ builder.Services.AddCRMApplicationService();
 builder.Services.AddCRMInfrastructureService();
 
 builder.Services.AddScoped<ValidationFilter>();
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var config = builder.Configuration["Redis:ConnectionString"];
+    return ConnectionMultiplexer.Connect(config);
+});
+
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddMaps(typeof(Program).Assembly);

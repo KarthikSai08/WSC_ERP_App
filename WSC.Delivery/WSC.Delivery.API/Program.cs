@@ -1,4 +1,5 @@
 using Scalar.AspNetCore;
+using StackExchange.Redis;
 using WSC.Delivery.Application.DependencyInjection;
 using WSC.Delivery.Infrastructure.DependencyInjection;
 using WSC.Shared.Contracts.Filters;
@@ -43,6 +44,13 @@ builder.Services.AddHttpClient<IOrderClient, OrderClient>(client =>
     client.BaseAddress = new Uri(storeUrl);
     client.Timeout = TimeSpan.FromSeconds(60);
 });
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var config = builder.Configuration["Redis:ConnectionString"];
+    return ConnectionMultiplexer.Connect(config);
+});
+
 var app = builder.Build();
 
 //app.UseMiddleware<ExceptionMiddleware>();

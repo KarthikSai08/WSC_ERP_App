@@ -1,5 +1,6 @@
 using Microsoft.Data.SqlClient;
 using Scalar.AspNetCore;
+using StackExchange.Redis;
 using System.Data;
 using WSC.Shared.Contracts.Interfaces.CRMClients;
 using WSC.Shared.Infrastructure.Clients;
@@ -37,6 +38,12 @@ builder.Services.AddScoped<ValidationFilter>();
 
 builder.Services.AddScoped<IDbConnection>(sp =>
     new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var config = builder.Configuration["Redis:ConnectionString"];
+    return ConnectionMultiplexer.Connect(config);
+});
 
 builder.Services.AddAutoMapper(cfg =>
 {

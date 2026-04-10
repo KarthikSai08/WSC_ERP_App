@@ -39,9 +39,6 @@ namespace WSC.Delivery.Application.Services
                 return ApiResponse<int>.Failed("Invalid delivery data.");
             try
             {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
                 var orderExists = await _orderClient.GetByOrderIdAsync(dto.OrderId, ct);
                 var customerExists = await _cstClient.GetCustomerByIdAsync(dto.CustomerId, ct);
                 if(orderExists == null)
@@ -54,26 +51,6 @@ namespace WSC.Delivery.Application.Services
                     _logger.LogWarning("Customer not found. ID: {CustomerId}", dto.CustomerId);
                     return ApiResponse<int>.Failed("Customer not found. Please provide a valid customer ID.");
                 }
-
->>>>>>> feature(delivery)/delivery-module
-                if (dto == null)
-                    return ApiResponse<int>.Failed("Invalid delivery data.");
-=======
-                var orderExists = await _orderClient.GetByOrderIdAsync(dto.OrderId, ct);
-                if (orderExists == null)
-                {
-                    return ApiResponse<int>.Failed("Order not found. Please provide a valid Order Id ");
-                }
-
-                var customerExists = await _cstClient.GetCustomerByIdAsync(dto.CustomerId, ct);
-               
-
-                if (customerExists == null)
-                {
-                    _logger.LogWarning("Customer not found. ID: {CustomerId}", dto.CustomerId);
-                    return ApiResponse<int>.Failed("Customer not found. Please provide a valid customer ID.");
-                }
->>>>>>> Stashed changes
 
                 _logger.LogInformation("Creating new order delivery for order ID: {OrderId}", dto.OrderId);
 
