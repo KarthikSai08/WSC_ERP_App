@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WSC.CRM.Application.Interfaces;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Shared.Contracts.Exceptions;
@@ -14,14 +15,16 @@ namespace WSC.Store.Application.Service
     {
         private readonly IOrderRepository _orderRepo;
         private readonly ICustomerClient _cstService;
+        private readonly IRedisCacheService _cache;
         private readonly IMapper _mapper;
 
 
-        public OrderService(IOrderRepository orderRepo, ICustomerClient cstService, IMapper mapper)
+        public OrderService(IOrderRepository orderRepo, ICustomerClient cstService, IMapper mapper, IRedisCacheService cache)
         {
             _orderRepo = orderRepo;
             _cstService = cstService;
             _mapper = mapper;
+            _cache = cache;
         }
 
         public async Task<ApiResponse<int>> CreateOrderAsync(CreateOrderDto dto, CancellationToken ct)
@@ -53,11 +56,21 @@ namespace WSC.Store.Application.Service
 
         public async Task<ApiResponse<IEnumerable<OrderResponseDto>>> GetAllOrdersAsync(CancellationToken ct)
         {
+            var cacheKey = "orders:all";
+
+            var cached = await _cache.GetAsync<IEnumerable<OrderResponseDto>>(cacheKey);
+
+            if (cached != null)
+                return ApiResponse<IEnumerable<OrderResponseDto>>.Ok(cached, "Orders retrieved from cache successfully");
+
             var orders = await _orderRepo.GetAllOrdersAsync(ct);
             if (orders == null || !orders.Any())
                 return ApiResponse<IEnumerable<OrderResponseDto>>.Ok(new List<OrderResponseDto>(), "No orders found.");
+            var mappedOrders = _mapper.Map<IEnumerable<OrderResponseDto>>(orders);
 
-            return ApiResponse<IEnumerable<OrderResponseDto>>.Ok(orders.ToList(), "Orders retrieved successfully");
+            if (orders != null)
+                await _cache.SetAsync(cacheKey, mappedOrders, TimeSpan.FromMinutes(10));
+            return ApiResponse<IEnumerable<OrderResponseDto>>.Ok(mappedOrders.ToList(), "Orders retrieved successfully");
 
         }
 
