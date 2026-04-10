@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WSC_ERP_App – Project Structure & Overview</title>
+    <title>WSC_ERP_App – Project Structure &amp; Overview</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet" />
@@ -595,11 +595,11 @@
         <!-- ── STATS ── -->
         <div class="stat-grid">
             <div class="stat-card">
-                <div class="stat-number">19</div>
+                <div class="stat-number">21</div>
                 <div class="stat-label">Total Projects</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">5</div>
+                <div class="stat-number">6</div>
                 <div class="stat-label">Solution Modules</div>
             </div>
             <div class="stat-card">
@@ -611,7 +611,7 @@
                 <div class="stat-label">Language</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">13</div>
+                <div class="stat-number">15</div>
                 <div class="stat-label">NuGet Packages</div>
             </div>
             <div class="stat-card">
@@ -769,7 +769,7 @@
                     <div class="arch-layer-name">API Layer</div>
                     <div class="arch-layer-items">
                         Controllers<br />Program.cs<br />JWT Auth<br />Rate Limiting<br />Serilog<br />Swagger /
-                        Scalar<br />ValidationFilter
+                        Scalar<br />ExceptionMiddleware<br />ValidationFilter
                     </div>
                 </div>
                 <div class="arch-layer l2">
@@ -791,7 +791,7 @@
                     <div class="arch-layer-num">💾</div>
                     <div class="arch-layer-name">Infrastructure Layer</div>
                     <div class="arch-layer-items">
-                        DapperContext<br />Repositories<br />Redis Client<br />SQL Server<br />DI Registration
+                        DapperContext<br />Repositories<br />UnitOfWork<br />Redis Client<br />SQL Server<br />HTTP Clients<br />DI Registration
                     </div>
                 </div>
             </div>
@@ -830,7 +830,7 @@
                             <td><strong>Delivery</strong></td>
                             <td>4</td>
                             <td>Domain · Application · Infrastructure · API</td>
-                            <td><span class="status-dot"><span class="dot yellow"></span> Scaffolded</span></td>
+                            <td><span class="status-dot"><span class="dot green"></span> Implemented</span></td>
                             <td>.NET 10</td>
                         </tr>
                         <tr>
@@ -926,7 +926,7 @@
                             <li><span class="highlight">LeadRepository.cs</span></li>
                             <li><span class="highlight">OpportunityRepository.cs</span></li>
                             <li><span class="highlight">ActivityRepository.cs</span></li>
-                            <li class="dir">Persistence/ · DependencyInjection/</li>
+                            <li class="dir">Persistence/Context/ · DependencyInjection/</li>
                         </ul>
                     </div>
                 </div>
@@ -943,9 +943,10 @@
                             <li><span class="highlight">CustomersController.cs</span></li>
                             <li><span class="highlight">LeadsController.cs</span></li>
                             <li><span class="highlight">OpportunityController.cs</span></li>
-                            <li><span class="highlight">ActivityController.cs</span></li>
                             <li class="dir">Filters/</li>
                             <li>ValidationFilter.cs</li>
+                            <li class="dir">Middleware/</li>
+                            <li>ExceptionMiddleware.cs</li>
                             <li>Program.cs · appsettings.json</li>
                         </ul>
                     </div>
@@ -966,7 +967,7 @@
                         <span class="module-name">WSC.Store.Domain</span>
                     </div>
                     <div class="module-body">
-                        <p class="module-desc">Product, Order, Inventory entities &amp; enums</p>
+                        <p class="module-desc">Product, Order, OrderItems, Inventory entities &amp; enums</p>
                         <ul class="file-list">
                             <li class="dir">Entities/</li>
                             <li><span class="highlight">Product.cs</span></li>
@@ -990,17 +991,22 @@
                             <li class="dir">Dtos/</li>
                             <li>CreateProductDto.cs · UpdateProductDto.cs</li>
                             <li>CreateOrderDto.cs · UpdateOrderDto.cs</li>
+                            <li>CreateItemsDto.cs · UpdateItemsDto.cs</li>
                             <li>CreateInventoryRecordDto.cs</li>
                             <li class="dir">Service/</li>
                             <li><span class="highlight">ProductService.cs</span></li>
                             <li><span class="highlight">OrderService.cs</span></li>
+                            <li><span class="highlight">OrderItemService.cs</span></li>
                             <li><span class="highlight">InventoryService.cs</span></li>
                             <li class="dir">Interfaces/RepositoryInterfaces/</li>
-                            <li class="iface">IProductRepository · IOrderRepository · IInventoryRepository</li>
+                            <li class="iface">IProductRepository · IOrderRepository</li>
+                            <li class="iface">IOrderItemsRepository · IInventoryRepository</li>
+                            <li class="iface">IUnitOfWork</li>
                             <li class="dir">Interfaces/ServiceInterfaces/</li>
-                            <li class="iface">IProductService · IOrderService · IInventoryService</li>
+                            <li class="iface">IProductService · IOrderService</li>
+                            <li class="iface">IOrderItemsService · IInventoryService</li>
                             <li class="dir">Mappings/</li>
-                            <li>ProductProfile · OrderProfile · InventoryProfile</li>
+                            <li>ProductProfile · OrderProfile · OrderItemsProfile · InventoryProfile</li>
                             <li class="dir">Validators/ · DependencyInjection/</li>
                         </ul>
                     </div>
@@ -1012,14 +1018,16 @@
                         <span class="module-name">WSC.Store.Infrastructure</span>
                     </div>
                     <div class="module-body">
-                        <p class="module-desc">Dapper repositories · DapperContext · Redis</p>
+                        <p class="module-desc">Dapper repositories · UnitOfWork · DapperContext</p>
                         <ul class="file-list">
                             <li class="dir">Persistence/Context/</li>
                             <li><span class="highlight">DapperContext.cs</span></li>
                             <li class="dir">Repository/</li>
                             <li><span class="highlight">ProductRepository.cs</span></li>
                             <li><span class="highlight">OrderRepository.cs</span></li>
+                            <li><span class="highlight">OrderItemsRepository.cs</span></li>
                             <li><span class="highlight">InventoryRepository.cs</span></li>
+                            <li><span class="highlight">UnitOfWork.cs</span></li>
                             <li class="dir">DependencyInjection/</li>
                         </ul>
                     </div>
@@ -1036,9 +1044,12 @@
                             <li class="dir">Controllers/</li>
                             <li><span class="highlight">ProductsController.cs</span></li>
                             <li><span class="highlight">OrdersController.cs</span></li>
+                            <li><span class="highlight">OrderItemsController.cs</span></li>
                             <li><span class="highlight">InventoryController.cs</span></li>
                             <li class="dir">Filters/</li>
                             <li>ValidationFilter.cs</li>
+                            <li class="dir">Middleware/</li>
+                            <li>ExceptionMiddleware.cs</li>
                             <li>Program.cs · appsettings.json</li>
                         </ul>
                     </div>
@@ -1048,8 +1059,7 @@
 
             <!-- DELIVERY -->
             <div class="module-group-title">
-                <h3>3. WSC.Delivery — Logistics &amp; Shipping <span
-                        style="color:var(--yellow);font-size:0.75em;font-weight:400;">(Scaffolded)</span></h3>
+                <h3>3. WSC.Delivery — Logistics &amp; Shipping</h3>
                 <div class="line"></div>
             </div>
             <div class="module-row">
@@ -1057,28 +1067,77 @@
                     <div class="module-header"><span class="layer-tag lt-domain">DOMAIN</span><span
                             class="module-name">WSC.Delivery.Domain</span></div>
                     <div class="module-body">
-                        <p class="module-desc">Awaiting entity definitions</p>
+                        <p class="module-desc">Delivery entities &amp; enums</p>
+                        <ul class="file-list">
+                            <li class="dir">Entities/</li>
+                            <li><span class="highlight">DeliveryAgent.cs</span></li>
+                            <li><span class="highlight">DeliveryItem.cs</span></li>
+                            <li><span class="highlight">DeliveryTracking.cs</span></li>
+                            <li><span class="highlight">OrderDelivery.cs</span></li>
+                            <li class="dir">Enums/</li>
+                            <li class="enum">DeliveryStatus.cs</li>
+                        </ul>
                     </div>
                 </div>
                 <div class="module-card">
                     <div class="module-header"><span class="layer-tag lt-app">APPLICATION</span><span
                             class="module-name">WSC.Delivery.Application</span></div>
                     <div class="module-body">
-                        <p class="module-desc">Awaiting service implementation</p>
+                        <p class="module-desc">Services, DTOs, AutoMapper, FluentValidation</p>
+                        <ul class="file-list">
+                            <li class="dir">Dtos/</li>
+                            <li>CreateDeliveryAgentDto.cs · UpdateDeliveryAgentDto.cs</li>
+                            <li>CreateDeliveryItemDto.cs · UpdateDeliveryItemDto.cs</li>
+                            <li>CreateDeliveryTrackingDto.cs</li>
+                            <li>CreateOrderDeliveryDto.cs · UpdateOrderDeliveryDto.cs</li>
+                            <li class="dir">Services/</li>
+                            <li><span class="highlight">DeliveryAgentService.cs</span></li>
+                            <li><span class="highlight">DeliveryItemService.cs</span></li>
+                            <li><span class="highlight">DeliveryTrackingService.cs</span></li>
+                            <li><span class="highlight">OrderDeliveryService.cs</span></li>
+                            <li class="dir">Interfaces/RepositoryInterfaces/</li>
+                            <li class="iface">IDeliveryAgentRepository · IDeliveryItemRepository</li>
+                            <li class="iface">IDeliveryRepository · IDeliveryTrackingRepository</li>
+                            <li class="dir">Interfaces/ServiceInterfaces/</li>
+                            <li class="iface">IDeliveryAgentService · IDeliveryItemService</li>
+                            <li class="iface">IDeliveryTrackingService · IOrderDeliveryService</li>
+                            <li class="dir">Mappings/</li>
+                            <li>DeliveryAgentProfile · DeliveryItemProfile</li>
+                            <li>DeliveryTrackingProfile · OrderDeliveryProfile</li>
+                            <li class="dir">Validators/ · DependencyInjection/</li>
+                        </ul>
                     </div>
                 </div>
                 <div class="module-card">
                     <div class="module-header"><span class="layer-tag lt-infra">INFRASTRUCTURE</span><span
                             class="module-name">WSC.Delivery.Infrastructure</span></div>
                     <div class="module-body">
-                        <p class="module-desc">Awaiting repository implementation</p>
+                        <p class="module-desc">Dapper repositories · DapperContext</p>
+                        <ul class="file-list">
+                            <li class="dir">Persistence/Context/</li>
+                            <li><span class="highlight">DapperContext.cs</span></li>
+                            <li class="dir">Repositories/</li>
+                            <li><span class="highlight">DeliveryAgentRepository.cs</span></li>
+                            <li><span class="highlight">DeliveryItemRepository.cs</span></li>
+                            <li><span class="highlight">DeliveryRepository.cs</span></li>
+                            <li><span class="highlight">DeliveryTrackingRepository.cs</span></li>
+                            <li class="dir">DependencyInjection/</li>
+                        </ul>
                     </div>
                 </div>
                 <div class="module-card">
                     <div class="module-header"><span class="layer-tag lt-api">API</span><span
                             class="module-name">WSC.Delivery.API</span></div>
                     <div class="module-body">
+                        <p class="module-desc">REST endpoints · JWT · Swagger · Scalar · Serilog</p>
                         <ul class="file-list">
+                            <li class="dir">Controllers/</li>
+                            <li><span class="highlight">DeliveryAgentController.cs</span></li>
+                            <li><span class="highlight">DeliveryItemController.cs</span></li>
+                            <li><span class="highlight">DeliveryTrackingController.cs</span></li>
+                            <li><span class="highlight">OrderDeliveryController.cs</span></li>
+                            <li class="dir">Middleware/</li>
+                            <li>ExceptionMiddleware.cs</li>
                             <li>Program.cs · appsettings.json</li>
                         </ul>
                     </div>
@@ -1110,7 +1169,11 @@
                     <div class="module-header"><span class="layer-tag lt-infra">INFRASTRUCTURE</span><span
                             class="module-name">WSC.Dashboard.Infrastructure</span></div>
                     <div class="module-body">
-                        <p class="module-desc">Awaiting repository implementation</p>
+                        <p class="module-desc">Dapper context scaffolded</p>
+                        <ul class="file-list">
+                            <li class="dir">Persistence/Context/</li>
+                            <li>DapperContext.cs</li>
+                        </ul>
                     </div>
                 </div>
                 <div class="module-card">
@@ -1118,6 +1181,8 @@
                             class="module-name">WSC.Dashboard.API</span></div>
                     <div class="module-body">
                         <ul class="file-list">
+                            <li class="dir">Middleware/</li>
+                            <li>ExceptionMiddleware.cs</li>
                             <li>Program.cs · appsettings.json</li>
                         </ul>
                     </div>
@@ -1146,13 +1211,20 @@
                             <li>CustomerResponseDto · LeadResponseDto</li>
                             <li>OpportunityResponseDto · ActivityResponseDto</li>
                             <li class="dir">Dtos/StoreLayer/</li>
-                            <li>ProductResponseDto · OrderResponseDto · InventoryResponseDto</li>
+                            <li>ProductResponseDto · OrderResponseDto</li>
+                            <li>OrderItemResponseDto · InventoryResponseDto</li>
+                            <li class="dir">Dtos/DeliveryLayer/</li>
+                            <li>DeliveryAgentResponseDto · DeliveryItemResponseDto</li>
+                            <li>DeliveryTrackingResponseDto · OrderDeliveryResponseDto</li>
                             <li class="dir">Enums/</li>
                             <li class="enum">LeadStatus · OpportunityStage · ActivityType</li>
                             <li class="dir">Exceptions/</li>
-                            <li>NotFoundException · DuplicateException · InActiveException</li>
+                            <li>NotFoundException · DuplicateException</li>
+                            <li>InActiveException · InSufficientException</li>
                             <li class="dir">Interfaces/CRMClients/</li>
                             <li class="iface">ICustomerClient.cs</li>
+                            <li class="dir">Interfaces/StoreClients/</li>
+                            <li class="iface">IOrderClient.cs · IProductClient.cs</li>
                             <li class="dir">ValueObjects/</li>
                             <li>Address.cs</li>
                             <li class="dir">Filters/</li>
@@ -1173,6 +1245,8 @@
                             <li><span class="highlight">DapperContext.cs</span></li>
                             <li class="dir">Clients/</li>
                             <li><span class="highlight">CustomerClient.cs</span></li>
+                            <li><span class="highlight">OrderClient.cs</span></li>
+                            <li><span class="highlight">ProductClient.cs</span></li>
                         </ul>
                     </div>
                 </div>
@@ -1249,8 +1323,24 @@
                             <td>WSC.Store.Application · WSC.Store.Infrastructure · WSC.Shared.Infrastructure</td>
                         </tr>
                         <tr>
+                            <td class="pkg-name">WSC.Delivery.Domain</td>
+                            <td><em style="color:var(--muted)">No project references (pure domain)</em></td>
+                        </tr>
+                        <tr>
+                            <td class="pkg-name">WSC.Delivery.Application</td>
+                            <td>WSC.Delivery.Domain · WSC.Shared.Contracts</td>
+                        </tr>
+                        <tr>
+                            <td class="pkg-name">WSC.Delivery.Infrastructure</td>
+                            <td>WSC.Delivery.Application · WSC.Delivery.Domain · WSC.Shared.Contracts</td>
+                        </tr>
+                        <tr>
+                            <td class="pkg-name">WSC.Delivery.API</td>
+                            <td>WSC.Delivery.Application · WSC.Delivery.Infrastructure · WSC.Shared.Infrastructure</td>
+                        </tr>
+                        <tr>
                             <td class="pkg-name">WSC.Shared.Contracts</td>
-                            <td><em style="color:var(--muted)">No project references</em></td>
+                            <td>WSC.Delivery.Domain</td>
                         </tr>
                         <tr>
                             <td class="pkg-name">WSC.Shared.Infrastructure</td>
