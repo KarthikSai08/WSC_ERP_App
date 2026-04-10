@@ -29,10 +29,29 @@ namespace WSC.Delivery.Application.Services
 
         public async Task<ApiResponse<int>> CreateOrderDeliveryAsync(CreateOrderDeliveryDto dto, CancellationToken ct)
         {
+            if (dto == null)
+                return ApiResponse<int>.Failed("Invalid delivery data.");
             try
             {
+<<<<<<< Updated upstream
                 if (dto == null)
                     return ApiResponse<int>.Failed("Invalid delivery data.");
+=======
+                var orderExists = await _orderClient.GetByOrderIdAsync(dto.OrderId, ct);
+                if (orderExists == null)
+                {
+                    return ApiResponse<int>.Failed("Order not found. Please provide a valid Order Id ");
+                }
+
+                var customerExists = await _cstClient.GetCustomerByIdAsync(dto.CustomerId, ct);
+               
+
+                if (customerExists == null)
+                {
+                    _logger.LogWarning("Customer not found. ID: {CustomerId}", dto.CustomerId);
+                    return ApiResponse<int>.Failed("Customer not found. Please provide a valid customer ID.");
+                }
+>>>>>>> Stashed changes
 
                 _logger.LogInformation("Creating new order delivery for order ID: {OrderId}", dto.OrderId);
 
