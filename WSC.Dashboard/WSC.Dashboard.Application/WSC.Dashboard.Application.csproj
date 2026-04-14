@@ -17,8 +17,4 @@
     <ProjectReference Include="..\WSC.Dashboard.Domain\WSC.Dashboard.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\ServiceInterfaces\" />
-  </ItemGroup>
-
 </Project>
