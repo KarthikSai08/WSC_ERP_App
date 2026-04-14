@@ -29,10 +29,10 @@ namespace WSC.Dashboard.Infrastructure.Repositories
                         
                         FROM crm.Customers c
                         LEFT JOIN store.Orders o ON c.CxId = o.CustomerId
-                        LEFT JOIN store.OrderItems oi ON o.Orderd = oi.OrderId
+                        LEFT JOIN store.OrderItems oi ON o.OrderId = oi.OrderId
                         LEFT JOIN delivery.OrderDeliveries d ON o.OrderId = d.OrderId
-                        LEFT JOIN delivery,DeliveryAgents a ON d.AssignedAgentId = a.DeliveryAgentId
-                        WHERE c.CustomerId = @CustomerId";
+                        LEFT JOIN delivery.DeliveryAgents a ON d.AssignedAgentId = a.DeliveryAgentId
+                        WHERE c.CxId = @CustomerId";
 
             var customerDict = new Dictionary<int, CustomerDisplayDto>();
             var orderDict = new Dictionary<int, OrderDisplayDto>();
@@ -73,7 +73,7 @@ namespace WSC.Dashboard.Infrastructure.Repositories
                     return existingCutsomer;
                 },
                 new { CustomerId = cxId },
-                splitOn: "OrderId, OrderItemId, DeliveryId, DeliveryAgentId"
+                splitOn: "OrderId,OrderItemId,DeliveryId,DeliveryAgentId"
                 );
             return  customerDict.Values.FirstOrDefault();
         }

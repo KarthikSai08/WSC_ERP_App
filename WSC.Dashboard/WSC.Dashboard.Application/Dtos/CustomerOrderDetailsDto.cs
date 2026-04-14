@@ -15,7 +15,7 @@ namespace WSC.Dashboard.Application.Dtos
         public int OrderId { get; set; }
         public decimal TotalAmount { get; set; }
         public OrderStatus OrderStatus { get; set; }
-        public List<OrderItemsDto> OrderItems { get; set; }
+        //public List<OrderItemsDto> OrderItems { get; set; }
         public int DeliveryId { get; set; } 
         public string TrackingNumber { get; set; }
         public DeliveryStatus DeliveryStatus { get; set; }

@@ -1,5 +1,8 @@
+using Scalar.AspNetCore;
 using StackExchange.Redis;
+using WSC.Dashboard.Application.DependencyInjection;
 using WSC.Store.API.Middleware;
+using WSC.Dashboard.Infrastructure.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,11 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddDashboardApplicationService();
+builder.Services.AddDashboardInfrastuctureService();
+
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
     var config = builder.Configuration["Redis:ConnectionString"];
     return ConnectionMultiplexer.Connect(config);
 });
+//builder.Services.AddScoped<ExceptionMiddleware>();
 
 var app = builder.Build();
 
@@ -22,6 +29,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();

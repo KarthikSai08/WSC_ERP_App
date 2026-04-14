@@ -8,17 +8,17 @@ namespace WSC.CRM.Infrastructure.DependencyInjection
 {
     public static class InfrastructureServices
     {
-        public static IServiceCollection AddCRMInfrastructureService(this IServiceCollection service)
+        public static IServiceCollection AddCRMInfrastructureService(this IServiceCollection services)
         {
 
-            service.AddScoped<DapperContext>();
+            services.AddScoped<DapperContext>();
 
-            service.AddScoped<ILeadRepository, LeadRepository>();
-            service.AddScoped<ICustomerRepository, CustomerRepository>();
-            service.AddScoped<IActivityRepository, ActivityRepository>();
-            service.AddScoped<IOpportunityRepository, OpportunityRepository>();
-            service.AddScoped<IRedisCacheService, RedisCacheService>();
-            return service;
+            services.AddScoped<ILeadRepository, LeadRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IActivityRepository, ActivityRepository>();
+            services.AddScoped<IOpportunityRepository, OpportunityRepository>();
+            services.AddScoped<IRedisCacheService, RedisCacheService>();
+            return services;
         }
     }
 }
