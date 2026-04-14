@@ -2,7 +2,6 @@ using Scalar.AspNetCore;
 using StackExchange.Redis;
 using WSC.Delivery.Application.DependencyInjection;
 using WSC.Delivery.Infrastructure.DependencyInjection;
-using WSC.Shared.Contracts.Filters;
 using WSC.Shared.Contracts.Interfaces.CRMClients;
 using WSC.Shared.Contracts.Interfaces.StoreClients;
 using WSC.Shared.Infrastructure.Clients;

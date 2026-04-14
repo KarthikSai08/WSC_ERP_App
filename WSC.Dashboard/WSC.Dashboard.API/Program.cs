@@ -1,8 +1,8 @@
 using Scalar.AspNetCore;
 using StackExchange.Redis;
 using WSC.Dashboard.Application.DependencyInjection;
-using WSC.Store.API.Middleware;
 using WSC.Dashboard.Infrastructure.DependencyInjection;
+using WSC.Store.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 

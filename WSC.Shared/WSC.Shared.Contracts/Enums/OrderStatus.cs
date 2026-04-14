@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Shared.Contracts.Enums
+﻿namespace WSC.Shared.Contracts.Enums
 {
     public enum OrderStatus
     {

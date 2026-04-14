@@ -1,12 +1,12 @@
 using AutoMapper;
-using WSC.Shared.Contracts.Common;
-using WSC.Shared.Contracts.Dtos.DeliveryLayer;
-using WSC.Shared.Contracts.Exceptions;
+using Microsoft.Extensions.Logging;
 using WSC.Delivery.Application.Dtos;
 using WSC.Delivery.Application.Interfaces.RepositoryInterfaces;
 using WSC.Delivery.Application.Interfaces.ServiceInterfaces;
 using WSC.Delivery.Domain.Entities;
-using Microsoft.Extensions.Logging;
+using WSC.Shared.Contracts.Common;
+using WSC.Shared.Contracts.Dtos.DeliveryLayer;
+using WSC.Shared.Contracts.Exceptions;
 
 namespace WSC.Delivery.Application.Services
 {

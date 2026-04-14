@@ -7,7 +7,7 @@ namespace WSC.Delivery.Application.Dtos
         public string VehicleNumber { get; set; }
         public string LicenseNumber { get; set; }
         public bool IsAvailable { get; set; }
-        public bool IsActive { get; set; } 
+        public bool IsActive { get; set; }
 
     }
 }

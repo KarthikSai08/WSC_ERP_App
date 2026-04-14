@@ -1,6 +1,5 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 using WSC.Delivery.Application.Dtos;
 using WSC.Delivery.Application.Interfaces.RepositoryInterfaces;
 using WSC.Delivery.Application.Interfaces.ServiceInterfaces;
@@ -24,7 +23,7 @@ namespace WSC.Delivery.Application.Services
         public OrderDeliveryService(
             IDeliveryRepository deliveryRepository,
             IMapper mapper,
-            ILogger<OrderDeliveryService> logger,ICustomerClient cstClient, IOrderClient orderClient)
+            ILogger<OrderDeliveryService> logger, ICustomerClient cstClient, IOrderClient orderClient)
         {
             _deliveryRepository = deliveryRepository ?? throw new ArgumentNullException(nameof(deliveryRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -41,7 +40,7 @@ namespace WSC.Delivery.Application.Services
             {
                 var orderExists = await _orderClient.GetByOrderIdAsync(dto.OrderId, ct);
                 var customerExists = await _cstClient.GetCustomerByIdAsync(dto.CustomerId, ct);
-                if(orderExists == null)
+                if (orderExists == null)
                 {
                     return ApiResponse<int>.Failed("Order not found. Please provide a valid Order Id ");
                 }

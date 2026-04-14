@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Delivery.Application.Interfaces
+﻿namespace WSC.Delivery.Application.Interfaces
 {
     public interface IRedisCacheService
     {

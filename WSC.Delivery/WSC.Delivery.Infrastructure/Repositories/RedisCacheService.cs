@@ -10,9 +10,9 @@ namespace WSC.Delivery.Infrastructure.Repositories
         public RedisCacheService(IConnectionMultiplexer redis) => _db = redis.GetDatabase();
         public async Task<T?> GetAsync<T>(string key)
         {
-            var value =await _db.StringGetAsync(key);
+            var value = await _db.StringGetAsync(key);
 
-            if(value.IsNullOrEmpty)
+            if (value.IsNullOrEmpty)
                 return default;
 
             return JsonSerializer.Deserialize<T>(value.ToString());

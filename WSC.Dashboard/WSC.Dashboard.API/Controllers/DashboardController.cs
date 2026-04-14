@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WSC.Dashboard.Application.Interfaces.ServiceInterfaces;
 
 namespace WSC.Dashboard.API.Controllers
@@ -19,5 +18,5 @@ namespace WSC.Dashboard.API.Controllers
                 return Ok(result);
             return NotFound(result);
         }
-    } 
+    }
 }

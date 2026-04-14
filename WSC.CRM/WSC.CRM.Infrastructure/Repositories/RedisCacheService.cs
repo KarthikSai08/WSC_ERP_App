@@ -13,7 +13,7 @@ namespace WSC.CRM.Infrastructure.Repositories
         {
             var value = await _db.StringGetAsync(key);
 
-            if(value.IsNullOrEmpty)
+            if (value.IsNullOrEmpty)
                 return default;
 
             return JsonSerializer.Deserialize<T>(value.ToString());

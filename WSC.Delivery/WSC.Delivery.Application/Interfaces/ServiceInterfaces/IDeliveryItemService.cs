@@ -1,6 +1,6 @@
+using WSC.Delivery.Application.Dtos;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.DeliveryLayer;
-using WSC.Delivery.Application.Dtos;
 
 namespace WSC.Delivery.Application.Interfaces.ServiceInterfaces
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WSC.Delivery.Domain.Enums;
+﻿using WSC.Delivery.Domain.Enums;
 using WSC.Shared.Contracts.Enums;
 
 namespace WSC.Dashboard.Application.Dtos
@@ -16,7 +13,7 @@ namespace WSC.Dashboard.Application.Dtos
         public decimal TotalAmount { get; set; }
         public OrderStatus OrderStatus { get; set; }
         //public List<OrderItemsDto> OrderItems { get; set; }
-        public int DeliveryId { get; set; } 
+        public int DeliveryId { get; set; }
         public string TrackingNumber { get; set; }
         public DeliveryStatus DeliveryStatus { get; set; }
         public int? AssignedAgentId { get; set; }

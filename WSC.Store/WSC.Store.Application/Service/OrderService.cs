@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using WSC.Store.Application.Interfaces;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Shared.Contracts.Exceptions;
 using WSC.Shared.Contracts.Interfaces.CRMClients;
 using WSC.Store.Application.Dtos;
+using WSC.Store.Application.Interfaces;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 using WSC.Store.Application.Interfaces.ServiceInterfaces;
 using WSC.Store.Domain.Entities;

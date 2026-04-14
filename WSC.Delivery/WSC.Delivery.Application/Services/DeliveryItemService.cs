@@ -1,12 +1,12 @@
 using AutoMapper;
-using WSC.Shared.Contracts.Common;
-using WSC.Shared.Contracts.Dtos.DeliveryLayer;
-using WSC.Shared.Contracts.Exceptions;
+using Microsoft.Extensions.Logging;
 using WSC.Delivery.Application.Dtos;
 using WSC.Delivery.Application.Interfaces.RepositoryInterfaces;
 using WSC.Delivery.Application.Interfaces.ServiceInterfaces;
 using WSC.Delivery.Domain.Entities;
-using Microsoft.Extensions.Logging;
+using WSC.Shared.Contracts.Common;
+using WSC.Shared.Contracts.Dtos.DeliveryLayer;
+using WSC.Shared.Contracts.Exceptions;
 using WSC.Shared.Contracts.Interfaces.StoreClients;
 
 namespace WSC.Delivery.Application.Services
@@ -35,7 +35,7 @@ namespace WSC.Delivery.Application.Services
             try
             {
                 var prd = await _prdClient.GetProductByIdAsync(dto.ProductId, ct);
-                if(prd == null) 
+                if (prd == null)
                     return ApiResponse<int>.Failed($"Product with ID {dto.ProductId} not found.");
 
                 if (dto == null)

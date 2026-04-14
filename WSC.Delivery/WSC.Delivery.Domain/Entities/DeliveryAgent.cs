@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace WSC.Delivery.Domain.Entities
+﻿namespace WSC.Delivery.Domain.Entities
 {
     public class DeliveryAgent
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Delivery.Domain.Enums
+﻿namespace WSC.Delivery.Domain.Enums
 {
     public enum DeliveryStatus
     {

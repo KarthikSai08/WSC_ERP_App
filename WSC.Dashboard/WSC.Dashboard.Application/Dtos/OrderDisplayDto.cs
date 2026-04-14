@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using WSC.Shared.Contracts.Enums;
+﻿using WSC.Shared.Contracts.Enums;
 
 namespace WSC.Dashboard.Application.Dtos
 {

@@ -104,7 +104,7 @@ namespace WSC.Delivery.Infrastructure.Repositories
 
             var delivery = await con.QueryFirstOrDefaultAsync<IEnumerable<OrderDelivery>>(new CommandDefinition(sql, new { Status = status }, cancellationToken: ct));
 
-            return delivery ;
+            return delivery;
         }
 
         public async Task<bool> UpdateDeliveryDetailsAsync(OrderDelivery delivery, CancellationToken ct)

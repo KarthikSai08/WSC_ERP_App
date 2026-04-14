@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WSC.Delivery.Domain.Entities;
+﻿using WSC.Delivery.Domain.Entities;
 using WSC.Shared.Contracts.Dtos.DeliveryLayer;
 namespace WSC.Delivery.Application.Interfaces.RepositoryInterfaces
 {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace WSC.Dashboard.Application.Dtos
+﻿namespace WSC.Dashboard.Application.Dtos
 {
     public class OrderItemsDisplayDto
     {

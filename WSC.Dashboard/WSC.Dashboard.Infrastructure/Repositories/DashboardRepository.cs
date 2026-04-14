@@ -1,7 +1,4 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.Dashboard.Application.Dtos;
 using WSC.Dashboard.Application.Interfaces.RepositoryInterfaces;
 using WSC.Dashboard.Infrastructure.Persistence.Context;
@@ -75,7 +72,7 @@ namespace WSC.Dashboard.Infrastructure.Repositories
                 new { CustomerId = cxId },
                 splitOn: "OrderId,OrderItemId,DeliveryId,DeliveryAgentId"
                 );
-            return  customerDict.Values.FirstOrDefault();
+            return customerDict.Values.FirstOrDefault();
         }
     }
 }
