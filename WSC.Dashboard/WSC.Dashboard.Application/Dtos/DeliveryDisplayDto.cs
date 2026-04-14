@@ -10,7 +10,6 @@ namespace WSC.Dashboard.Application.Dtos
         public int DeliveryId { get; set; }
         public string TrackingNumber { get; set; }
         public DeliveryStatus DeliveryStatus { get; set; }
-        public int? AssignedAgentId { get; set; }
         public DateTime ScheduledDate { get; set; }
 
         public AgentDisplayDto Agent { get; set; }
