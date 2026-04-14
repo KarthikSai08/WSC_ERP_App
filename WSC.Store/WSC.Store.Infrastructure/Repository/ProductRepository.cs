@@ -55,7 +55,6 @@ namespace WSC.Store.Infrastructure.Repository
             var sql = @"SELECT COUNT(1) FROM store.Products WHERE SKU = @SKU AND IsActive = 1";
 
             var exists = await con.ExecuteScalarAsync<int>(new CommandDefinition(sql, new { SKU = sku }, cancellationToken: ct));
-
             return exists > 0;
         }
 
@@ -64,7 +63,6 @@ namespace WSC.Store.Infrastructure.Repository
             using var con = _context.CreateConnection();
             var sql = @"SELECT ProductId, ProductName, SKU, Category, Price, IsActive
                         FROM store.Products WHERE IsActive = 1";
-
 
             var products = await con.QueryAsync<Product>(new CommandDefinition(sql, cancellationToken: ct));
             return products;

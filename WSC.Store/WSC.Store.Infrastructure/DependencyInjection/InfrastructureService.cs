@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using WSC.Store.Application.Interfaces;
 using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 using WSC.Store.Infrastructure.Persistence.Context;
 using WSC.Store.Infrastructure.Repository;
@@ -15,6 +16,8 @@ namespace WSC.Store.Infrastructure.DependencyInjection
             service.AddScoped<IInventoryRepository, InventoryRepository>();
             service.AddScoped<IOrderRepository, OrderRepository>();
             service.AddScoped<IOrderItemsRepository, OrderItemsRepository>();
+
+            service.AddScoped<IRedisCacheService, RedisCacheService>();
 
             service.AddScoped<IUnitOfWork, UnitOfWork>();
 

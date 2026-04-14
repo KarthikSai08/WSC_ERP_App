@@ -7,7 +7,7 @@ namespace WSC.Store.Domain.Entities
     {
         public int OrderId { get; set; }
         [Required]
-        public int CustomerId { get; set; }  // integrates with CRM
+        public int CustomerId { get; set; }
         public decimal TotalAmount { get; set; }
         public OrderStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }

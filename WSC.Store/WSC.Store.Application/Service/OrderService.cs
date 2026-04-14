@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using WSC.CRM.Application.Interfaces;
+using WSC.Store.Application.Interfaces;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
 using WSC.Shared.Contracts.Exceptions;

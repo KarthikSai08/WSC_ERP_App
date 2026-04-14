@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using WSC.Delivery.Application.Interfaces;
 using WSC.Delivery.Application.Interfaces.RepositoryInterfaces;
 using WSC.Delivery.Infrastructure.Persistence.Context;
 using WSC.Delivery.Infrastructure.Repositories;
@@ -16,6 +17,7 @@ namespace WSC.Delivery.Infrastructure.DependencyInjection
             services.AddScoped<IDeliveryItemRepository, DeliveryItemRepository>();
             services.AddScoped<IDeliveryTrackingRepository, DeliveryTrackingRepository>();
 
+            services.AddScoped<IRedisCacheService, RedisCacheService>();
             return services;
         }
     }
