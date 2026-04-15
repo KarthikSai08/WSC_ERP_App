@@ -125,7 +125,6 @@ namespace WSC.CRM.Application.Services
                 request.PageNumber,
                 totalCount
             );
-
             return ApiResponse<PagedResponse<OpportunityResponseDto>>
                 .Ok(response, "Paged Opportunities retrieved successfully");
         }

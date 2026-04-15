@@ -570,6 +570,114 @@
             border-top: 1px solid var(--border);
             margin-top: 48px;
         }
+
+        /* ── ROADMAP ────────────────────────────────────────────── */
+        .progress-bar-wrap {
+            background: var(--surface2);
+            border-radius: 999px;
+            height: 10px;
+            margin: 14px 0 28px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green), var(--accent2));
+            border-radius: 999px;
+        }
+        .roadmap-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        @media (max-width: 700px) { .roadmap-cols { grid-template-columns: 1fr; } }
+        .done-list, .todo-list {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .done-list  { border-top: 3px solid var(--green); }
+        .todo-list  { border-top: 3px solid var(--red); }
+        .roadmap-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 9px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875em;
+        }
+        .roadmap-item:last-child { border-bottom: none; }
+        .ri-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7em;
+            color: var(--muted);
+            background: var(--surface2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .ri-body { display:flex; flex-direction:column; gap:2px; }
+        .ri-label { font-weight: 600; color: var(--text); }
+        .ri-sub   { font-size: 0.75em; color: var(--muted); }
+        .todo-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+        .todo-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--red);
+            border-radius: 10px;
+            padding: 18px;
+            position: relative;
+            transition: border-color .2s, transform .2s;
+        }
+        .todo-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+        .todo-card.p-high  { border-left-color: var(--red); }
+        .todo-card.p-med   { border-left-color: var(--yellow); }
+        .todo-card.p-low   { border-left-color: var(--blue); }
+        .todo-seq {
+            position: absolute; top: 14px; right: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7em; color: var(--muted);
+            background: var(--surface2);
+            padding: 2px 8px; border-radius: 4px;
+        }
+        .todo-title { font-weight: 700; font-size: 1em; margin-bottom: 6px; color: var(--text); }
+        .todo-priority {
+            display: inline-block; font-size: 0.68em; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .5px;
+            padding: 2px 8px; border-radius: 4px; margin-bottom: 10px;
+        }
+        .pri-high { background: rgba(239,68,68,.15); color: var(--red); }
+        .pri-med  { background: rgba(245,158,11,.15); color: var(--yellow); }
+        .pri-low  { background: rgba(59,130,246,.15);  color: var(--blue); }
+        .todo-desc { font-size: 0.82em; color: var(--muted); line-height: 1.65; margin-bottom: 12px; }
+        .todo-steps {
+            list-style: none;
+            font-size: 0.8em;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+        }
+        .todo-steps li {
+            padding: 3px 0;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .todo-steps li::before { content: '→'; color: var(--accent); }
+        .todo-scope { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+        .scope-tag {
+            font-size: 0.7em;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2px 8px;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
     </style>
 </head>
 
@@ -1002,6 +1110,8 @@
                             <li class="iface">IProductRepository · IOrderRepository</li>
                             <li class="iface">IOrderItemsRepository · IInventoryRepository</li>
                             <li class="iface">IUnitOfWork</li>
+                            <li class="dir">Interfaces/</li>
+                            <li class="iface"><span class="highlight">IRedisCacheService.cs</span></li>
                             <li class="dir">Interfaces/ServiceInterfaces/</li>
                             <li class="iface">IProductService · IOrderService</li>
                             <li class="iface">IOrderItemsService · IInventoryService</li>
@@ -1028,6 +1138,7 @@
                             <li><span class="highlight">OrderItemsRepository.cs</span></li>
                             <li><span class="highlight">InventoryRepository.cs</span></li>
                             <li><span class="highlight">UnitOfWork.cs</span></li>
+                            <li><span class="highlight">RedisCacheService.cs</span></li>
                             <li class="dir">DependencyInjection/</li>
                         </ul>
                     </div>
@@ -1355,10 +1466,227 @@
             </div>
         </div>
 
+        <!-- ── IMPLEMENTATION ROADMAP ── -->
+        <div class="section">
+            <div class="section-title">📋 Implementation Roadmap</div>
+
+            <!-- Progress bar -->
+            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+                <span style="font-size:.85em;color:var(--muted);">Overall Progress</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:.85em;"><span style="color:var(--green);">11 completed</span> &nbsp;/&nbsp; <span style="color:var(--red);">6 remaining</span> &nbsp;/&nbsp; <span style="color:var(--muted);">17 total</span></span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--accent);">64.7 %</span>
+            </div>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" style="width:64.7%"></div>
+            </div>
+
+            <!-- Two-column: done | todo -->
+            <div class="roadmap-cols">
+
+                <!-- ✅ DONE -->
+                <div class="done-list">
+                    <div style="font-size:.8em;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">✅ Completed (11)</div>
+
+                    <div class="roadmap-item">
+                        <span class="ri-num">#1</span>
+                        <div class="ri-body"><span class="ri-label">Dapper Core</span><span class="ri-sub">Micro-ORM · CommandDefinition · raw SQL across all modules</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#2</span>
+                        <div class="ri-body"><span class="ri-label">Dynamic Parameters</span><span class="ri-sub">DapperDynamicParameters for partial-update queries (OrderRepository)</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#3</span>
+                        <div class="ri-body"><span class="ri-label">Stored Procedures</span><span class="ri-sub">CommandType.StoredProcedure in CRM &amp; Store repositories</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#4</span>
+                        <div class="ri-body"><span class="ri-label">Unit Of Work</span><span class="ri-sub">IUnitOfWork · BeginAsync / CommitAsync / RollbackAsync (WSC.Store)</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#5</span>
+                        <div class="ri-body"><span class="ri-label">Redis Caching — Cache-Aside</span><span class="ri-sub">IRedisCacheService · RedisCacheService · StackExchange.Redis</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#7</span>
+                        <div class="ri-body"><span class="ri-label">Transactions</span><span class="ri-sub">Dapper transactions wired through UnitOfWork.BeginTransaction()</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#8</span>
+                        <div class="ri-body"><span class="ri-label">Clean Architecture</span><span class="ri-sub">Domain → Application → Infrastructure → API across all 6 modules</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#9</span>
+                        <div class="ri-body"><span class="ri-label">Global Exception Middleware</span><span class="ri-sub">ExceptionMiddleware.cs registered in all 5 API projects</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#14</span>
+                        <div class="ri-body"><span class="ri-label">Schema Separation</span><span class="ri-sub">SQL schemas crm. / store. / delivery. enforced in all Dapper queries</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#15</span>
+                        <div class="ri-body"><span class="ri-label">AutoMapper</span><span class="ri-sub">Entity↔DTO Profiles in every Application layer</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#16</span>
+                        <div class="ri-body"><span class="ri-label">PagedResponse</span><span class="ri-sub">PagedResponse&lt;T&gt; · PaginationRequest in WSC.Shared.Contracts</span></div>
+                    </div>
+                </div>
+
+                <!-- ❌ TODO -->
+                <div class="todo-list">
+                    <div style="font-size:.8em;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">🔴 Remaining (6)</div>
+
+                    <div class="roadmap-item">
+                        <span class="ri-num">#6</span>
+                        <div class="ri-body"><span class="ri-label">SeriLog</span><span class="ri-sub">Package installed — Program.cs configuration not done yet</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#10</span>
+                        <div class="ri-body"><span class="ri-label">Idempotency</span><span class="ri-sub">No implementation found — Idempotency-Key + Redis cache required</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#11</span>
+                        <div class="ri-body"><span class="ri-label">JWT Auth</span><span class="ri-sub">Package installed — AddAuthentication / JwtBearer not configured</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#12</span>
+                        <div class="ri-body"><span class="ri-label">Rate Limiting</span><span class="ri-sub">Package installed — IpRateLimiting not wired into any Program.cs</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#13</span>
+                        <div class="ri-body"><span class="ri-label">API Versioning</span><span class="ri-sub">No implementation found — Asp.Versioning.Mvc needed</span></div>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="ri-num">#17</span>
+                        <div class="ri-body"><span class="ri-label">Auditing</span><span class="ri-sub">No implementation found — AuditLog entity + IAuditService needed</span></div>
+                    </div>
+                </div>
+
+            </div><!-- /roadmap-cols -->
+
+            <!-- ── DETAILED TODO BREAKDOWN ── -->
+            <div class="section-title" style="margin-bottom:20px;">🔧 Remaining Work — Detailed Breakdown</div>
+            <div class="todo-cards">
+
+                <!-- 1. SeriLog -->
+                <div class="todo-card p-high">
+                    <span class="todo-seq">#6 / 17</span>
+                    <div class="todo-title">🪵 SeriLog — Structured Logging</div>
+                    <span class="todo-priority pri-high">High Priority</span>
+                    <p class="todo-desc">NuGet packages <code>Serilog.AspNetCore</code> and <code>Serilog.Sinks.File</code> are already installed. Configuration in each <code>Program.cs</code> is missing. Needs request-level logging, enrichers, and structured output to console &amp; rolling file sinks.</p>
+                    <ul class="todo-steps">
+                        <li>Call <code>builder.Host.UseSerilog()</code> in all API Program.cs files</li>
+                        <li>Configure <code>MinimumLevel</code>, <code>WriteTo.Console</code>, <code>WriteTo.File</code></li>
+                        <li>Add <code>app.UseSerilogRequestLogging()</code> middleware</li>
+                        <li>Add log enrichers: <code>FromLogContext</code>, <code>MachineName</code>, <code>Environment</code></li>
+                        <li>Add <code>"Serilog"</code> config section to all <code>appsettings.json</code></li>
+                    </ul>
+                    <div class="todo-scope">
+                        <span class="scope-tag">WSC.CRM.API</span><span class="scope-tag">WSC.Store.API</span><span class="scope-tag">WSC.Delivery.API</span><span class="scope-tag">WSC.Dashboard.API</span><span class="scope-tag">WSC.Gateway.API</span>
+                    </div>
+                </div>
+
+                <!-- 2. Idempotency -->
+                <div class="todo-card p-high">
+                    <span class="todo-seq">#10 / 17</span>
+                    <div class="todo-title">🔑 Idempotency — Duplicate Request Prevention</div>
+                    <span class="todo-priority pri-high">High Priority</span>
+                    <p class="todo-desc">Prevent clients from accidentally creating duplicate resources on retry. The client sends a unique <code>Idempotency-Key</code> header. The server caches the first response in Redis; subsequent identical requests return the cached response without re-executing the handler.</p>
+                    <ul class="todo-steps">
+                        <li>Create <code>IdempotencyMiddleware.cs</code> — extract <code>Idempotency-Key</code> header</li>
+                        <li>On first request: execute + store result in Redis (keyed by <code>Idempotency-Key</code>)</li>
+                        <li>On repeat request: return cached response (HTTP 200 with original body)</li>
+                        <li>Set Redis TTL (e.g. 24 h) for idempotency records</li>
+                        <li>Apply only to mutating endpoints (POST / PUT / PATCH)</li>
+                    </ul>
+                    <div class="todo-scope">
+                        <span class="scope-tag">WSC.CRM.API</span><span class="scope-tag">WSC.Store.API</span><span class="scope-tag">WSC.Delivery.API</span><span class="scope-tag">Infrastructure (Redis)</span>
+                    </div>
+                </div>
+
+                <!-- 3. JWT Auth -->
+                <div class="todo-card p-high">
+                    <span class="todo-seq">#11 / 17</span>
+                    <div class="todo-title">🔐 JWT Auth — Token Authentication &amp; Authorisation</div>
+                    <span class="todo-priority pri-high">High Priority</span>
+                    <p class="todo-desc">Package <code>Microsoft.AspNetCore.Authentication.JwtBearer</code> is installed but not configured anywhere. All API controllers are currently open. Needs token issuance (login endpoint) and per-controller <code>[Authorize]</code> protection.</p>
+                    <ul class="todo-steps">
+                        <li>Add <code>Jwt</code> section to <code>appsettings.json</code> (Issuer, Audience, Key)</li>
+                        <li>Call <code>AddAuthentication(JwtBearer)</code> + <code>AddJwtBearer()</code> in all Program.cs</li>
+                        <li>Add <code>app.UseAuthentication()</code> before <code>app.UseAuthorization()</code></li>
+                        <li>Create <code>TokenService</code> in a shared or per-module Application layer</li>
+                        <li>Add <code>[Authorize]</code> to all controllers; add <code>[AllowAnonymous]</code> to auth endpoints</li>
+                        <li>Centralise JWT validation in <code>WSC.Gateway.API</code> for the gateway pattern</li>
+                    </ul>
+                    <div class="todo-scope">
+                        <span class="scope-tag">All API Projects</span><span class="scope-tag">WSC.Gateway.API</span><span class="scope-tag">WSC.Shared.Contracts</span>
+                    </div>
+                </div>
+
+                <!-- 4. Rate Limiting -->
+                <div class="todo-card p-med">
+                    <span class="todo-seq">#12 / 17</span>
+                    <div class="todo-title">🚦 Rate Limiting — API Traffic Throttling</div>
+                    <span class="todo-priority pri-med">Medium Priority</span>
+                    <p class="todo-desc">Package <code>AspNetCoreRateLimit 5.0.0</code> is installed but not wired. Needs IP-based and client-based rules to prevent abuse, with configuration via <code>appsettings.json</code>.</p>
+                    <ul class="todo-steps">
+                        <li>Add <code>IpRateLimiting</code> section to <code>appsettings.json</code> with rules</li>
+                        <li>Register <code>services.AddMemoryCache()</code> + <code>services.AddIpRateLimiting()</code></li>
+                        <li>Add <code>app.UseIpRateLimiting()</code> to pipeline (before controllers)</li>
+                        <li>Configure per-endpoint rules for sensitive mutations (Orders, Auth)</li>
+                        <li>Consider client-ID-based throttling for Gateway</li>
+                    </ul>
+                    <div class="todo-scope">
+                        <span class="scope-tag">WSC.Gateway.API</span><span class="scope-tag">WSC.CRM.API</span><span class="scope-tag">WSC.Store.API</span><span class="scope-tag">WSC.Delivery.API</span>
+                    </div>
+                </div>
+
+                <!-- 5. API Versioning -->
+                <div class="todo-card p-med">
+                    <span class="todo-seq">#13 / 17</span>
+                    <div class="todo-title">📌 API Versioning — Multi-Version Support</div>
+                    <span class="todo-priority pri-med">Medium Priority</span>
+                    <p class="todo-desc">No versioning is currently in place. Adding <code>Asp.Versioning.Mvc</code> enables parallel v1 / v2 API lifecycles, clean deprecation paths, and Swagger UI grouped by version.</p>
+                    <ul class="todo-steps">
+                        <li>Install <code>Asp.Versioning.Mvc</code> + <code>Asp.Versioning.Mvc.ApiExplorer</code> NuGet packages</li>
+                        <li>Call <code>services.AddApiVersioning()</code> with <code>DefaultApiVersion</code>, <code>AssumeDefaultVersionWhenUnspecified</code></li>
+                        <li>Decorate controllers with <code>[ApiVersion("1.0")]</code></li>
+                        <li>Update routes to <code>[Route("api/v{version:apiVersion}/[controller]")]</code></li>
+                        <li>Configure Swagger to generate a separate doc per version</li>
+                        <li>Apply to all API projects consistently</li>
+                    </ul>
+                    <div class="todo-scope">
+                        <span class="scope-tag">WSC.CRM.API</span><span class="scope-tag">WSC.Store.API</span><span class="scope-tag">WSC.Delivery.API</span><span class="scope-tag">WSC.Dashboard.API</span>
+                    </div>
+                </div>
+
+                <!-- 6. Auditing -->
+                <div class="todo-card p-med">
+                    <span class="todo-seq">#17 / 17</span>
+                    <div class="todo-title">📝 Auditing — Entity Change Tracking</div>
+                    <span class="todo-priority pri-med">Medium Priority</span>
+                    <p class="todo-desc">No audit trail exists. Every Create / Update / Delete should record <em>who</em> made the change, <em>when</em>, and <em>what</em> changed. This feeds compliance, debugging, and business intelligence requirements.</p>
+                    <ul class="todo-steps">
+                        <li>Create <code>AuditLog</code> entity in <code>WSC.Shared.Contracts</code></li>
+                        <li>Define <code>IAuditService</code> interface with <code>LogAsync(action, entity, userId)</code></li>
+                        <li>Implement <code>AuditService</code> writing to a <code>shared.AuditLogs</code> SQL table via Dapper</li>
+                        <li>Integrate audit calls into UnitOfWork <code>CommitAsync()</code></li>
+                        <li>Inject <code>IHttpContextAccessor</code> to capture <code>UserId</code> from JWT claims</li>
+                        <li>Add <code>CreatedBy</code> / <code>UpdatedBy</code> columns to key entity tables</li>
+                    </ul>
+                    <div class="todo-scope">
+                        <span class="scope-tag">WSC.Shared.Contracts</span><span class="scope-tag">WSC.Shared.Infrastructure</span><span class="scope-tag">All Infrastructure Layers</span><span class="scope-tag">Database</span>
+                    </div>
+                </div>
+
+            </div><!-- /todo-cards -->
+        </div><!-- /roadmap section -->
+
     </div><!-- /container -->
 
     <footer>
-        <p>WSC_ERP_App · Last updated: April 2026 · .NET 10 · C# 14 · Clean Architecture · Microservices</p>
+        <p>WSC_ERP_App · Last updated: April 2026 · .NET 10 · C# 14 · Clean Architecture · Microservices · 11/17 features complete</p>
         <p style="margin-top:6px;">Repository: <a href="https://github.com/KarthikSai08/WSC_ERP_App"
                 target="_blank">github.com/KarthikSai08/WSC_ERP_App</a></p>
     </footer>
