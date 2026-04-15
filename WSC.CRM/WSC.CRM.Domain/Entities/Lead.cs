@@ -14,13 +14,9 @@ namespace WSC.CRM.Domain.Entities
         public string LeadPhone { get; set; }
         [Required]
         public LeadStatus Status { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
-        [Required]
-        public int CustomerId { get; set; }
         public bool IsActive { get; set; }
-        public Customer Customer { get; set; }
 
-        public ICollection<Activity> Activities { get; set; }
     }
 }
