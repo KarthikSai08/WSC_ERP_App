@@ -11,11 +11,12 @@ namespace WSC.CRM.Domain.Entities
         [Required]
         public OpportunityStage Stage { get; set; }
         public decimal Amount { get; set; }
+        public bool IsActive { get; set; }
+
+        public int? CustomerId { get; set; } // set after closed won
+        public int LeadId { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? ClosedAt { get; set; }
-        public bool IsActive { get; set; }
-        [Required]
-        public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
     }
 }

@@ -25,13 +25,15 @@ namespace WSC.CRM.Application.Services
         {
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
+            if (dto.CustomerId.HasValue)
+            {
+                var cxExists = await _cxRepo.GetCustomerByIdAsync(dto.CustomerId.Value, ct);
+                if (cxExists is null)
+                    throw new NotFoundException("Customer", dto.CustomerId);
 
-            var cxExists = await _cxRepo.GetCustomerByIdAsync(dto.CustomerId, ct);
-            if (cxExists is null)
-                throw new NotFoundException("Customer", dto.CustomerId);
-
-            if (!cxExists.IsActive)
-                throw new InActiveException("Customer", dto.CustomerId);
+                if (!cxExists.IsActive)
+                    throw new InActiveException("Customer", dto.CustomerId);
+            }
 
             var opp = _mapper.Map<Opportunity>(dto);
 

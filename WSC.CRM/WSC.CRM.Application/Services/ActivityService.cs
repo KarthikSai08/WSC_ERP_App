@@ -25,11 +25,15 @@ namespace WSC.CRM.Application.Services
         {
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
-            var lead = await _leadRepo.GetLeadByIdAsync(dto.LeadId, ct);
-            if (lead == null)
-                throw new NotFoundException("Lead", dto.LeadId);
-            if (!lead.IsActive)
-                throw new InActiveException("Lead", dto.LeadId);
+
+            if (dto.LeadId.HasValue)
+            {
+                var lead = await _leadRepo.GetLeadByIdAsync(dto.LeadId.Value, ct);
+                if (lead == null)
+                    throw new NotFoundException("Lead", dto.LeadId);
+                if (!lead.IsActive)
+                    throw new InActiveException("Lead", dto.LeadId);
+            }
 
             if (string.IsNullOrWhiteSpace(dto.Title))
                 throw new ValidationException("Title is Required !");
@@ -60,13 +64,11 @@ namespace WSC.CRM.Application.Services
                 throw new NotFoundException("Lead", leadId);
 
             var activities = await _repo.GetActivitiesByLeadIdAsync(leadId, ct);
-
             if (activities == null || !activities.Any())
                 return ApiResponse<IEnumerable<ActivityResponseDto>>.Failed("No activities found for the given lead ID");
 
             var mappedActivities = _mapper.Map<IEnumerable<ActivityResponseDto>>(activities);
             return ApiResponse<IEnumerable<ActivityResponseDto>>.Ok(mappedActivities, "Activities retrieved successfully");
-
         }
 
         public async Task<ApiResponse<ActivityResponseDto?>> GetActivityByIdAsync(int id, CancellationToken ct)

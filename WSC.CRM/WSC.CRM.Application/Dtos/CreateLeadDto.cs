@@ -5,7 +5,5 @@
         public string LeadName { get; set; }
         public string LeadEmail { get; set; }
         public string LeadPhone { get; set; }
-
-        public int CustomerId { get; set; }
     }
 }

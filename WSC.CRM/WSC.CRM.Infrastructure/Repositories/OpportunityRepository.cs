@@ -23,8 +23,9 @@ namespace WSC.CRM.Infrastructure.Repositories
 
             parameters.Add("@ClosedAt", opp.ClosedAt);
             parameters.Add("@CustomerId", opp.CustomerId);
+            parameters.Add("@LeadId", opp.LeadId);
             parameters.Add(
-                            "@NewId",
+                            "@@NewOpportunityId",
                             dbType: System.Data.DbType.Int32,
                             direction: System.Data.ParameterDirection.Output);
 
@@ -32,7 +33,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                                        parameters,
                                        commandType: System.Data.CommandType.StoredProcedure);
 
-            var newId = parameters.Get<int>("@NewId");
+            var newId = parameters.Get<int>("@@NewOpportunityId");
             return newId;
 
         }
@@ -54,7 +55,7 @@ namespace WSC.CRM.Infrastructure.Repositories
             using var con = _context.CreateConnection();
             var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CxName
                         FROM crm.Opportunities o
-                        INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
+                        LEFT JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1 AND o.Stage IN (0,1)
                         ORDER BY CreatedAt DESC";
             var opportunities = await con.QueryAsync<OpportunityResponseDto>(new CommandDefinition(sql, cancellationToken: ct));
@@ -66,7 +67,7 @@ namespace WSC.CRM.Infrastructure.Repositories
             using var con = _context.CreateConnection();
             var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CxName
                         FROM crm.Opportunities o
-                        INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
+                        LEFT JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1
                         ORDER BY CreatedAt DESC";
 
@@ -79,7 +80,7 @@ namespace WSC.CRM.Infrastructure.Repositories
             using var con = _context.CreateConnection();
             var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CxName
                         FROM crm.Opportunities o
-                        INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
+                        LEFT JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1 AND o.CustomerId = @CustomerId
                         ORDER BY o.CreatedAt DESC";
 
@@ -92,7 +93,7 @@ namespace WSC.CRM.Infrastructure.Repositories
             using var con = _context.CreateConnection();
             var sql = @"SELECT o.OpportunityId, o.OpportunityName, o.Stage, o.Amount, o.CreatedAt, o.ClosedAt, o.CustomerId, c.CxName
                         FROM crm.Opportunities o
-                        INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
+                        LEFT JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1 AND o.OpportunityId = @OpportunityId";
 
             var opportunity = await con.QueryFirstOrDefaultAsync<OpportunityResponseDto>(new CommandDefinition(sql, new { OpportunityId = id }, cancellationToken: ct));
@@ -125,7 +126,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                             o.CustomerId,
                             c.CxName
                         FROM crm.Opportunities o
-                        INNER JOIN crm.Customers c ON o.CustomerId = c.CxId
+                        LEFT JOIN crm.Customers c ON o.CustomerId = c.CxId
                         WHERE o.IsActive = 1
                         ORDER BY CreatedAt DESC
                         OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;

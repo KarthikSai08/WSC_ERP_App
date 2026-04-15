@@ -9,8 +9,7 @@ namespace WSC.CRM.Application.Mappings
     {
         public OpportunityProfile()
         {
-            CreateMap<Opportunity, OpportunityResponseDto>()
-                .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.CxName));
+            CreateMap<Opportunity, OpportunityResponseDto>();
             CreateMap<CreateOpportunityDto, Opportunity>();
             CreateMap<UpdateOpportunityDto, Opportunity>();
         }
