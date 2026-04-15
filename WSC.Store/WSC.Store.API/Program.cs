@@ -1,9 +1,11 @@
 using Microsoft.Data.SqlClient;
 using Scalar.AspNetCore;
+using Serilog;
 using StackExchange.Redis;
 using System.Data;
 using WSC.Shared.Contracts.Interfaces.CRMClients;
 using WSC.Shared.Infrastructure.Clients;
+using WSC.Shared.Infrastructure.Logging;
 using WSC.Store.API.Filters;
 using WSC.Store.API.Middleware;
 using WSC.Store.Application.DependencyInjection;
@@ -34,7 +36,7 @@ builder.Services.AddStoreApplicationService();
 builder.Services.AddStoreInfrastructureService();
 
 builder.Services.AddScoped<ValidationFilter>();
-
+builder.Host.ConfigureSerilog();
 
 builder.Services.AddScoped<IDbConnection>(sp =>
     new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -54,6 +56,9 @@ builder.Services.AddAutoMapper(cfg =>
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<CorrelationMiddleware>();
+
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {

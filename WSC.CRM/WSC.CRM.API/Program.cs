@@ -1,8 +1,10 @@
 using Scalar.AspNetCore;
+using Serilog;
 using StackExchange.Redis;
 using WSC.CRM.API.Filters;
 using WSC.CRM.Application.DependencyInjection;
 using WSC.CRM.Infrastructure.DependencyInjection;
+using WSC.Shared.Infrastructure.Logging;
 using WSC.Store.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +26,8 @@ builder.Services.AddCRMInfrastructureService();
 
 builder.Services.AddScoped<ValidationFilter>();
 
+builder.Host.ConfigureSerilog();
+
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
     var config = builder.Configuration["Redis:ConnectionString"];
@@ -39,6 +43,9 @@ builder.Services.AddAutoMapper(cfg =>
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<CorrelationMiddleware>();
+
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {

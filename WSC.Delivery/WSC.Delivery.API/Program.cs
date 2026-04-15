@@ -1,10 +1,12 @@
 using Scalar.AspNetCore;
+using Serilog;
 using StackExchange.Redis;
 using WSC.Delivery.Application.DependencyInjection;
 using WSC.Delivery.Infrastructure.DependencyInjection;
 using WSC.Shared.Contracts.Interfaces.CRMClients;
 using WSC.Shared.Contracts.Interfaces.StoreClients;
 using WSC.Shared.Infrastructure.Clients;
+using WSC.Shared.Infrastructure.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +27,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddMaps(typeof(Program).Assembly);
     cfg.AddMaps(typeof(ApplicationService).Assembly);
 });
-
+builder.Host.ConfigureSerilog();
 var crmUrl = builder.Configuration["Services:CRM"];
 var storeUrl = builder.Configuration["Services:Store"];
 builder.Services.AddHttpClient<ICustomerClient, CustomerClient>(client =>
@@ -53,6 +55,8 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 var app = builder.Build();
 
 //app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<CorrelationMiddleware>();
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {
