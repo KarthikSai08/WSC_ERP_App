@@ -27,15 +27,17 @@ namespace WSC.CRM.Infrastructure.Repositories
             parameters.Add("@Type", (int)act.Type);
             parameters.Add("@ScheduledAt", act.ScheduledAt);
             parameters.Add("@LeadId", act.LeadId);
+            parameters.Add("@OpportunityId", act.OpportunityId);
+            parameters.Add("@CustomerId", act.CustomerId);
 
-            parameters.Add("@NewId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@@NewActivityId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             await con.ExecuteAsync(
                 "crm.sp_CreateActivity",
                 parameters,
                 commandType: CommandType.StoredProcedure);
 
-            var id = parameters.Get<int>("@NewId");
+            var id = parameters.Get<int>("@@NewActivityId");
             return id;
         }
 
@@ -80,9 +82,9 @@ namespace WSC.CRM.Infrastructure.Repositories
         public async Task<Activity?> GetActivityEntityByIdAsync(int id, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT ActivityId, Title, Description, Type, ScheduledAt, CompletedAt, IsActive, LeadId
+            var sql = @"SELECT ActivityId, Title, Description, Type, ScheduledAt, CompletedAt, IsActive, LeadId, CustomerId, OpportunityId
                         FROM crm.Activities 
-                        WHERE IsActive = 1";
+                        WHERE ActivityId = @Id AND IsActive = 1";
 
             var activity = await con.QueryFirstOrDefaultAsync<Activity>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
             return activity;

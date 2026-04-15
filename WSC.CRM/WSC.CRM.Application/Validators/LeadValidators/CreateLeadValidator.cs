@@ -18,9 +18,6 @@ namespace WSC.CRM.Application.Validators.LeadValidators
             RuleFor(x => x.LeadPhone)
                 .NotEmpty().WithMessage("Lead phone number is required.")
                 .Matches(@"^\+?[1-9]\d{1,14}$").WithMessage("Invalid phone number format.");
-
-            RuleFor(x => x.CustomerId)
-                .GreaterThan(0).WithMessage("Customer ID must be greater than zero.");
         }
     }
 }

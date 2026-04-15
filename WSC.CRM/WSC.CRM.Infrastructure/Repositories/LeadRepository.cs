@@ -25,15 +25,14 @@ namespace WSC.CRM.Infrastructure.Repositories
             parameters.Add("@LeadName", lead.LeadName);
             parameters.Add("@LeadEmail", lead.LeadEmail);
             parameters.Add("@LeadPhone", lead.LeadPhone);
-            parameters.Add("@CustomerId", lead.CustomerId);
 
-            parameters.Add("@NewId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@NewLeadId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             await con.ExecuteAsync(
                 "crm.sp_CreateLead",
                 parameters, commandType: CommandType.StoredProcedure);
 
-            var leadId = parameters.Get<int>("@NewId");
+            var leadId = parameters.Get<int>("@NewLeadId");
             return leadId;
         }
 
@@ -65,9 +64,8 @@ namespace WSC.CRM.Infrastructure.Repositories
         public async Task<IEnumerable<LeadResponseDto>> GetAllLeadsAsync(CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT l.LeadId, l.LeadName, l.LeadEmail, l.LeadPhone, l.Status, l.CreatedAt, l.UpdatedAt, l.CustomerId, c.CxName AS CustomerName, l.IsActive
+            var sql = @"SELECT l.LeadId, l.LeadName, l.LeadEmail, l.LeadPhone, l.Status, l.CreatedAt, l.UpdatedAt, l.IsActive
                         FROM crm.Leads l
-                        INNER JOIN crm.Customers c ON l.CustomerId = c.CxId
                         WHERE l.IsActive = 1";
             var leads = await con.QueryAsync<LeadResponseDto>(new CommandDefinition(sql, cancellationToken: ct));
             return leads;
@@ -76,9 +74,8 @@ namespace WSC.CRM.Infrastructure.Repositories
         public async Task<LeadResponseDto?> GetLeadByIdAsync(int id, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = @"SELECT l.LeadId, l.LeadName, l.LeadEmail, l.LeadPhone, l.Status, l.CreatedAt, l.UpdatedAt, l.CustomerId, c.CxName AS CustomerName, l.IsActive
+            var sql = @"SELECT l.LeadId, l.LeadName, l.LeadEmail, l.LeadPhone, l.Status, l.CreatedAt, l.UpdatedAt, l.IsActive
                         FROM crm.Leads l
-                        INNER JOIN crm.Customers c ON l.CustomerId = c.CxId
                         WHERE l.IsActive = 1 and LeadId = @Id";
 
             var lead = await con.QueryFirstOrDefaultAsync<LeadResponseDto>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
@@ -132,9 +129,9 @@ namespace WSC.CRM.Infrastructure.Repositories
         {
             using var con = _context.CreateConnection();
             var sql = @"SELECT LeadId, LeadName, LeadEmail, LeadPhone,
-                       Status, CreatedAt, UpdatedAt, CustomerId
-                FROM crm.Leads
-                WHERE LeadId = @Id AND IsActive = 1";
+                       Status, CreatedAt, UpdatedAt
+                        FROM crm.Leads
+                        WHERE LeadId = @Id AND IsActive = 1";
 
             return await con.QueryFirstOrDefaultAsync<Lead>(sql, new { Id = id });
         }
@@ -150,11 +147,8 @@ namespace WSC.CRM.Infrastructure.Repositories
                             l.LeadPhone,
                             l.Status,
                             l.CreatedAt,
-                            l.CustomerId,
-                            c.CxName AS CustomerName,
                             l.IsActive
                         FROM crm.Leads l
-                        JOIN crm.Customers c ON l.CustomerId = c.CxId
                         WHERE l.IsActive = 1
                         ORDER BY l.LeadId
                         OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;

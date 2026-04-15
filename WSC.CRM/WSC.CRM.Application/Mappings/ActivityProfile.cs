@@ -9,8 +9,7 @@ namespace WSC.CRM.Application.Mappings
     {
         public ActivityProfile()
         {
-            CreateMap<Activity, ActivityResponseDto>()
-                .ForMember(dest => dest.LeadName, opt => opt.MapFrom(src => src.Lead.LeadName));
+            CreateMap<Activity, ActivityResponseDto>();
             CreateMap<CreateActivityDto, Activity>();
             CreateMap<UpdateActivityDto, Activity>();
         }
