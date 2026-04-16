@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Repository;
@@ -15,11 +16,13 @@ namespace WSC.CRM.Application.Services
         private readonly IOpportunityRepository _repo;
         private readonly IMapper _mapper;
         private readonly ICustomerRepository _cxRepo;
-        public OpportunityService(IOpportunityRepository repo, IMapper mapper, ICustomerRepository cxRepo)
+        private readonly ILogger<OpportunityService> _logger;
+        public OpportunityService(IOpportunityRepository repo, IMapper mapper, ICustomerRepository cxRepo, ILogger<OpportunityService> logger)
         {
             _mapper = mapper;
             _repo = repo;
             _cxRepo = cxRepo;
+            _logger = logger;
         }
         public async Task<ApiResponse<int>> CreateOpportunityAsync(CreateOpportunityDto dto, CancellationToken ct)
         {

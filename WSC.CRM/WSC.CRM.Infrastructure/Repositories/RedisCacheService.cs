@@ -1,4 +1,5 @@
-﻿using StackExchange.Redis;
+﻿using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 using System.Text.Json;
 using WSC.CRM.Application.Interfaces;
 
@@ -7,7 +8,12 @@ namespace WSC.CRM.Infrastructure.Repositories
     internal class RedisCacheService : IRedisCacheService
     {
         private readonly IDatabase _db;
-        public RedisCacheService(IConnectionMultiplexer redis) => _db = redis.GetDatabase();
+        private readonly ILogger<RedisCacheService> _logger;
+        public RedisCacheService(IConnectionMultiplexer redis, ILogger<RedisCacheService> logger)
+        {
+            _db = redis.GetDatabase();
+            _logger = logger;
+        }
 
         public async Task<T?> GetAsync<T>(string key)
         {
@@ -16,17 +22,21 @@ namespace WSC.CRM.Infrastructure.Repositories
             if (value.IsNullOrEmpty)
                 return default;
 
+            _logger.LogInformation("Cache hit for key: {Key}", key);
             return JsonSerializer.Deserialize<T>(value.ToString());
         }
 
         public async Task RemoveAsync(string key)
         {
+            _logger.LogInformation("Removing cache for key: {Key}", key);
             await _db.KeyDeleteAsync(key);
         }
 
         public async Task SetAsync<T>(string key, T value, TimeSpan? expiry = null)
         {
             var json = JsonSerializer.Serialize(value);
+
+            _logger.LogInformation("Setting cache for key: {Key} with expiry: {Expiry}", key, expiry);
             await _db.StringSetAsync(key, json, expiry, When.Always);
         }
 

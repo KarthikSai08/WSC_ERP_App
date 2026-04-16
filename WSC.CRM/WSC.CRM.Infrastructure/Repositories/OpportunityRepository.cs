@@ -20,12 +20,11 @@ namespace WSC.CRM.Infrastructure.Repositories
             parameters.Add("@OpportunityName", opp.OpportunityName);
             parameters.Add("@Stage", opp.Stage);
             parameters.Add("@Amount", opp.Amount);
-
             parameters.Add("@ClosedAt", opp.ClosedAt);
             parameters.Add("@CustomerId", opp.CustomerId);
             parameters.Add("@LeadId", opp.LeadId);
-            parameters.Add(
-                            "@@NewOpportunityId",
+
+            parameters.Add("@@NewOpportunityId",
                             dbType: System.Data.DbType.Int32,
                             direction: System.Data.ParameterDirection.Output);
 
@@ -188,7 +187,6 @@ namespace WSC.CRM.Infrastructure.Repositories
             sql.Append(" WHERE OpportunityId = @OpportunityId AND IsActive = 1");
 
             var updatedRows = await con.ExecuteAsync(new CommandDefinition(sql.ToString(), parameters, cancellationToken: ct));
-
             return updatedRows > 0;
         }
     }

@@ -135,8 +135,7 @@ namespace WSC.CRM.Infrastructure.Repositories
 
             return await con.QueryFirstOrDefaultAsync<Lead>(sql, new { Id = id });
         }
-        public async Task<(IEnumerable<LeadResponseDto> Data, int TotalCount)>
-    GetPagedLeadsAsync(PaginationRequest request, CancellationToken ct)
+        public async Task<(IEnumerable<LeadResponseDto> Data, int TotalCount)> GetPagedLeadsAsync(PaginationRequest request, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
 

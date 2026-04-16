@@ -2,6 +2,7 @@ using Scalar.AspNetCore;
 using Serilog;
 using StackExchange.Redis;
 using WSC.CRM.API.Filters;
+using WSC.CRM.API.Middleware;
 using WSC.CRM.Application.DependencyInjection;
 using WSC.CRM.Infrastructure.DependencyInjection;
 using WSC.Shared.Infrastructure.Logging;
@@ -31,12 +32,14 @@ builder.Services.AddScoped<ValidationFilter>();
 //Logging
 builder.Host.ConfigureSerilog();
 
+//Redis Configuration
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
     var config = builder.Configuration["Redis:ConnectionString"];
     return ConnectionMultiplexer.Connect(config);
 });
 
+//AutoMapper Configuration
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddMaps(typeof(Program).Assembly);
@@ -45,15 +48,10 @@ builder.Services.AddAutoMapper(cfg =>
 
 var app = builder.Build();
 
-
-app.UseMiddleware<ExceptionMiddleware>();
-app.UseMiddleware<CorrelationMiddleware>();
-
-
 //Custom Middleware for Exception Handling and Correlation ID
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<IdempotencyMiddleware>();
 app.UseMiddleware<CorrelationMiddleware>();
-
 
 app.UseSerilogRequestLogging();
 
@@ -64,7 +62,6 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.MapGet("/test", () => "WORKING");
-
 
 app.UseHttpsRedirection();
 

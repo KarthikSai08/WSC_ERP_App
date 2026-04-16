@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Repository;
@@ -15,11 +16,13 @@ namespace WSC.CRM.Application.Services
         private readonly IActivityRepository _repo;
         private readonly ILeadRepository _leadRepo;
         private readonly IMapper _mapper;
-        public ActivityService(IActivityRepository repo, IMapper mapper, ILeadRepository leadRepo)
+        private readonly ILogger<ActivityService> _logger;
+        public ActivityService(IActivityRepository repo, IMapper mapper, ILeadRepository leadRepo, ILogger<ActivityService> logger)
         {
             _mapper = mapper;
             _repo = repo;
             _leadRepo = leadRepo;
+            _logger = logger;
         }
         public async Task<ApiResponse<int>> CreateActivityAsync(CreateActivityDto dto, CancellationToken ct)
         {
@@ -42,17 +45,20 @@ namespace WSC.CRM.Application.Services
             var activityId = await _repo.CreateActivityAsync(act, ct);
 
             if (activityId <= 0)
-                throw new Exception("Failed to Create Activity");
+                throw new InvalidInputIdException(activityId);
 
+            _logger.LogInformation("Activity with ID {ActivityId} created successfully", activityId);
             return ApiResponse<int>.Ok(activityId, "Activity created successfully");
         }
 
         public async Task<ApiResponse<bool>> DeleteActivityAsync(int id, CancellationToken ct)
         {
             if (id <= 0)
-                throw new NotFoundException("Activity ", id);
+                throw new InvalidInputIdException(id);
 
             var deleted = await _repo.DeleteActivityAsync(id, ct);
+
+            _logger.LogInformation("Attempt to delete activity with ID {ActivityId} resulted in {Result}", id, deleted ? "success" : "failure");
             return deleted
                 ? ApiResponse<bool>.Ok(true, "Activity deleted successfully")
                 : ApiResponse<bool>.Failed("Failed to delete activity");
@@ -61,7 +67,7 @@ namespace WSC.CRM.Application.Services
         public async Task<ApiResponse<IEnumerable<ActivityResponseDto>>> GetActivitiesByLeadIdAsync(int leadId, CancellationToken ct)
         {
             if (leadId <= 0)
-                throw new NotFoundException("Lead", leadId);
+                throw new InvalidInputIdException(leadId);
 
             var activities = await _repo.GetActivitiesByLeadIdAsync(leadId, ct);
             if (activities == null || !activities.Any())
@@ -74,7 +80,7 @@ namespace WSC.CRM.Application.Services
         public async Task<ApiResponse<ActivityResponseDto?>> GetActivityByIdAsync(int id, CancellationToken ct)
         {
             if (id <= 0)
-                throw new NotFoundException("Activity", id);
+                throw new InvalidInputIdException(id);
 
             var activity = await _repo.GetActivityByIdAsync(id, ct);
             if (activity == null)
@@ -83,7 +89,6 @@ namespace WSC.CRM.Application.Services
             var mappedActivity = _mapper.Map<ActivityResponseDto?>(activity);
 
             return ApiResponse<ActivityResponseDto?>.Ok(mappedActivity, "Activity retrieved successfully");
-
         }
 
         public async Task<ApiResponse<IEnumerable<ActivityResponseDto>>> GetAllActivitiesAsync(CancellationToken ct)
@@ -126,7 +131,7 @@ namespace WSC.CRM.Application.Services
                 throw new ArgumentNullException(nameof(act));
 
             if (act.ActivityId <= 0)
-                throw new NotFoundException("Activity", act.ActivityId);
+                throw new InvalidInputIdException(act.ActivityId);
 
             var activity = await _repo.GetActivityEntityByIdAsync(act.ActivityId, ct);
             if (activity == null)

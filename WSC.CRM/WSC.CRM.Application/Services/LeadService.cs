@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Application.Interfaces.Services;
@@ -14,10 +15,12 @@ namespace WSC.CRM.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly ILeadRepository _repo;
-        public LeadService(IMapper mapper, ILeadRepository repo)
+        private readonly ILogger<LeadService> _logger;
+        public LeadService(IMapper mapper, ILeadRepository repo, ILogger<LeadService> logger)
         {
             _mapper = mapper;
             _repo = repo;
+            _logger = logger;
         }
 
         public async Task<ApiResponse<int>> CreateLeadAsync(CreateLeadDto dto, CancellationToken ct)
@@ -27,24 +30,32 @@ namespace WSC.CRM.Application.Services
 
             var exists = await _repo.ExistsByLeadAsync(dto.LeadEmail, ct);
             if (exists is true)
+            {
+                _logger.LogWarning("Attempt to create duplicate lead with email: {LeadEmail}", dto.LeadEmail);
                 throw new DuplicateException("Lead", dto.LeadEmail);
+            }
 
             var lead = _mapper.Map<Lead>(dto);
             var id = await _repo.CreateLeadAsync(lead, ct);
 
+            _logger.LogInformation("Lead created with ID: {LeadId}", id);
             return ApiResponse<int>.Ok(id, "Lead created successfully.");
         }
 
         public async Task<ApiResponse<bool>> DeleteLeadAsync(int id, CancellationToken ct)
         {
             if (id <= 0)
-                throw new ArgumentOutOfRangeException("id");
+                throw new InvalidInputIdException(id);
 
             var exists = await _repo.GetLeadByIdAsync(id, ct);
             if (exists == null)
+            {
+                _logger.LogWarning("Attempt to delete non-existent lead with ID: {LeadId}", id);
                 throw new NotFoundException("Lead", id);
+            }
 
             var res = await _repo.DeleteLeadAsync(id, ct);
+            _logger.LogInformation("Lead with ID: {LeadId} deletion attempted. Success: {Success}", id, res);
             return res
                 ? ApiResponse<bool>.Ok(true, "Lead deleted successfully.")
                 : ApiResponse<bool>.Failed("Failed to delete lead.");
@@ -54,8 +65,12 @@ namespace WSC.CRM.Application.Services
         {
             var leads = await _repo.GetAllLeadsAsync(ct);
             if (leads == null || !leads.Any())
+            {
+                _logger.LogInformation("No leads found in the system.");
                 return ApiResponse<IEnumerable<LeadResponseDto>>.Ok(Enumerable.Empty<LeadResponseDto>(), "No leads found.");
+            }
 
+            _logger.LogInformation("Retrieved {LeadCount} leads from the system.", leads.Count());
             return ApiResponse<IEnumerable<LeadResponseDto>>.Ok(
                 _mapper.Map<IEnumerable<LeadResponseDto>>(leads),
                 "Leads retrieved successfully.");
@@ -64,13 +79,17 @@ namespace WSC.CRM.Application.Services
         public async Task<ApiResponse<LeadResponseDto?>> GetLeadByIdAsync(int id, CancellationToken ct)
         {
             if (id <= 0)
-                throw new ArgumentOutOfRangeException("id");
+                throw new InvalidInputIdException(id);
 
             var lead = await _repo.GetLeadByIdAsync(id, ct);
             if (lead == null)
+            {
+                _logger.LogWarning("Lead with ID: {LeadId} not found.", id);
                 throw new NotFoundException("Lead", id);
+            }
 
             var result = _mapper.Map<LeadResponseDto>(lead);
+            _logger.LogInformation("Lead with ID: {LeadId} retrieved successfully.", id);
             return ApiResponse<LeadResponseDto>.Ok(result, "Lead Found!");
         }
 
@@ -91,11 +110,13 @@ namespace WSC.CRM.Application.Services
         public async Task<ApiResponse<bool>> UpdateLeadStatusAsync(int id, LeadStatus newStatus, CancellationToken ct)
         {
             if (id <= 0)
-                throw new ArgumentOutOfRangeException("id");
+                throw new InvalidInputIdException(id);
+
             if (!Enum.IsDefined(typeof(LeadStatus), newStatus))
                 throw new ArgumentException("Invalid lead status.", nameof(newStatus));
 
             var updated = await _repo.UpdateLeadStatusAsync(id, newStatus, ct);
+            _logger.LogInformation("Lead with ID: {LeadId} status update attempted to {NewStatus}. Success: {Success}", id, newStatus, updated);
             return updated
                 ? ApiResponse<bool>.Ok(true, "Lead status updated successfully.")
                 : ApiResponse<bool>.Failed("Failed to update lead status.");

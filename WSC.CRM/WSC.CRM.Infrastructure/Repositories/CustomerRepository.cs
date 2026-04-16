@@ -14,7 +14,6 @@ namespace WSC.CRM.Infrastructure.Repositories
         private readonly DapperContext _context;
         public CustomerRepository(DapperContext context) => _context = context;
 
-
         public async Task<int> CreateCustomerAsync(Customer cx, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
@@ -23,25 +22,21 @@ namespace WSC.CRM.Infrastructure.Repositories
             parameters.Add("@CxName", cx.CxName);
             parameters.Add("@CxEmail", cx.CxEmail);
             parameters.Add("@CxPhone", cx.CxPhone);
-
             parameters.Add("@Street", cx.CxAddress?.Street);
             parameters.Add("@City", cx.CxAddress?.City);
             parameters.Add("@State", cx.CxAddress?.State);
             parameters.Add("@ZipCode", cx.CxAddress?.ZipCode);
             parameters.Add("@Country", cx.CxAddress?.Country);
-
             parameters.Add("@CreatedAt", DateTime.UtcNow);
+
             parameters.Add("@NewId",
                             dbType: DbType.Int32,
                             direction: ParameterDirection.Output);
 
-            await con.ExecuteAsync(
-                    "crm.sp_CreateCustomer",
-                    parameters,
-                    commandType: CommandType.StoredProcedure);
+            await con.ExecuteAsync("crm.sp_CreateCustomer",
+                                    parameters,commandType: CommandType.StoredProcedure);
 
             var id = parameters.Get<int>("@NewId");
-            Console.WriteLine($"NewId from SP: {id}");
             return id;
         }
 
@@ -54,7 +49,6 @@ namespace WSC.CRM.Infrastructure.Repositories
                         WHERE CxId = @Id AND IsActive = 1";
 
             var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
-
             return affectedRows > 0;
         }
 
@@ -66,7 +60,6 @@ namespace WSC.CRM.Infrastructure.Repositories
                         WHERE CxEmail = @Email AND IsActive = 1";
 
             var exists = await con.QueryFirstOrDefaultAsync<int?>(new CommandDefinition(sql, new { Email = email }, cancellationToken: ct));
-
             return exists.HasValue;
 
         }
@@ -75,7 +68,7 @@ namespace WSC.CRM.Infrastructure.Repositories
         {
             using var con = _context.CreateConnection();
 
-            var sql = @"SELECT * FROM crm.Customers";
+            var sql = @"SELECT CxId, CxName, CxEmail, CxPhone, Street, City, State, ZipCode, Country FROM crm.Customers";
             var customers = await con.QueryAsync<Customer>(new CommandDefinition(sql, cancellationToken: ct));
 
             return customers;
@@ -176,7 +169,6 @@ namespace WSC.CRM.Infrastructure.Repositories
             sql.Append(" WHERE CxId = @CxId AND IsActive = 1");
 
             var updated = await con.ExecuteAsync(new CommandDefinition(sql.ToString(), parameters, cancellationToken: ct));
-
             return updated > 0;
         }
     }

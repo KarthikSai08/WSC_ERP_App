@@ -34,6 +34,7 @@ namespace WSC.Store.API.Middleware
                 DuplicateException d => CreateResponse(HttpStatusCode.Conflict, d.Message),
                 InSufficientException i => CreateResponse(HttpStatusCode.BadRequest, i.Message),
                 InActiveException ia => CreateResponse(HttpStatusCode.BadRequest, ia.Message),
+                InvalidInputIdException ii => CreateResponse(HttpStatusCode.BadRequest, ii.Message),
 
                 _ => CreateResponse(HttpStatusCode.InternalServerError, "Something went wrong. Please try again later.")
             };

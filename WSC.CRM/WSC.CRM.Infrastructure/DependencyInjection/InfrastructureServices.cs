@@ -3,6 +3,8 @@ using WSC.CRM.Application.Interfaces;
 using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Infrastructure.Persistence.Context;
 using WSC.CRM.Infrastructure.Repositories;
+using WSC.Shared.Contracts.Interfaces;
+using WSC.Shared.Infrastructure.Services;
 
 namespace WSC.CRM.Infrastructure.DependencyInjection
 {
@@ -18,6 +20,9 @@ namespace WSC.CRM.Infrastructure.DependencyInjection
             services.AddScoped<IActivityRepository, ActivityRepository>();
             services.AddScoped<IOpportunityRepository, OpportunityRepository>();
             services.AddScoped<IRedisCacheService, RedisCacheService>();
+
+            services.AddSingleton<IIdempotencyService, IdempotencyService>();
+
             return services;
         }
     }

@@ -35,11 +35,19 @@ namespace WSC.Delivery.Application.Services
 
 		public async Task<ApiResponse<int>> CreateDeliveryItemAsync(CreateDeliveryItemDto dto, CancellationToken ct)
 		{
-			var prd = _prdClient.GetProductByIdAsync(dto.ProductId, ct);
+            var prdTask = _prdClient.GetProductByIdAsync(dto.ProductId, ct);
+			var deliveryTask = _deliveryRepo.GetByDeliveryIdAsync(dto.DeliveryId, ct); 
+			
+			await Task.WhenAll(prdTask, deliveryTask); 
 
+			var prd = await prdTask; 
+			var delivery = await deliveryTask;
 
-			if (prd == null)
+            if (prd == null)
 				throw new NotFoundException("Product", dto.ProductId);
+
+			if (delivery == null)
+				throw new NotFoundException("Delivery", dto.DeliveryId);
 
 			if (dto == null)
 				return ApiResponse<int>.Failed("Invalid delivery item data.");

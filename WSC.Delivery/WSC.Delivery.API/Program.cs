@@ -27,7 +27,11 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddMaps(typeof(Program).Assembly);
     cfg.AddMaps(typeof(ApplicationService).Assembly);
 });
+
+//Serilog configuration
 builder.Host.ConfigureSerilog();
+
+//Client configuration for CRM and Store services
 var crmUrl = builder.Configuration["Services:CRM"];
 var storeUrl = builder.Configuration["Services:Store"];
 builder.Services.AddHttpClient<ICustomerClient, CustomerClient>(client =>

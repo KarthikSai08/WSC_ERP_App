@@ -48,6 +48,10 @@ namespace WSC.CRM.Application.Services
         public async Task<ApiResponse<bool>> DeleteCustomerAsync(int id, CancellationToken ct)
         {
             _logger.LogInformation("Customer Deactivation initiated for ID: {CustomerId} at {Time}", id, DateTime.UtcNow);
+
+            if(id <= 0)
+                throw new InvalidInputIdException(id);
+
             var result = await _repo.DeleteCustomerAsync(id, ct);
             if (result)
             {
@@ -77,7 +81,7 @@ namespace WSC.CRM.Application.Services
         {
             _logger.LogInformation("Customer retrieval initiated for ID: {CustomerId} at {Time}", id, DateTime.UtcNow);
             if (id <= 0)
-                throw new Exception("Id must be greater than 0");
+                throw new InvalidInputIdException(id);
 
             var customer = await _repo.GetCustomerByIdAsync(id, ct);
 
@@ -94,6 +98,10 @@ namespace WSC.CRM.Application.Services
         public async Task<ApiResponse<bool>> UpdateCustomerAsync(UpdateCustomerDto dto, CancellationToken ct)
         {
             _logger.LogInformation("Customer update initiated for ID: {CustomerId} at {Time}", dto.CxId, DateTime.UtcNow);
+
+           if(dto.CxId <= 0)
+                throw new InvalidInputIdException(dto.CxId);
+
             var customer = await _repo.GetCustomerByIdAsync(dto.CxId, ct);
             if (customer == null)
                 throw new NotFoundException("Customer", dto.CxId);
