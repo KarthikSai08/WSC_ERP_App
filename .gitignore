@@ -1,21 +1,70 @@
-# Build outputs
+# ── Build Outputs ──────────────────────────────────────────────
 bin/
 obj/
+out/
 
-# Visual Studio
+# ── Visual Studio ───────────────────────────────────────────────
 .vs/
 *.user
 *.suo
-*.log
+*.sln.docstates
+*.vsp
+*.vspx
+*.sap
 
-# Database files
-*.mdf
-*.ldf
+# ── Visual Studio Code ──────────────────────────────────────────
+.vscode/
+*.code-workspace
 
-# Resharper
+# ── Rider / JetBrains ───────────────────────────────────────────
+.idea/
 _ReSharper*/
 *.DotSettings.user
+*.resharper
 
-# OS files
+# ── Database Files (local dev only) ────────────────────────────
+*.mdf
+*.ldf
+*.ndf
+
+# ── Logs ────────────────────────────────────────────────────────
+*.log
+logs/
+Logs/
+
+# ── NuGet ───────────────────────────────────────────────────────
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+nuget.config.local
+
+# ── Publish / Deploy Artefacts ──────────────────────────────────
+publish/
+*.pubxml.user
+
+# ── Test Results ────────────────────────────────────────────────
+TestResults/
+coverage/
+*.trx
+*.coveragexml
+
+# ── OS Files ────────────────────────────────────────────────────
 Thumbs.db
-*.DS_Store
+Desktop.ini
+.DS_Store
+ehthumbs.db
+
+# ── Solution Launch Files ───────────────────────────────────────
+*.slnLaunch.user
+
+# ── Personal / Documentation (not for repo) ─────────────────────
+MY_LEARNING_REVIEW.html
+PROJECT_STRUCTURE.html
+TECH_STACK_IMPLEMENTATION_GUIDE.md
+
+# ── Secrets / Environment ───────────────────────────────────────
+appsettings.Development.json
+*.env
+.env
+secrets.json

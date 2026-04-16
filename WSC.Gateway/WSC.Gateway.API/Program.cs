@@ -1,3 +1,6 @@
+using WSC.Shared.Contracts.Interfaces.CRMClients;
+using WSC.Shared.Infrastructure.Clients;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+
+var crmUrl = builder.Configuration["Services:CRM"];
+
+builder.Services.AddHttpClient<ICustomerClient, CustomerClient>(client =>
+{
+    client.BaseAddress = new Uri(crmUrl);
+});
 
 var app = builder.Build();
 

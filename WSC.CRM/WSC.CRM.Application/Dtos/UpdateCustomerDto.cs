@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.CRM.Application.Dtos
+﻿namespace WSC.CRM.Application.Dtos
 {
     public class UpdateCustomerDto
     {

@@ -1,0 +1,20 @@
+using FluentValidation;
+using WSC.Delivery.Application.Dtos;
+
+namespace WSC.Delivery.Application.Validators.DeliveryItemValidators
+{
+    public class CreateDeliveryItemValidator : AbstractValidator<CreateDeliveryItemDto>
+    {
+        public CreateDeliveryItemValidator()
+        {
+            RuleFor(x => x.DeliveryId)
+                .GreaterThan(0).WithMessage("Valid delivery ID is required.");
+
+            RuleFor(x => x.ProductId)
+                .GreaterThan(0).WithMessage("Valid order item ID is required.");
+
+            RuleFor(x => x.Quantity)
+                .GreaterThan(0).WithMessage("Quantity must be greater than 0.");
+        }
+    }
+}

@@ -1,11 +1,11 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using WSC.CRM.Application.Interfaces;
+using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Domain.Entities;
 using WSC.CRM.Infrastructure.Persistence.Context;
+using WSC.Shared.Contracts.Common;
+using WSC.Shared.Contracts.Dtos.CRMLayer;
 
 namespace WSC.CRM.Infrastructure.Repositories
 {
@@ -13,12 +13,12 @@ namespace WSC.CRM.Infrastructure.Repositories
     {
         private readonly DapperContext _context;
         public CustomerRepository(DapperContext context) => _context = context;
-        
+
 
         public async Task<int> CreateCustomerAsync(Customer cx, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            
+
             var parameters = new DynamicParameters();
             parameters.Add("@CxName", cx.CxName);
             parameters.Add("@CxEmail", cx.CxEmail);
@@ -36,11 +36,12 @@ namespace WSC.CRM.Infrastructure.Repositories
                             direction: ParameterDirection.Output);
 
             await con.ExecuteAsync(
-                    "CreateCustomer",
+                    "crm.sp_CreateCustomer",
                     parameters,
                     commandType: CommandType.StoredProcedure);
 
             var id = parameters.Get<int>("@NewId");
+            Console.WriteLine($"NewId from SP: {id}");
             return id;
         }
 
@@ -52,9 +53,9 @@ namespace WSC.CRM.Infrastructure.Repositories
                         SET IsActive = 0, UpdatedAt = SYSUTCDATETIME()
                         WHERE CxId = @Id AND IsActive = 1";
 
-            var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, new {Id = id}, cancellationToken: ct));
+            var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
 
-            return affectedRows > 0;   
+            return affectedRows > 0;
         }
 
         public async Task<bool> ExistsByEmailAsync(string email, CancellationToken ct)
@@ -64,7 +65,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                         FROM crm.Customers 
                         WHERE CxEmail = @Email AND IsActive = 1";
 
-            var exists = await con.QueryFirstOrDefaultAsync<int?>(new CommandDefinition(sql, new {Email = email}, cancellationToken: ct));
+            var exists = await con.QueryFirstOrDefaultAsync<int?>(new CommandDefinition(sql, new { Email = email }, cancellationToken: ct));
 
             return exists.HasValue;
 
@@ -90,7 +91,35 @@ namespace WSC.CRM.Infrastructure.Repositories
 
             var customer = await con.QueryFirstOrDefaultAsync<Customer>(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
             return customer;
+        }
 
+        public async Task<(IEnumerable<CustomerResponseDto> Data, int TotalCount)> GetPagedCustomersAsync(PaginationRequest request, CancellationToken ct)
+        {
+            using var con = _context.CreateConnection();
+
+            var sql = @"
+                        SELECT CxId, CxName, CxEmail, CxPhone, Street, City, State, ZipCode, Country
+                        FROM crm.Customers 
+                        WHERE IsActive = 1
+                        ORDER BY CxId
+                        OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;
+
+                        SELECT COUNT(1)
+                        FROM crm.Customers
+                        WHERE IsActive = 1;
+                    ";
+
+            using var multi = await con.QueryMultipleAsync(
+                new CommandDefinition(sql, new
+                {
+                    Offset = (request.PageNumber - 1) * request.PageSize,
+                    request.PageSize
+                }, cancellationToken: ct));
+
+            var data = await multi.ReadAsync<CustomerResponseDto>();
+            var totalCount = await multi.ReadFirstAsync<int>();
+
+            return (data, totalCount);
         }
 
         public async Task<bool> UpdateCustomerAsync(Customer cx, CancellationToken ct)
@@ -113,7 +142,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                 sql.Append(", CxEmail = @CxEmail");
                 parameters.Add("CxEmail", cx.CxEmail);
             }
-            if(!string.IsNullOrWhiteSpace(cx.CxPhone))
+            if (!string.IsNullOrWhiteSpace(cx.CxPhone))
             {
                 sql.Append(", CxPhone = @CxPhone");
                 parameters.Add("CxPhone", cx.CxPhone);
@@ -146,7 +175,7 @@ namespace WSC.CRM.Infrastructure.Repositories
             }
             sql.Append(" WHERE CxId = @CxId AND IsActive = 1");
 
-            var updated = await con.ExecuteAsync(new CommandDefinition(sql.ToString(),parameters, cancellationToken: ct));
+            var updated = await con.ExecuteAsync(new CommandDefinition(sql.ToString(), parameters, cancellationToken: ct));
 
             return updated > 0;
         }
