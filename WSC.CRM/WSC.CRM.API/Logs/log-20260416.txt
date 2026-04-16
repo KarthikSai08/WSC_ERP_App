@@ -1,0 +1,117 @@
+2026-04-16 11:16:54.414 +05:30 [INF] Now listening on: https://localhost:7238
+2026-04-16 11:16:54.570 +05:30 [INF] Now listening on: http://localhost:5157
+2026-04-16 11:16:54.819 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-16 11:16:54.823 +05:30 [INF] Hosting environment: Development
+2026-04-16 11:16:54.825 +05:30 [INF] Content root path: C:\Users\karth\source\repos\WSC_App\WSC.CRM\WSC.CRM.API
+2026-04-16 11:17:00.353 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5157/all-activities - null null
+2026-04-16 11:17:00.553 +05:30 [INF] HTTP GET /all-activities responded 307 in 4.8033 ms
+2026-04-16 11:17:00.643 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5157/all-activities - 307 0 null 307.4075ms
+2026-04-16 11:17:00.821 +05:30 [INF] Request starting HTTP/1.1 GET https://localhost:7238/all-activities - null null
+2026-04-16 11:17:00.904 +05:30 [INF] HTTP GET /all-activities responded 404 in 3.4764 ms
+2026-04-16 11:17:00.946 +05:30 [INF] Request finished HTTP/1.1 GET https://localhost:7238/all-activities - 404 0 null 125.033ms
+2026-04-16 11:17:00.986 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7238/all-activities, Response status code: 404
+2026-04-16 11:17:13.379 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5157/api/all-activities - null null
+2026-04-16 11:17:13.395 +05:30 [INF] HTTP GET /api/all-activities responded 307 in 0.2574 ms
+2026-04-16 11:17:13.408 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5157/api/all-activities - 307 0 null 29.1211ms
+2026-04-16 11:17:13.409 +05:30 [INF] Request starting HTTP/1.1 GET https://localhost:7238/api/all-activities - null null
+2026-04-16 11:17:13.431 +05:30 [INF] HTTP GET /api/all-activities responded 404 in 0.2009 ms
+2026-04-16 11:17:13.437 +05:30 [INF] Request finished HTTP/1.1 GET https://localhost:7238/api/all-activities - 404 0 null 27.3823ms
+2026-04-16 11:17:13.445 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7238/api/all-activities, Response status code: 404
+2026-04-16 11:18:05.704 +05:30 [INF] Request starting HTTP/1.1 GET https://localhost:7238/api/all-activities - null null
+2026-04-16 11:18:05.711 +05:30 [INF] HTTP GET /api/all-activities responded 404 in 0.0396 ms
+2026-04-16 11:18:05.732 +05:30 [INF] Request finished HTTP/1.1 GET https://localhost:7238/api/all-activities - 404 0 null 27.7164ms
+2026-04-16 11:18:05.743 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7238/api/all-activities, Response status code: 404
+2026-04-16 11:18:55.736 +05:30 [INF] Request starting HTTP/1.1 GET https://localhost:7238/api/customers - null null
+2026-04-16 11:18:55.755 +05:30 [INF] Executing endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:18:55.892 +05:30 [INF] Route matched with {action = "GetAll", controller = "Customers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[WSC.Shared.Contracts.Common.ApiResponse`1[System.Collections.Generic.IEnumerable`1[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto]]]] GetAll(System.Threading.CancellationToken) on controller WSC.CRM.API.Controllers.CustomersController (WSC.CRM.API).
+2026-04-16 11:18:56.267 +05:30 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-04-16 11:18:56.313 +05:30 [INF] All Customers retrieval initiated at "2026-04-16T05:48:56.3126715Z"
+2026-04-16 11:18:58.439 +05:30 [INF] Retrieved 9 customers at "2026-04-16T05:48:58.4389684Z"
+2026-04-16 11:18:58.478 +05:30 [INF] Executing OkObjectResult, writing value of type 'WSC.Shared.Contracts.Common.ApiResponse`1[[System.Collections.Generic.IEnumerable`1[[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto, WSC.Shared.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-04-16 11:18:58.519 +05:30 [INF] Executed action WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API) in 2607.4625ms
+2026-04-16 11:18:58.525 +05:30 [INF] Executed endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:18:58.534 +05:30 [INF] HTTP GET /api/customers responded 200 in 2783.2173 ms
+2026-04-16 11:18:58.550 +05:30 [INF] Request finished HTTP/1.1 GET https://localhost:7238/api/customers - 200 null application/json; charset=utf-8 2814.4222ms
+2026-04-16 11:19:08.921 +05:30 [INF] Request starting HTTP/1.1 GET https://localhost:7238/api/customers - null null
+2026-04-16 11:19:08.929 +05:30 [INF] Executing endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:19:08.933 +05:30 [INF] Route matched with {action = "GetAll", controller = "Customers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[WSC.Shared.Contracts.Common.ApiResponse`1[System.Collections.Generic.IEnumerable`1[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto]]]] GetAll(System.Threading.CancellationToken) on controller WSC.CRM.API.Controllers.CustomersController (WSC.CRM.API).
+2026-04-16 11:19:08.941 +05:30 [INF] All Customers retrieval initiated at "2026-04-16T05:49:08.9409760Z"
+2026-04-16 11:19:08.962 +05:30 [INF] Retrieved 9 customers at "2026-04-16T05:49:08.9628595Z"
+2026-04-16 11:19:08.966 +05:30 [INF] Executing OkObjectResult, writing value of type 'WSC.Shared.Contracts.Common.ApiResponse`1[[System.Collections.Generic.IEnumerable`1[[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto, WSC.Shared.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-04-16 11:19:08.971 +05:30 [INF] Executed action WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API) in 32.369ms
+2026-04-16 11:19:08.975 +05:30 [INF] Executed endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:19:08.978 +05:30 [INF] HTTP GET /api/customers responded 200 in 49.7620 ms
+2026-04-16 11:19:08.984 +05:30 [INF] Request finished HTTP/1.1 GET https://localhost:7238/api/customers - 200 null application/json; charset=utf-8 62.7835ms
+2026-04-16 11:19:14.462 +05:30 [INF] Request starting HTTP/1.1 GET https://localhost:7238/api/customers - null null
+2026-04-16 11:19:14.470 +05:30 [INF] Executing endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:19:14.475 +05:30 [INF] Route matched with {action = "GetAll", controller = "Customers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[WSC.Shared.Contracts.Common.ApiResponse`1[System.Collections.Generic.IEnumerable`1[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto]]]] GetAll(System.Threading.CancellationToken) on controller WSC.CRM.API.Controllers.CustomersController (WSC.CRM.API).
+2026-04-16 11:19:14.486 +05:30 [INF] All Customers retrieval initiated at "2026-04-16T05:49:14.4861883Z"
+2026-04-16 11:19:14.491 +05:30 [INF] Retrieved 9 customers at "2026-04-16T05:49:14.4912054Z"
+2026-04-16 11:19:14.494 +05:30 [INF] Executing OkObjectResult, writing value of type 'WSC.Shared.Contracts.Common.ApiResponse`1[[System.Collections.Generic.IEnumerable`1[[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto, WSC.Shared.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-04-16 11:19:14.499 +05:30 [INF] Executed action WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API) in 19.0827ms
+2026-04-16 11:19:14.505 +05:30 [INF] Executed endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:19:14.510 +05:30 [INF] HTTP GET /api/customers responded 200 in 40.3360 ms
+2026-04-16 11:19:14.517 +05:30 [INF] Request finished HTTP/1.1 GET https://localhost:7238/api/customers - 200 null application/json; charset=utf-8 55.3842ms
+2026-04-16 11:19:17.512 +05:30 [INF] Request starting HTTP/1.1 GET https://localhost:7238/api/customers - null null
+2026-04-16 11:19:17.519 +05:30 [INF] Executing endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:19:17.522 +05:30 [INF] Route matched with {action = "GetAll", controller = "Customers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[WSC.Shared.Contracts.Common.ApiResponse`1[System.Collections.Generic.IEnumerable`1[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto]]]] GetAll(System.Threading.CancellationToken) on controller WSC.CRM.API.Controllers.CustomersController (WSC.CRM.API).
+2026-04-16 11:19:17.527 +05:30 [INF] All Customers retrieval initiated at "2026-04-16T05:49:17.5275892Z"
+2026-04-16 11:19:17.531 +05:30 [INF] Retrieved 9 customers at "2026-04-16T05:49:17.5314907Z"
+2026-04-16 11:19:17.536 +05:30 [INF] Executing OkObjectResult, writing value of type 'WSC.Shared.Contracts.Common.ApiResponse`1[[System.Collections.Generic.IEnumerable`1[[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto, WSC.Shared.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-04-16 11:19:17.539 +05:30 [INF] Executed action WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API) in 12.5499ms
+2026-04-16 11:19:17.543 +05:30 [INF] Executed endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:19:17.546 +05:30 [INF] HTTP GET /api/customers responded 200 in 27.7077 ms
+2026-04-16 11:19:17.551 +05:30 [INF] Request finished HTTP/1.1 GET https://localhost:7238/api/customers - 200 null application/json; charset=utf-8 38.758ms
+2026-04-16 11:19:19.171 +05:30 [INF] Request starting HTTP/1.1 GET https://localhost:7238/api/customers - null null
+2026-04-16 11:19:19.180 +05:30 [INF] Executing endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:19:19.183 +05:30 [INF] Route matched with {action = "GetAll", controller = "Customers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[WSC.Shared.Contracts.Common.ApiResponse`1[System.Collections.Generic.IEnumerable`1[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto]]]] GetAll(System.Threading.CancellationToken) on controller WSC.CRM.API.Controllers.CustomersController (WSC.CRM.API).
+2026-04-16 11:19:19.190 +05:30 [INF] All Customers retrieval initiated at "2026-04-16T05:49:19.1904027Z"
+2026-04-16 11:19:19.195 +05:30 [INF] Retrieved 9 customers at "2026-04-16T05:49:19.1954001Z"
+2026-04-16 11:19:19.201 +05:30 [INF] Executing OkObjectResult, writing value of type 'WSC.Shared.Contracts.Common.ApiResponse`1[[System.Collections.Generic.IEnumerable`1[[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto, WSC.Shared.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-04-16 11:19:19.206 +05:30 [INF] Executed action WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API) in 16.3611ms
+2026-04-16 11:19:19.210 +05:30 [INF] Executed endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:19:19.213 +05:30 [INF] HTTP GET /api/customers responded 200 in 33.3696 ms
+2026-04-16 11:19:19.220 +05:30 [INF] Request finished HTTP/1.1 GET https://localhost:7238/api/customers - 200 null application/json; charset=utf-8 48.5431ms
+2026-04-16 11:31:53.173 +05:30 [INF] Request starting HTTP/1.1 GET https://localhost:7238/api/customers - null null
+2026-04-16 11:31:53.181 +05:30 [INF] Executing endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:31:53.185 +05:30 [INF] Route matched with {action = "GetAll", controller = "Customers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[WSC.Shared.Contracts.Common.ApiResponse`1[System.Collections.Generic.IEnumerable`1[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto]]]] GetAll(System.Threading.CancellationToken) on controller WSC.CRM.API.Controllers.CustomersController (WSC.CRM.API).
+2026-04-16 11:31:53.194 +05:30 [INF] All Customers retrieval initiated at "2026-04-16T06:01:53.1949083Z"
+2026-04-16 11:31:53.228 +05:30 [INF] Retrieved 9 customers at "2026-04-16T06:01:53.2286879Z"
+2026-04-16 11:31:53.232 +05:30 [INF] Executing OkObjectResult, writing value of type 'WSC.Shared.Contracts.Common.ApiResponse`1[[System.Collections.Generic.IEnumerable`1[[WSC.Shared.Contracts.Dtos.CRMLayer.CustomerResponseDto, WSC.Shared.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-04-16 11:31:53.236 +05:30 [INF] Executed action WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API) in 42.0272ms
+2026-04-16 11:31:53.239 +05:30 [INF] Executed endpoint 'WSC.CRM.API.Controllers.CustomersController.GetAll (WSC.CRM.API)'
+2026-04-16 11:31:53.241 +05:30 [INF] HTTP GET /api/customers responded 200 in 59.6122 ms
+2026-04-16 11:31:53.245 +05:30 [INF] Request finished HTTP/1.1 GET https://localhost:7238/api/customers - 200 null application/json; charset=utf-8 71.6603ms
+2026-04-16 12:58:46.310 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7238/scalar/ - null null
+2026-04-16 12:58:46.376 +05:30 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-16 12:58:46.511 +05:30 [INF] Write content with HTTP Response ContentType of text/html
+2026-04-16 12:58:46.531 +05:30 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-16 12:58:46.534 +05:30 [INF] HTTP GET /scalar/ responded 200 in 157.7593 ms
+2026-04-16 12:58:46.539 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7238/scalar/ - 200 null text/html 230.0576ms
+2026-04-16 12:58:46.565 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7238/scalar/scalar.js - null null
+2026-04-16 12:58:46.565 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7238/_vs/browserLink - null null
+2026-04-16 12:58:46.566 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7238/scalar/scalar.aspnetcore.js - null null
+2026-04-16 12:58:46.565 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7238/_framework/aspnetcore-browser-refresh.js - null null
+2026-04-16 12:58:46.602 +05:30 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-16 12:58:46.608 +05:30 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-16 12:58:46.640 +05:30 [INF] Sending file with download name ''.
+2026-04-16 12:58:46.640 +05:30 [INF] Sending file with download name ''.
+2026-04-16 12:58:46.642 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7238/_framework/aspnetcore-browser-refresh.js - 200 14927 application/javascript; charset=utf-8 77.0113ms
+2026-04-16 12:58:46.650 +05:30 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-16 12:58:46.660 +05:30 [INF] HTTP GET /scalar/scalar.aspnetcore.js responded 200 in 51.8785 ms
+2026-04-16 12:58:46.666 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7238/scalar/scalar.aspnetcore.js - 200 1111 text/javascript 100.0202ms
+2026-04-16 12:58:46.706 +05:30 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-16 12:58:46.709 +05:30 [INF] HTTP GET /scalar/scalar.js responded 200 in 106.2577 ms
+2026-04-16 12:58:46.711 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7238/scalar/scalar.js - 200 1115490 text/javascript 146.0766ms
+2026-04-16 12:58:46.742 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7238/_vs/browserLink - 200 null text/javascript; charset=UTF-8 176.2495ms
+2026-04-16 12:58:46.873 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7238/openapi/v1.json - null null
+2026-04-16 12:58:46.885 +05:30 [INF] Executing endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-16 12:58:46.968 +05:30 [INF] Executed endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-16 12:58:46.971 +05:30 [INF] HTTP GET /openapi/v1.json responded 200 in 86.2003 ms
+2026-04-16 12:58:46.977 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7238/openapi/v1.json - 200 null application/json;charset=utf-8 104.5679ms
+2026-04-16 12:58:47.496 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7238/scalar/favicon.svg - null null
+2026-04-16 12:58:47.499 +05:30 [INF] Executing endpoint 'HTTP: GET /scalar/favicon.svg'
+2026-04-16 12:58:47.503 +05:30 [INF] Sending file with download name ''.
+2026-04-16 12:58:47.507 +05:30 [INF] Executed endpoint 'HTTP: GET /scalar/favicon.svg'
+2026-04-16 12:58:47.511 +05:30 [INF] HTTP GET /scalar/favicon.svg responded 200 in 11.7651 ms
+2026-04-16 12:58:47.515 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7238/scalar/favicon.svg - 200 533 image/svg+xml 18.9828ms

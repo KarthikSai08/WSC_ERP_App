@@ -1,0 +1,5 @@
+2026-04-16 15:35:54.548 +05:30 [INF] Now listening on: https://localhost:7126
+2026-04-16 15:35:54.662 +05:30 [INF] Now listening on: http://localhost:5089
+2026-04-16 15:35:55.048 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-16 15:35:55.124 +05:30 [INF] Hosting environment: Development
+2026-04-16 15:35:55.147 +05:30 [INF] Content root path: C:\Users\karth\source\repos\WSC_App\WSC.Store\WSC.Store.API

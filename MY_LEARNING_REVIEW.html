@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Learning Review – WSC ERP App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── DESIGN TOKENS ────────────────────────────────────────── */
+    :root {
+      --bg:        #0b0d14;
+      --surface:   #131622;
+      --surface2:  #1c2030;
+      --surface3:  #232840;
+      --border:    #2a2f4a;
+      --accent:    #7c6af7;
+      --accent2:   #5eead4;
+      --green:     #22c55e;
+      --yellow:    #f59e0b;
+      --orange:    #f97316;
+      --red:       #ef4444;
+      --blue:      #3b82f6;
+      --cyan:      #06b6d4;
+      --purple:    #a855f7;
+      --pink:      #ec4899;
+      --text:      #e2e8f0;
+      --muted:     #6b7280;
+      --muted2:    #94a3b8;
+      --code-bg:   #0d1117;
+      --radius-sm: 8px;
+      --radius:    12px;
+      --radius-lg: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 24px 16px 60px;
+    }
+
+    /* ── SCROLLBAR ───────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--surface); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* ── LAYOUT ──────────────────────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* ── HEADER ──────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 60px 32px 48px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      margin-bottom: 40px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #131622 0%, #0e1020 100%);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(124,106,247,.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 20%, rgba(94,234,212,.12) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(124,106,247,.15);
+      border: 1px solid rgba(124,106,247,.3);
+      color: var(--accent);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: .8em;
+      font-weight: 600;
+      letter-spacing: .5px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2em, 4vw, 3em);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      color: var(--muted2);
+      font-size: 1.05em;
+      max-width: 560px;
+      margin: 0 auto 24px;
+    }
+    .meta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .meta-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: .78em;
+      color: var(--muted2);
+      font-weight: 500;
+    }
+
+    /* ── SECTION ─────────────────────────────────────────────── */
+    .section { margin-bottom: 48px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .section-header .icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: 1.3em;
+      font-weight: 700;
+    }
+    .section-header .line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Icon variants */
+    .icon-purple { background: rgba(124,106,247,.15); }
+    .icon-cyan   { background: rgba(94,234,212,.12); }
+    .icon-green  { background: rgba(34,197,94,.12); }
+    .icon-yellow { background: rgba(245,158,11,.12); }
+    .icon-red    { background: rgba(239,68,68,.12); }
+    .icon-blue   { background: rgba(59,130,246,.12); }
+    .icon-orange { background: rgba(249,115,22,.12); }
+    .icon-pink   { background: rgba(236,72,153,.12); }
+
+    /* ── STAT GRID ───────────────────────────────────────────── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 16px;
+      text-align: center;
+      transition: border-color .2s, transform .2s;
+    }
+    .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .stat-num {
+      font-size: 2.2em;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-size: .75em;
+      color: var(--muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-weight: 600;
+    }
+
+    /* ── SKILL CARD GRID ─────────────────────────────────────── */
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .skill-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.4);
+    }
+    .skill-card-header {
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+    .skill-card-header .card-icon { font-size: 1.3em; }
+    .skill-card-header h3 { font-size: .95em; font-weight: 700; }
+    .skill-card-header .card-lvl {
+      margin-left: auto;
+      font-size: .7em;
+      font-weight: 700;
+      letter-spacing: .5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+    .lvl-strong   { background: rgba(34,197,94,.15);  color: var(--green); }
+    .lvl-good     { background: rgba(94,234,212,.15);  color: var(--accent2); }
+    .lvl-growing  { background: rgba(245,158,11,.15);  color: var(--yellow); }
+    .lvl-beginner { background: rgba(59,130,246,.12);  color: var(--blue); }
+
+    .skill-card-body { padding: 16px 18px; }
+    .skill-list { list-style: none; }
+    .skill-list li {
+      padding: 6px 0;
+      font-size: .875em;
+      color: var(--muted2);
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .skill-list li:last-child { border-bottom: none; }
+    .skill-list li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .skill-list li span { color: var(--text); font-weight: 500; }
+
+    /* ── PROGRESS BARS ───────────────────────────────────────── */
+    .progress-section { margin-bottom: 40px; }
+    .progress-item { margin-bottom: 18px; }
+    .progress-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .progress-label {
+      font-size: .875em;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .progress-pct {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .78em;
+      color: var(--muted2);
+    }
+    .progress-bar-bg {
+      height: 8px;
+      background: var(--surface2);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      position: relative;
+      transition: width 1s ease-out;
+    }
+    .fill-strong  { background: linear-gradient(90deg, #22c55e, #16a34a); }
+    .fill-good    { background: linear-gradient(90deg, #5eead4, #0891b2); }
+    .fill-mid     { background: linear-gradient(90deg, #f59e0b, #d97706); }
+    .fill-low     { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+    .fill-accent  { background: linear-gradient(90deg, #7c6af7, #a855f7); }
+
+    /* ── PATTERN CARDS ───────────────────────────────────────── */
+    .pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .pattern-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: border-color .2s, transform .2s;
+    }
+    .pattern-card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+    .pattern-card-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .pattern-badge {
+      font-size: .68em;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 5px;
+    }
+    .pb-arch   { background: rgba(124,106,247,.15); color: var(--accent); }
+    .pb-design { background: rgba(94,234,212,.15);  color: var(--accent2); }
+    .pb-data   { background: rgba(34,197,94,.15);   color: var(--green); }
+    .pb-api    { background: rgba(245,158,11,.15);  color: var(--yellow); }
+    .pb-perf   { background: rgba(239,68,68,.15);   color: var(--red); }
+
+    .pattern-card h4 { font-size: .95em; font-weight: 700; }
+    .pattern-card p { font-size: .82em; color: var(--muted2); line-height: 1.65; margin-top: 6px; }
+
+    /* ── IMPROVEMENT CARDS ───────────────────────────────────── */
+    .improve-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .improve-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+    .improve-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+    .improve-card-header {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .priority-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-high   { background: var(--red);    box-shadow: 0 0 6px var(--red); }
+    .dot-med    { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+    .dot-low    { background: var(--blue);   box-shadow: 0 0 6px var(--blue); }
+    .improve-card-header h4 { font-size: .95em; font-weight: 700; }
+    .improve-card-header .pri-tag {
+      margin-left: auto;
+      font-size: .68em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      padding: 3px 9px;
+      border-radius: 5px;
+    }
+    .pri-high { background: rgba(239,68,68,.15);   color: var(--red); }
+    .pri-med  { background: rgba(245,158,11,.15);  color: var(--yellow); }
+    .pri-low  { background: rgba(59,130,246,.12);  color: var(--blue); }
+
+    .improve-card-body { padding: 16px 18px; }
+    .improve-card-body p {
+      font-size: .825em;
+      color: var(--muted2);
+      margin-bottom: 12px;
+      line-height: 1.65;
+    }
+    .action-list { list-style: none; }
+    .action-list li {
+      font-size: .8em;
+      color: var(--muted2);
+      padding: 4px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+    }
+    .action-list li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+
+    /* ── TIMELINE ────────────────────────────────────────────── */
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 6px;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+      border-radius: 1px;
+    }
+    .tl-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -23px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: var(--bg);
+    }
+    .tl-item.done::before { background: var(--green); border-color: var(--green); box-shadow: 0 0 8px var(--green); }
+    .tl-item.partial::before { background: var(--yellow); border-color: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+    .tl-item.pending::before { background: var(--surface2); border-color: var(--border); }
+
+    .tl-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .tl-title { font-weight: 700; font-size: .95em; }
+    .tl-badge {
+      font-size: .68em; font-weight: 700;
+      padding: 2px 9px; border-radius: 999px;
+      text-transform: uppercase; letter-spacing: .4px;
+    }
+    .tb-done    { background: rgba(34,197,94,.15);   color: var(--green); }
+    .tb-partial { background: rgba(245,158,11,.15);  color: var(--yellow); }
+    .tb-pending { background: rgba(100,116,139,.15); color: var(--muted2); }
+
+    .tl-desc {
+      font-size: .825em;
+      color: var(--muted2);
+      line-height: 1.65;
+    }
+    .tl-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .tl-tag {
+      font-size: .7em;
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 8px;
+      color: var(--muted2);
+    }
+
+    /* ── TECH PILL GRID ──────────────────────────────────────── */
+    .tech-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tech-pill {
+      display: flex;align-items: center;gap: 7px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 14px;
+      font-size: .85em;
+      transition: all .2s;
+    }
+    .tech-pill:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .tech-pill .tp-ver {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72em;
+      color: var(--muted);
+      background: var(--border);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+    .tp-purple { border-left: 3px solid var(--accent); }
+    .tp-cyan   { border-left: 3px solid var(--accent2); }
+    .tp-green  { border-left: 3px solid var(--green); }
+    .tp-yellow { border-left: 3px solid var(--yellow); }
+    .tp-blue   { border-left: 3px solid var(--blue); }
+    .tp-red    { border-left: 3px solid var(--red); }
+
+    /* ── QUOTE BLOCK ─────────────────────────────────────────── */
+    .quote-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin: 20px 0;
+    }
+    .quote-block p {
+      font-size: .925em;
+      color: var(--muted2);
+      font-style: italic;
+      line-height: 1.7;
+    }
+    .quote-block p strong { color: var(--text); font-style: normal; }
+
+    /* ── CODE SNIPPET ────────────────────────────────────────── */
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .78em;
+      color: var(--accent2);
+      overflow-x: auto;
+      line-height: 1.75;
+      margin-top: 12px;
+    }
+    .code-block .kw { color: var(--purple); }
+    .code-block .ty { color: var(--cyan); }
+    .code-block .cm { color: var(--muted); }
+    .code-block .st { color: var(--yellow); }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 32px 0 0;
+      border-top: 1px solid var(--border);
+      margin-top: 56px;
+      color: var(--muted);
+      font-size: .8em;
+      line-height: 1.8;
+    }
+    footer span { color: var(--accent2); }
+
+    /* ── NAV ─────────────────────────────────────────────────── */
+    .sticky-nav {
+      position: sticky;
+      top: 12px;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+    .nav-pills {
+      display: flex;
+      gap: 4px;
+      background: rgba(19,22,34,.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 7px;
+    }
+    .nav-pills a {
+      text-decoration: none;
+      color: var(--muted2);
+      font-size: .78em;
+      font-weight: 600;
+      padding: 5px 13px;
+      border-radius: 999px;
+      transition: all .2s;
+    }
+    .nav-pills a:hover { color: var(--text); background: var(--surface2); }
+
+    /* ── INFO GRID 2-col ─────────────────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } .nav-pills { display: none; } }
+
+    /* ── HIGHLIGHT BOX ───────────────────────────────────────── */
+    .highlight-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+    .highlight-box h4 {
+      font-size: .9em;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cloud-tag {
+      font-size: .8em;
+      padding: 5px 13px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: default;
+      transition: transform .15s;
+    }
+    .cloud-tag:hover { transform: scale(1.05); }
+    .ct-purple { background: rgba(124,106,247,.15); border: 1px solid rgba(124,106,247,.3); color: var(--accent); }
+    .ct-cyan   { background: rgba(94,234,212,.12);  border: 1px solid rgba(94,234,212,.25); color: var(--accent2); }
+    .ct-green  { background: rgba(34,197,94,.12);   border: 1px solid rgba(34,197,94,.25);  color: var(--green); }
+    .ct-yellow { background: rgba(245,158,11,.12);  border: 1px solid rgba(245,158,11,.25); color: var(--yellow); }
+    .ct-blue   { background: rgba(59,130,246,.12);  border: 1px solid rgba(59,130,246,.25); color: var(--blue); }
+    .ct-red    { background: rgba(239,68,68,.12);   border: 1px solid rgba(239,68,68,.25);  color: var(--red); }
+    .ct-orange { background: rgba(249,115,22,.12);  border: 1px solid rgba(249,115,22,.25); color: var(--orange); }
+    .ct-pink   { background: rgba(236,72,153,.12);  border: 1px solid rgba(236,72,153,.25); color: var(--pink); }
+
+    /* ── TABLE ───────────────────────────────────────────────── */
+    .review-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .review-table thead tr { background: var(--surface2); }
+    .review-table th {
+      padding: 11px 14px;
+      text-align: left;
+      font-size: .78em;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--muted);
+      border-bottom: 2px solid var(--border);
+    }
+    .review-table td {
+      padding: 10px 14px;
+      font-size: .875em;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted2);
+    }
+    .review-table tbody tr { background: var(--surface); transition: background .15s; }
+    .review-table tbody tr:hover { background: var(--surface2); }
+    .review-table td:first-child { color: var(--text); font-weight: 600; }
+
+    /* ── STATUS BADGES TABLE ─────────────────────────────────── */
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: .72em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .sc-done     { background: rgba(34,197,94,.15);   color: var(--green); }
+    .sc-partial  { background: rgba(245,158,11,.15);  color: var(--yellow); }
+    .sc-planned  { background: rgba(59,130,246,.12);  color: var(--blue); }
+    .sc-skip     { background: rgba(100,116,139,.12); color: var(--muted); }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- ── STICKY NAV ── -->
+    <div class="sticky-nav">
+      <nav class="nav-pills">
+        <a href="#summary">Overview</a>
+        <a href="#skills-learned">Skills</a>
+        <a href="#patterns">Patterns</a>
+        <a href="#progress">Progress</a>
+        <a href="#improve">Improve</a>
+        <a href="#next-steps">Next Steps</a>
+      </nav>
+    </div>
+
+    <!-- ── HERO ── -->
+    <div class="hero" id="summary">
+      <div class="hero-tag">📖 Personal Learning Review</div>
+      <h1>What I <span class="grad">Built &amp; Learnt</span><br/>— WSC ERP App</h1>
+      <p>A full retrospective on skills acquired, design patterns applied, architectural decisions made, and the gaps I need to close through this project.</p>
+      <div class="meta-row">
+        <span class="meta-pill">📅 April 2026</span>
+        <span class="meta-pill">🎯 .NET 10 · C# 14</span>
+        <span class="meta-pill">🏗️ Clean Architecture</span>
+        <span class="meta-pill">⚙️ Microservices</span>
+        <span class="meta-pill">🗄️ SQL Server</span>
+      </div>
+    </div>
+
+    <!-- ── STAT OVERVIEW ── -->
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Modules</div></div>
+      <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Arch Layers</div></div>
+      <div class="stat-card"><div class="stat-num">21</div><div class="stat-label">Projects</div></div>
+      <div class="stat-card"><div class="stat-num">15+</div><div class="stat-label">Patterns</div></div>
+      <div class="stat-card"><div class="stat-num">15</div><div class="stat-label">NuGet Pkgs</div></div>
+      <div class="stat-card"><div class="stat-num">∞</div><div class="stat-label">Lessons</div></div>
+    </div>
+
+    <!-- ── WHAT I BUILT: PROJECT OVERVIEW ── -->
+    <div class="section">
+      <div class="section-header">
+        <div class="icon icon-purple">🏢</div>
+        <h2>What I Built — The WSC ERP System</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="quote-block">
+        <p>
+          I built a <strong>multi-module Enterprise Resource Planning (ERP) system</strong> from scratch using
+          <strong>.NET 10, C# 14</strong>, and <strong>Clean Architecture</strong>. The system is split into
+          <strong>6 microservice modules</strong> — Store, CRM, Delivery, Dashboard, Shared, and Gateway —
+          each following a strict 4-layer structure: <strong>Domain → Application → Infrastructure → API</strong>.
+          It uses <strong>Dapper</strong> for raw SQL data access, <strong>Redis</strong> for caching, and
+          <strong>SQL Server</strong> as the primary database. The modules communicate via shared contracts
+          and typed HTTP clients.
+        </p>
+      </div>
+
+      <div class="two-col" style="margin-top:20px;">
+        <div class="highlight-box">
+          <h4>🗂️ Modules Built</h4>
+          <div class="tag-cloud">
+            <span class="cloud-tag ct-green">WSC.Store ✅</span>
+            <span class="cloud-tag ct-green">WSC.Delivery ✅</span>
+            <span class="cloud-tag ct-cyan">WSC.Shared ✅</span>
+            <span class="cloud-tag ct-yellow">WSC.CRM 🔄</span>
+            <span class="cloud-tag ct-blue">WSC.Gateway 🔄</span>
+            <span class="cloud-tag ct-red">WSC.Dashboard 📋</span>
+          </div>
+        </div>
+        <div class="highlight-box">
+          <h4>🛠 Tech Stack Used</h4>
+          <div class="tag-cloud">
+            <span class="cloud-tag ct-purple">.NET 10</span>
+            <span class="cloud-tag ct-purple">C# 14</span>
+            <span class="cloud-tag ct-cyan">Dapper</span>
+            <span class="cloud-tag ct-green">SQL Server</span>
+            <span class="cloud-tag ct-red">Redis</span>
+            <span class="cloud-tag ct-yellow">FluentValidation</span>
+            <span class="cloud-tag ct-blue">AutoMapper</span>
+            <span class="cloud-tag ct-orange">Serilog</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SKILLS LEARNED ── -->
+    <div class="section" id="skills-learned">
+      <div class="section-header">
+        <div class="icon icon-green">🧠</div>
+        <h2>Skills I Learnt &amp; Applied</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="skill-grid">
+
+        <!-- Clean Architecture -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">🏗️</span>
+            <h3>Clean Architecture</h3>
+            <span class="card-lvl lvl-strong">Strong</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li><span>Domain Layer</span> — pure entities, no framework dependencies</li>
+              <li><span>Application Layer</span> — services, DTOs, interfaces, validators</li>
+              <li><span>Infrastructure Layer</span> — Dapper repos, persistence, DI wiring</li>
+              <li><span>API Layer</span> — controllers, middleware, filters, Program.cs</li>
+              <li>Enforced dependency direction (inner layers never depend on outer)</li>
+              <li>Separate <code style="font-family:'JetBrains Mono';font-size:.82em;color:var(--accent2)">.slnx</code> per module for clear boundaries</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dapper & Data Access -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">🗄️</span>
+            <h3>Dapper &amp; Data Access</h3>
+            <span class="card-lvl lvl-strong">Strong</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li><span>DapperContext</span> — managing IDbConnection lifecycle</li>
+              <li><span>Dynamic Parameters</span> — safe parameterized queries</li>
+              <li><span>Stored Procedures</span> — calling complex DB logic via Dapper</li>
+              <li><span>Generic Repository</span> — reusable CRUD via generics</li>
+              <li><span>Unit of Work</span> — coordinating transactions across repositories</li>
+              <li>Mapping results to DTOs and domain entities cleanly</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- C# & OOP -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">💎</span>
+            <h3>C# 14 &amp; Modern OOP</h3>
+            <span class="card-lvl lvl-strong">Strong</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li><span>Interfaces &amp; abstraction</span> — IService, IRepository, IUnitOfWork</li>
+              <li><span>Async/await</span> — consistent Task-returning methods</li>
+              <li><span>Nullable reference types</span> — enabled project-wide</li>
+              <li><span>Implicit usings</span> — cleaner namespace management</li>
+              <li><span>Record types &amp; DTOs</span> — immutable request/response models</li>
+              <li>Generics for repositories and service patterns</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dependency Injection -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">🔌</span>
+            <h3>Dependency Injection &amp; DI Wiring</h3>
+            <span class="card-lvl lvl-strong">Strong</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li><span>IServiceCollection extensions</span> — per-layer DI registration</li>
+              <li>Scoped, singleton, transient lifetime choices</li>
+              <li><span>Program.cs</span> as composition root</li>
+              <li>Avoiding service locator anti-pattern</li>
+              <li>Registering typed HTTP clients for inter-module calls</li>
+              <li>DependencyInjection folder pattern per layer</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- REST API Design -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">🌐</span>
+            <h3>ASP.NET Core REST API</h3>
+            <span class="card-lvl lvl-good">Good</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li><span>Controllers</span> — Products, Orders, OrderItems, Inventory, Delivery</li>
+              <li>HTTP verbs (GET, POST, PUT, DELETE) with proper status codes</li>
+              <li><span>Global Exception Middleware</span> — consistent error responses</li>
+              <li>Action result types (Ok, NotFound, BadRequest, Created)</li>
+              <li><span>appsettings.json</span> — configuration separation per environment</li>
+              <li>Route attributes and RESTful URL design</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Microservices & Cross-Module Communication -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">🔗</span>
+            <h3>Microservices &amp; HTTP Clients</h3>
+            <span class="card-lvl lvl-good">Good</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li><span>Typed HTTP Clients</span> — CustomerClient, OrderClient, ProductClient</li>
+              <li><span>WSC.Shared.Contracts</span> — shared DTOs across modules</li>
+              <li>CRM, Store, Delivery client layers in shared infrastructure</li>
+              <li>Module independence — each has its own DB, API, and DI</li>
+              <li>Shared contracts for integration without coupling</li>
+              <li>Gateway module for routing (in-progress)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Caching -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">⚡</span>
+            <h3>Redis Caching</h3>
+            <span class="card-lvl lvl-good">Good</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li><span>Cache-Aside Pattern</span> — check cache → DB → write-back</li>
+              <li><span>RedisCacheService</span> — StackExchange.Redis integration</li>
+              <li>Serialization to/from JSON for cached objects</li>
+              <li>Cache key design for entity-level caching</li>
+              <li>Cache invalidation on write operations</li>
+              <li>IDistributedCache abstraction for testability</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Validation -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">✅</span>
+            <h3>FluentValidation</h3>
+            <span class="card-lvl lvl-good">Good</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li><span>AbstractValidator&lt;T&gt;</span> — validator classes per DTO</li>
+              <li>RuleFor chains for field-level validation</li>
+              <li>Validators folder pattern in Application layer</li>
+              <li>Integrated into service layer before persistence</li>
+              <li>Custom error messages for API consumers</li>
+              <li>Validation before DapperContext calls</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- AutoMapper -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">🗺️</span>
+            <h3>AutoMapper &amp; Mappings</h3>
+            <span class="card-lvl lvl-good">Good</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li><span>Profile classes</span> — mapping configs in Mappings/ folder</li>
+              <li>Entity → DTO and DTO → Entity projections</li>
+              <li>Registered via DI in Application layer</li>
+              <li>Used in service layer to decouple domain from API contracts</li>
+              <li>Nested object mappings for complex entities</li>
+              <li>ReverseMap() for bidirectional mappings</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Middleware & Filters -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">🛡️</span>
+            <h3>Middleware &amp; Filters</h3>
+            <span class="card-lvl lvl-growing">Growing</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li><span>ExceptionMiddleware</span> — global error handling per module</li>
+              <li>Custom middleware registration in Program.cs pipeline</li>
+              <li>Filters folder in API layer (idempotency, auditing)</li>
+              <li>Middleware ordering awareness (exception first)</li>
+              <li>ProblemDetails pattern for structured error responses</li>
+              <li>JWT auth middleware (planned, partially implemented)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- SQL & Database -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">🐘</span>
+            <h3>SQL Server &amp; Database Design</h3>
+            <span class="card-lvl lvl-growing">Growing</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li>Table design for Store: Products, Orders, OrderItems, Inventory</li>
+              <li>Delivery schema: OrderDelivery, DeliveryAgent, DeliveryTracking</li>
+              <li>Foreign key relationships and referential integrity</li>
+              <li>Stored procedures for complex multi-step operations</li>
+              <li>Schema separation: dbo, audit, cache schemas</li>
+              <li>LocalDB (.mdf) for development, SQL Server for production</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Project & Solution Organisation -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="card-icon">📁</span>
+            <h3>Project &amp; Solution Organisation</h3>
+            <span class="card-lvl lvl-strong">Strong</span>
+          </div>
+          <div class="skill-card-body">
+            <ul class="skill-list">
+              <li>Multi-solution (.slnx) workspace layout per module</li>
+              <li>Consistent folder naming conventions across all modules</li>
+              <li>Separated DependencyInjection, Service, Repo, Persistence layers</li>
+              <li>.gitignore management for build artefacts</li>
+              <li>appsettings per environment (Development / Production)</li>
+              <li>Properties/launchSettings.json per API project</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── PATTERNS APPLIED ── -->
+    <div class="section" id="patterns">
+      <div class="section-header">
+        <div class="icon icon-cyan">🔷</div>
+        <h2>Design &amp; Architectural Patterns Applied</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="pattern-grid">
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-arch">Architecture</span>
+          </div>
+          <h4>🏛 Clean Architecture (Onion)</h4>
+          <p>Domain → Application → Infrastructure → API layers with inward-only dependency flow. Each module is a self-contained vertical slice.</p>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-design">Design Pattern</span>
+          </div>
+          <h4>🏭 Repository Pattern</h4>
+          <p>IGenericRepository&lt;T&gt; abstraction with concrete Dapper implementations. Entity-specific repositories extend the generic base.</p>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-design">Design Pattern</span>
+          </div>
+          <h4>🔄 Unit of Work Pattern</h4>
+          <p>Coordinates multiple repositories under a single transaction. IUnitOfWork exposes all repos and manages commit/rollback consistently.</p>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-data">Data Pattern</span>
+          </div>
+          <h4>⚡ Cache-Aside Pattern</h4>
+          <p>Check Redis first → on miss, hit DB and write back to cache. Used in Store and Delivery modules via RedisCacheService.</p>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-arch">Architecture</span>
+          </div>
+          <h4>🔌 Dependency Injection (IoC)</h4>
+          <p>All dependencies registered via IServiceCollection extensions. Program.cs is the composition root, no service locator used.</p>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-api">API Pattern</span>
+          </div>
+          <h4>🌐 RESTful API Design</h4>
+          <p>Resource-based URLs, proper HTTP verbs, action result types (200, 201, 400, 404). Exception middleware for consistent error format.</p>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-design">Design Pattern</span>
+          </div>
+          <h4>🗺️ DTO Mapping Pattern</h4>
+          <p>Entities never leak to API consumers. AutoMapper Profile classes handle Entity ↔ DTO transformation in the Application layer.</p>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-arch">Architecture</span>
+          </div>
+          <h4>📦 Shared Kernel Pattern</h4>
+          <p>WSC.Shared.Contracts contains cross-module DTOs, exceptions, interfaces, and enums. WSC.Shared.Infrastructure provides typed HTTP clients.</p>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-perf">Resilience</span>
+          </div>
+          <h4>🛡️ Global Exception Middleware</h4>
+          <p>Single try/catch at the request pipeline boundary. Catches domain and infra exceptions and converts them to structured ProblemDetails responses.</p>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-data">Data Pattern</span>
+          </div>
+          <h4>📋 Stored Procedure Pattern</h4>
+          <p>Complex operations (multi-table inserts, atomic updates) encapsulated in stored procs. Dapper calls them with DynamicParameters.</p>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-api">API Pattern</span>
+          </div>
+          <h4>🔢 API Versioning (Planned)</h4>
+          <p>Controller folders structured as v1/ and v2/. Route versioning middleware to be activated when features stabilize.</p>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-card-top">
+            <span class="pattern-badge pb-design">Design Pattern</span>
+          </div>
+          <h4>🔑 Options Pattern</h4>
+          <p>appsettings.json values bound to typed options classes (connection strings, Redis config, JWT settings) via IOptions&lt;T&gt;.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TECH STACK TABLE ── -->
+    <div class="section">
+      <div class="section-header">
+        <div class="icon icon-yellow">📦</div>
+        <h2>Technologies &amp; Tools Used</h2>
+        <div class="line"></div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="review-table">
+          <thead>
+            <tr>
+              <th>Technology</th>
+              <th>Version</th>
+              <th>What I Used It For</th>
+              <th>Comfort Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>.NET / ASP.NET Core</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">10.0</td>
+              <td>Web API framework, DI host, middleware pipeline</td>
+              <td><span class="status-chip sc-done">★★★★★ Expert</span></td>
+            </tr>
+            <tr>
+              <td>C#</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">14.0</td>
+              <td>Primary language — OOP, async, generics, nullables</td>
+              <td><span class="status-chip sc-done">★★★★☆ Strong</span></td>
+            </tr>
+            <tr>
+              <td>Dapper</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">2.1.72</td>
+              <td>Micro-ORM for raw SQL queries &amp; stored procs</td>
+              <td><span class="status-chip sc-done">★★★★☆ Strong</span></td>
+            </tr>
+            <tr>
+              <td>SQL Server / LocalDB</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">2022</td>
+              <td>Primary relational DB, stored procedures, schema design</td>
+              <td><span class="status-chip sc-partial">★★★☆☆ Growing</span></td>
+            </tr>
+            <tr>
+              <td>Redis (StackExchange)</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">2.x</td>
+              <td>Distributed caching, cache-aside pattern</td>
+              <td><span class="status-chip sc-partial">★★★☆☆ Growing</span></td>
+            </tr>
+            <tr>
+              <td>AutoMapper</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">13.x</td>
+              <td>Entity ↔ DTO mapping in Application layer</td>
+              <td><span class="status-chip sc-done">★★★★☆ Good</span></td>
+            </tr>
+            <tr>
+              <td>FluentValidation</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">11.x</td>
+              <td>Request validation in Application layer</td>
+              <td><span class="status-chip sc-done">★★★★☆ Good</span></td>
+            </tr>
+            <tr>
+              <td>Serilog</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">4.x</td>
+              <td>Structured logging to console &amp; file sinks</td>
+              <td><span class="status-chip sc-partial">★★☆☆☆ Beginner</span></td>
+            </tr>
+            <tr>
+              <td>JWT Auth</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">MS Identity</td>
+              <td>Token-based API authentication (planned)</td>
+              <td><span class="status-chip sc-planned">★★☆☆☆ Learning</span></td>
+            </tr>
+            <tr>
+              <td>Rate Limiting</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">Built-in .NET</td>
+              <td>API abuse prevention middleware</td>
+              <td><span class="status-chip sc-planned">★★☆☆☆ Learning</span></td>
+            </tr>
+            <tr>
+              <td>Git / GitHub</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">—</td>
+              <td>Version control, .gitignore, branch management</td>
+              <td><span class="status-chip sc-done">★★★★☆ Good</span></td>
+            </tr>
+            <tr>
+              <td>Visual Studio 2026</td>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">18.4.2</td>
+              <td>IDE for coding, debugging, solution management</td>
+              <td><span class="status-chip sc-done">★★★★☆ Good</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PROGRESS TRACKER ── -->
+    <div class="section" id="progress">
+      <div class="section-header">
+        <div class="icon icon-blue">📊</div>
+        <h2>Feature Implementation Progress</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="two-col">
+        <div class="progress-section">
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">🏗 Clean Architecture Setup</span>
+              <span class="progress-pct">100%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-strong" style="width:100%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">🗄 Dapper + Repository + UoW</span>
+              <span class="progress-pct">95%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-strong" style="width:95%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">🛒 WSC.Store Module</span>
+              <span class="progress-pct">90%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-good" style="width:90%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">🚚 WSC.Delivery Module</span>
+              <span class="progress-pct">85%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-good" style="width:85%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">📦 WSC.Shared Contracts + Clients</span>
+              <span class="progress-pct">80%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-good" style="width:80%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">⚡ Redis Caching (Cache-Aside)</span>
+              <span class="progress-pct">75%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-accent" style="width:75%"></div></div>
+          </div>
+        </div>
+
+        <div class="progress-section">
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">🛡 Global Exception Middleware</span>
+              <span class="progress-pct">100%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-strong" style="width:100%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">✅ FluentValidation</span>
+              <span class="progress-pct">85%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-good" style="width:85%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">🤝 WSC.CRM Module</span>
+              <span class="progress-pct">60%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-mid" style="width:60%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">📝 Serilog Logging</span>
+              <span class="progress-pct">40%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-mid" style="width:40%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">🔒 JWT Authentication</span>
+              <span class="progress-pct">25%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-low" style="width:25%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label-row">
+              <span class="progress-label">⚖ Rate Limiting / API Versioning</span>
+              <span class="progress-pct">15%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-low" style="width:15%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── JOURNEY TIMELINE ── -->
+    <div class="section">
+      <div class="section-header">
+        <div class="icon icon-purple">🗓️</div>
+        <h2>Build Journey — What I Did &amp; When</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="timeline">
+
+        <div class="tl-item done">
+          <div class="tl-header">
+            <span class="tl-title">Phase 1 — Domain Foundation</span>
+            <span class="tl-badge tb-done">✅ Complete</span>
+          </div>
+          <p class="tl-desc">
+            Designed all domain entities: <strong>Product, Order, OrderItem, Inventory</strong> for WSC.Store;
+            <strong>OrderDelivery, DeliveryAgent, DeliveryItem, DeliveryTracking</strong> for WSC.Delivery.
+            Defined enums and value objects. Ensured zero framework dependencies in Domain layer.
+          </p>
+          <div class="tl-tags">
+            <span class="tl-tag">Entities</span><span class="tl-tag">Enums</span><span class="tl-tag">ValueObjects</span>
+          </div>
+        </div>
+
+        <div class="tl-item done">
+          <div class="tl-header">
+            <span class="tl-title">Phase 2 — Infrastructure Layer</span>
+            <span class="tl-badge tb-done">✅ Complete</span>
+          </div>
+          <p class="tl-desc">
+            Set up DapperContext, connection management, GenericRepository, entity-specific repositories
+            (Product, Order, OrderItem, Inventory, Delivery), Unit of Work with transaction support,
+            and RedisCacheService.
+          </p>
+          <div class="tl-tags">
+            <span class="tl-tag">Dapper</span><span class="tl-tag">Repository</span><span class="tl-tag">UnitOfWork</span><span class="tl-tag">Redis</span>
+          </div>
+        </div>
+
+        <div class="tl-item done">
+          <div class="tl-header">
+            <span class="tl-title">Phase 3 — Application &amp; API Layer</span>
+            <span class="tl-badge tb-done">✅ Complete</span>
+          </div>
+          <p class="tl-desc">
+            Created service interfaces and implementations, AutoMapper profiles, FluentValidation validators.
+            Built REST controllers: Products, Orders, OrderItems, Inventory, Delivery. Added ExceptionMiddleware.
+            Set up Program.cs with DI and pipeline registration.
+          </p>
+          <div class="tl-tags">
+            <span class="tl-tag">Services</span><span class="tl-tag">AutoMapper</span>
+            <span class="tl-tag">FluentValidation</span><span class="tl-tag">Controllers</span>
+          </div>
+        </div>
+
+        <div class="tl-item done">
+          <div class="tl-header">
+            <span class="tl-title">Phase 4 — Shared Contracts &amp; HTTP Clients</span>
+            <span class="tl-badge tb-done">✅ Complete</span>
+          </div>
+          <p class="tl-desc">
+            Built WSC.Shared.Contracts with cross-module DTOs, interfaces, enums, exceptions, and filters.
+            Built WSC.Shared.Infrastructure typed HTTP clients: CustomerClient, OrderClient, ProductClient
+            for inter-module communication.
+          </p>
+          <div class="tl-tags">
+            <span class="tl-tag">SharedContracts</span><span class="tl-tag">TypedClients</span><span class="tl-tag">DTOs</span>
+          </div>
+        </div>
+
+        <div class="tl-item partial">
+          <div class="tl-header">
+            <span class="tl-title">Phase 5 — CRM Module &amp; Gateway</span>
+            <span class="tl-badge tb-partial">🔄 In Progress</span>
+          </div>
+          <p class="tl-desc">
+            WSC.CRM module is partially built. Customer, Lead, Opportunity, Activity entities and repos
+            are structured. Gateway module is in early scaffolding stage.
+          </p>
+          <div class="tl-tags">
+            <span class="tl-tag">CRM</span><span class="tl-tag">Gateway</span>
+          </div>
+        </div>
+
+        <div class="tl-item pending">
+          <div class="tl-header">
+            <span class="tl-title">Phase 6 — Security, Logging, Rate Limiting</span>
+            <span class="tl-badge tb-pending">📋 Planned</span>
+          </div>
+          <p class="tl-desc">
+            JWT Auth, Serilog structured logging (console + file sink), Rate Limiting middleware,
+            API Versioning (v1/v2 routes), Idempotency keys, and full Auditing service to be implemented.
+          </p>
+          <div class="tl-tags">
+            <span class="tl-tag">JWT</span><span class="tl-tag">Serilog</span>
+            <span class="tl-tag">RateLimiting</span><span class="tl-tag">Versioning</span>
+            <span class="tl-tag">Idempotency</span><span class="tl-tag">Auditing</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── WHAT I NEED TO IMPROVE ── -->
+    <div class="section" id="improve">
+      <div class="section-header">
+        <div class="icon icon-red">🎯</div>
+        <h2>What I Need to Improve</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="improve-grid">
+
+        <!-- JWT Auth -->
+        <div class="improve-card" style="border-top: 3px solid var(--red);">
+          <div class="improve-card-header">
+            <div class="priority-dot dot-high"></div>
+            <h4>🔒 JWT Authentication</h4>
+            <span class="pri-tag pri-high">P1 High</span>
+          </div>
+          <div class="improve-card-body">
+            <p>I understand JWT conceptually but haven't fully wired it into the pipeline. Need to implement token generation, validation, and protect endpoints with [Authorize] correctly.</p>
+            <ul class="action-list">
+              <li>Implement JwtTokenProvider in WSC.Shared.Infrastructure</li>
+              <li>Add AddAuthentication + AddJwtBearer in Program.cs</li>
+              <li>Protect controllers with [Authorize] on operations</li>
+              <li>Test token refresh flow and expiry edge cases</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Serilog -->
+        <div class="improve-card" style="border-top: 3px solid var(--red);">
+          <div class="improve-card-header">
+            <div class="priority-dot dot-high"></div>
+            <h4>📝 Serilog Structured Logging</h4>
+            <span class="pri-tag pri-high">P1 High</span>
+          </div>
+          <div class="improve-card-body">
+            <p>I set up Serilog minimally but haven't structured my log messages with proper context, correlation IDs, or log enrichers. This is critical for debugging in production environments.</p>
+            <ul class="action-list">
+              <li>Configure file sink + console sink with output templates</li>
+              <li>Add request correlation ID enricher to middleware</li>
+              <li>Use LogContext.PushProperty() for contextual logging</li>
+              <li>Understand log levels (Debug, Info, Warning, Error, Fatal)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Idempotency -->
+        <div class="improve-card" style="border-top: 3px solid var(--yellow);">
+          <div class="improve-card-header">
+            <div class="priority-dot dot-med"></div>
+            <h4>♻️ Idempotency Keys</h4>
+            <span class="pri-tag pri-med">P2 Medium</span>
+          </div>
+          <div class="improve-card-body">
+            <p>Duplicate request prevention is important for payment-like operations in an ERP. I understand the concept but haven't implemented the Idempotency-Key header validation and storage in Redis.</p>
+            <ul class="action-list">
+              <li>Implement IdempotencyFilter that reads Idempotency-Key header</li>
+              <li>Store request results in Redis keyed by client-provided ID</li>
+              <li>Return cached response if duplicate request detected</li>
+              <li>Apply to POST endpoints in Store and CRM modules</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Rate Limiting -->
+        <div class="improve-card" style="border-top: 3px solid var(--yellow);">
+          <div class="improve-card-header">
+            <div class="priority-dot dot-med"></div>
+            <h4>⚖️ Rate Limiting</h4>
+            <span class="pri-tag pri-med">P2 Medium</span>
+          </div>
+          <div class="improve-card-body">
+            <p>Know it exists in .NET 7+ via RateLimiterMiddleware but haven't configured policies (fixed window, sliding window, concurrency) or wired them to specific controllers.</p>
+            <ul class="action-list">
+              <li>Learn fixed window vs sliding window vs token bucket policies</li>
+              <li>Configure AddRateLimiter with named policies in Program.cs</li>
+              <li>Apply [EnableRateLimiting("policy")] to public endpoints</li>
+              <li>Test with rapid API calls to verify 429 responses</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- API Versioning -->
+        <div class="improve-card" style="border-top: 3px solid var(--yellow);">
+          <div class="improve-card-header">
+            <div class="priority-dot dot-med"></div>
+            <h4>🔢 API Versioning</h4>
+            <span class="pri-tag pri-med">P2 Medium</span>
+          </div>
+          <div class="improve-card-body">
+            <p>I've structured controller folders as v1/ but haven't activated Asp.Versioning NuGet or configured route-based versioning. Need to understand deprecation strategies too.</p>
+            <ul class="action-list">
+              <li>Install Asp.Versioning.Mvc and configure in Program.cs</li>
+              <li>Decorate controllers with [ApiVersion("1.0")]</li>
+              <li>Use URL route versioning: /api/v1/products</li>
+              <li>Understand how to deprecate a version without breaking clients</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Auditing -->
+        <div class="improve-card" style="border-top: 3px solid var(--blue);">
+          <div class="improve-card-header">
+            <div class="priority-dot dot-low"></div>
+            <h4>📋 Auditing &amp; Change Tracking</h4>
+            <span class="pri-tag pri-low">P3 Low</span>
+          </div>
+          <div class="improve-card-body">
+            <p>The audit schema tables are planned but AuditService and AuditingFilter aren't wired yet. Need to understand how to capture before/after state snap-shots on mutations.</p>
+            <ul class="action-list">
+              <li>Create AuditService that logs to audit.* schema tables</li>
+              <li>Implement AuditingFilter that wraps controller actions</li>
+              <li>Capture old/new values as JSON snapshots</li>
+              <li>Include user context (userId) from JWT claims in audit rows</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Unit Testing -->
+        <div class="improve-card" style="border-top: 3px solid var(--blue);">
+          <div class="improve-card-header">
+            <div class="priority-dot dot-low"></div>
+            <h4>🧪 Unit &amp; Integration Testing</h4>
+            <span class="pri-tag pri-low">P3 Low</span>
+          </div>
+          <div class="improve-card-body">
+            <p>Zero tests written so far. All validation has been manual via HTTP files (.http) and Swagger. Need to adopt xUnit, Moq, and FluentAssertions for service and middleware testing.</p>
+            <ul class="action-list">
+              <li>Learn xUnit test structure (Arrange-Act-Assert)</li>
+              <li>Mock IRepository and IUnitOfWork with Moq</li>
+              <li>Write unit tests for service layer (OrderService, ProductService)</li>
+              <li>Use WebApplicationFactory for integration/API tests</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- EF Core / Migrations -->
+        <div class="improve-card" style="border-top: 3px solid var(--blue);">
+          <div class="improve-card-header">
+            <div class="priority-dot dot-low"></div>
+            <h4>🔄 EF Core Migrations</h4>
+            <span class="pri-tag pri-low">P3 Low</span>
+          </div>
+          <div class="improve-card-body">
+            <p>Used EF Core primarily for DapperContext connection management and DB initialization, not full code-first migrations. Need to understand migration commands and rollback strategies.</p>
+            <ul class="action-list">
+              <li>Learn dotnet ef migrations add / update / rollback</li>
+              <li>Understand DbContext configuration for code-first schemas</li>
+              <li>Explore using Fluent API for table/column configuration</li>
+              <li>Compare EF Core vs raw Dapper for different use cases</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── NEXT STEPS ROADMAP ── -->
+    <div class="section" id="next-steps">
+      <div class="section-header">
+        <div class="icon icon-orange">🚀</div>
+        <h2>Next Steps — What to Work On Next</h2>
+        <div class="line"></div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="review-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Task</th>
+              <th>Module</th>
+              <th>How to Learn It</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--muted)">01</td>
+              <td>Complete JWT Authentication end-to-end</td>
+              <td>WSC.Shared + All APIs</td>
+              <td>Microsoft Docs + build a test login endpoint</td>
+              <td><span class="status-chip sc-planned">🔜 Next</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--muted)">02</td>
+              <td>Wire Serilog with request enrichment</td>
+              <td>All Modules</td>
+              <td>Serilog docs + correlation ID middleware tutorial</td>
+              <td><span class="status-chip sc-planned">🔜 Next</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--muted)">03</td>
+              <td>Complete WSC.CRM module</td>
+              <td>WSC.CRM</td>
+              <td>Mirror Store module structure</td>
+              <td><span class="status-chip sc-partial">🔄 Partial</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--muted)">04</td>
+              <td>Activate API Versioning (Asp.Versioning)</td>
+              <td>All APIs</td>
+              <td>GitHub: dotnet/aspnet-api-versioning docs</td>
+              <td><span class="status-chip sc-planned">📋 Planned</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--muted)">05</td>
+              <td>Implement Rate Limiting with named policies</td>
+              <td>All APIs</td>
+              <td>Microsoft docs: Rate limiting in .NET</td>
+              <td><span class="status-chip sc-planned">📋 Planned</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--muted)">06</td>
+              <td>Implement Idempotency-Key filter</td>
+              <td>Store, CRM APIs</td>
+              <td>Stripe API idempotency pattern as reference</td>
+              <td><span class="status-chip sc-planned">📋 Planned</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--muted)">07</td>
+              <td>Build Auditing service + audit.* schema tables</td>
+              <td>Shared + All APIs</td>
+              <td>SQL schema design + AuditingFilter pattern</td>
+              <td><span class="status-chip sc-planned">📋 Planned</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--muted)">08</td>
+              <td>Write xUnit unit tests for service layer</td>
+              <td>Store, Delivery</td>
+              <td>xUnit + Moq quickstart guides</td>
+              <td><span class="status-chip sc-planned">📋 Planned</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--muted)">09</td>
+              <td>Set up WSC.Gateway with YARP reverse proxy</td>
+              <td>WSC.Gateway</td>
+              <td>YARP docs + Microsoft gateway tutorials</td>
+              <td><span class="status-chip sc-planned">📋 Planned</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono',monospace;color:var(--muted)">10</td>
+              <td>Build WSC.Dashboard with reporting endpoints</td>
+              <td>WSC.Dashboard</td>
+              <td>Aggregate data from Store + Delivery + CRM</td>
+              <td><span class="status-chip sc-planned">📋 Planned</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── KEY TAKEAWAYS ── -->
+    <div class="section">
+      <div class="section-header">
+        <div class="icon icon-pink">💡</div>
+        <h2>Key Lessons &amp; Takeaways</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="pattern-grid">
+        <div class="pattern-card">
+          <h4>🧱 Structure First, Code Second</h4>
+          <p>Getting the Clean Architecture layers right before writing business logic saved massive refactoring effort later. Investing in folder structure pays off.</p>
+        </div>
+        <div class="pattern-card">
+          <h4>🔗 Abstractions Enable Testability</h4>
+          <p>Every repository and service behind an interface means the code can be unit-tested with mocks. Skipping interfaces makes code rigid and hard to test.</p>
+        </div>
+        <div class="pattern-card">
+          <h4>🗃 Dapper > EF Core for Control</h4>
+          <p>Dapper gives full SQL control and is perfect for stored-procedure-heavy enterprise apps. EF Core is better for rapid CRUD with migrations — know when to use which.</p>
+        </div>
+        <div class="pattern-card">
+          <h4>📦 Shared Contracts Prevent Coupling</h4>
+          <p>Putting DTOs and interfaces in WSC.Shared.Contracts lets modules communicate without knowing each other's internals. This is how real microservices scale.</p>
+        </div>
+        <div class="pattern-card">
+          <h4>⚡ Cache-Aside is Simple but Powerful</h4>
+          <p>The pattern itself is easy: check Redis, miss → DB, write back. The hard part is cache invalidation and key design — patterns I need to practice more.</p>
+        </div>
+        <div class="pattern-card">
+          <h4>🛡 Exception Middleware Matters</h4>
+          <p>Having a single global exception handler means API consumers always get consistent error shapes. Scattering try/catch in controllers leads to inconsistent errors.</p>
+        </div>
+        <div class="pattern-card">
+          <h4>📋 Documentation While Building</h4>
+          <p>Creating PROJECT_STRUCTURE.html as I built helped cement my understanding of what I was constructing and made architecture decisions more deliberate.</p>
+        </div>
+        <div class="pattern-card">
+          <h4>🔄 Incremental Complexity Works</h4>
+          <p>Starting with Domain → Infra → App → API before adding Redis, JWT, and Rate Limiting meant every new layer had a stable foundation to build on.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer>
+      <p>
+        <span>WSC ERP App</span> — Personal Learning Review · April 2026<br/>
+        <span>Karthik Sai</span> · .NET Developer in Progress · <span>KarthikSai08/WSC_ERP_App</span>
+      </p>
+      <p style="margin-top:8px;color:var(--border);">
+        This file is personal/private and excluded from git via .gitignore
+      </p>
+    </footer>
+
+  </div>
+</body>
+
+</html>
