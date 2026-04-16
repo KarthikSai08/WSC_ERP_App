@@ -21,11 +21,14 @@ builder.Services.AddControllers(opts =>
     });
 builder.Services.AddOpenApi();
 
+
+//Dependency Injection for Application and Infrastructure layers
 builder.Services.AddCRMApplicationService();
 builder.Services.AddCRMInfrastructureService();
 
+//Filter
 builder.Services.AddScoped<ValidationFilter>();
-
+//Logging
 builder.Host.ConfigureSerilog();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
@@ -42,8 +45,15 @@ builder.Services.AddAutoMapper(cfg =>
 
 var app = builder.Build();
 
+
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<CorrelationMiddleware>();
+
+
+//Custom Middleware for Exception Handling and Correlation ID
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<CorrelationMiddleware>();
+
 
 app.UseSerilogRequestLogging();
 
@@ -52,7 +62,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
-app.MapGet("/test", () => "WORKING");
+
+//app.MapGet("/test", () => "WORKING");
+
 
 app.UseHttpsRedirection();
 
