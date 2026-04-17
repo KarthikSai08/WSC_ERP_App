@@ -6,6 +6,7 @@ using WSC.CRM.API.Middleware;
 using WSC.CRM.Application.DependencyInjection;
 using WSC.CRM.Infrastructure.DependencyInjection;
 using WSC.Shared.Infrastructure.Logging;
+using WSC.Shared.Infrastructure.Services;
 using WSC.Store.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +23,7 @@ builder.Services.AddControllers(opts =>
     });
 builder.Services.AddOpenApi();
 
-
+builder.Services.AddScoped<IdempotencyService>();
 //Dependency Injection for Application and Infrastructure layers
 builder.Services.AddCRMApplicationService();
 builder.Services.AddCRMInfrastructureService();
