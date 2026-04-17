@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Services;
 using WSC.Shared.Contracts.Common;
@@ -19,15 +20,18 @@ namespace WSC.CRM.API.Controllers
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<LeadResponseDto>>>> GetAllLeads(CancellationToken ct)
         {
-            var leads = await _service.GetAllLeadsAsync(ct);
-            return Ok(leads);
+            var result = await _service.GetAllLeadsAsync(ct);
+            if (!result.Success)
+                return BadRequest();
+            return Ok(result);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResponse<LeadResponseDto>>> GetLeadById(int id, CancellationToken ct)
         {
-            var lead = await _service.GetLeadByIdAsync(id, ct);
-            if (lead == null) return NotFound();
-            return Ok(lead);
+            var result = await _service.GetLeadByIdAsync(id, ct);
+            if (!result.Success)
+                return BadRequest();
+            return Ok(result);
         }
         [HttpPost("create-lead")]
         public async Task<ActionResult<ApiResponse<int>>> CreateLead([FromBody] CreateLeadDto request, CancellationToken ct)
@@ -38,21 +42,25 @@ namespace WSC.CRM.API.Controllers
         [HttpPut("update-lead")]
         public async Task<ActionResult<ApiResponse<bool>>> UpdateLead([FromBody] UpdateLeadDto request, CancellationToken ct)
         {
-            var success = await _service.UpdateLeadAsync(request, ct);
-            if (success is null) return NotFound();
-            return NoContent();
+            var result = await _service.UpdateLeadAsync(request, ct);
+            if (!result.Success)
+                return BadRequest();
+            return Ok(result);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteLead(int id, CancellationToken ct)
         {
-            var success = await _service.DeleteLeadAsync(id, ct);
-            if (success is null) return NotFound();
-            return NoContent();
+            var result = await _service.DeleteLeadAsync(id, ct);
+            if (!result.Success)
+                return BadRequest();
+            return Ok(result);
         }
         [HttpGet("paged-response")]
         public async Task<ActionResult<ApiResponse<IEnumerable<LeadResponseDto>>>> GetLeads([FromQuery] PaginationRequest request, CancellationToken ct)
         {
             var result = await _service.GetLeadsAsync(request, ct);
+            if (!result.Success)
+                return BadRequest();
             return Ok(result);
         }
     }
