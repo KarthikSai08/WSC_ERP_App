@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\WSC.Shared\WSC.Shared.Infrastructure\WSC.Shared.Infrastructure.csproj" />
     <ProjectReference Include="..\WSC.CRM.Application\WSC.CRM.Application.csproj" />
   </ItemGroup>
 

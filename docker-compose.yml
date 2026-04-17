@@ -1,0 +1,6 @@
+services:
+  wsc.crm.api:
+    image: ${DOCKER_REGISTRY-}wsccrmapi
+    build:
+      context: .
+      dockerfile: WSC.CRM/WSC.CRM.API/Dockerfile

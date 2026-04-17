@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace WSC.Shared.Infrastructure.Services
 
         public async Task SetResponseAsync(string key, string response, TimeSpan ttl, CancellationToken ct)
         {
-            await _db.StringSetAsync(key, response, ttl, ct);
+            await _db.StringSetAsync(key, response, ttl, When.Always, CommandFlags.None);
         }
     }
 }

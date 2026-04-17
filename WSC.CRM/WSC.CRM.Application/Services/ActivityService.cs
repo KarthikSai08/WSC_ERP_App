@@ -148,7 +148,7 @@ namespace WSC.CRM.Application.Services
         public async Task<ApiResponse<bool>> UpdateCompletedAtAsync(int actId, CancellationToken ct)
         {
             if (actId <= 0)
-                throw new NotFoundException("Activity", actId);
+                throw new InvalidInputIdException(actId);
             var act = await _repo.GetActivityEntityByIdAsync(actId, ct);
             if (act == null)
                 throw new NotFoundException("Activity", actId);
