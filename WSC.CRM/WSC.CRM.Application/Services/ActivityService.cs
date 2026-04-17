@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http.Headers;
+using System.Runtime.InteropServices.Marshalling;
 using WSC.CRM.Application.Dtos;
+using WSC.CRM.Application.Interfaces;
 using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Application.Interfaces.Services;
 using WSC.CRM.Domain.Entities;
@@ -17,12 +20,14 @@ namespace WSC.CRM.Application.Services
         private readonly ILeadRepository _leadRepo;
         private readonly IMapper _mapper;
         private readonly ILogger<ActivityService> _logger;
-        public ActivityService(IActivityRepository repo, IMapper mapper, ILeadRepository leadRepo, ILogger<ActivityService> logger)
+        private readonly IRedisCacheService _cache;
+        public ActivityService(IActivityRepository repo, IMapper mapper, ILeadRepository leadRepo, ILogger<ActivityService> logger, IRedisCacheService cache)
         {
             _mapper = mapper;
             _repo = repo;
             _leadRepo = leadRepo;
             _logger = logger;
+            _cache = cache;
         }
         public async Task<ApiResponse<int>> CreateActivityAsync(CreateActivityDto dto, CancellationToken ct)
         {
@@ -47,6 +52,10 @@ namespace WSC.CRM.Application.Services
             if (activityId <= 0)
                 throw new InvalidInputIdException(activityId);
 
+            await _cache.RemoveAsync("Activities:All");
+            await _cache.RemoveAsync($"Activities:Lead:{dto.LeadId}");
+            await _cache.RemoveAsync($"Activities:Page:1:Size:10"); 
+
             _logger.LogInformation("Activity with ID {ActivityId} created successfully", activityId);
             return ApiResponse<int>.Ok(activityId, "Activity created successfully");
         }
@@ -59,6 +68,10 @@ namespace WSC.CRM.Application.Services
             var deleted = await _repo.DeleteActivityAsync(id, ct);
 
             _logger.LogInformation("Attempt to delete activity with ID {ActivityId} resulted in {Result}", id, deleted ? "success" : "failure");
+
+            await _cache.RemoveAsync($"Activity:{id}");
+            await _cache.RemoveAsync("Activities:All");
+
             return deleted
                 ? ApiResponse<bool>.Ok(true, "Activity deleted successfully")
                 : ApiResponse<bool>.Failed("Failed to delete activity");
@@ -66,14 +79,26 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<IEnumerable<ActivityResponseDto>>> GetActivitiesByLeadIdAsync(int leadId, CancellationToken ct)
         {
+
             if (leadId <= 0)
                 throw new InvalidInputIdException(leadId);
+
+            var cacheKey = $"Activities:Lead:{leadId}";
+
+            var cached = await _cache.GetAsync<IEnumerable<ActivityResponseDto>>(cacheKey);
+            if(cached != null)
+            {
+                _logger.LogInformation("Cache hit for activities of lead ID {LeadId}", leadId);
+                return ApiResponse<IEnumerable<ActivityResponseDto>>.Ok(cached, "Activities retrieved successfully (from cache)");
+            }
 
             var activities = await _repo.GetActivitiesByLeadIdAsync(leadId, ct);
             if (activities == null || !activities.Any())
                 return ApiResponse<IEnumerable<ActivityResponseDto>>.Failed("No activities found for the given lead ID");
 
             var mappedActivities = _mapper.Map<IEnumerable<ActivityResponseDto>>(activities);
+
+            await _cache.SetAsync(cacheKey, mappedActivities, TimeSpan.FromMinutes(15));
             return ApiResponse<IEnumerable<ActivityResponseDto>>.Ok(mappedActivities, "Activities retrieved successfully");
         }
 
@@ -82,23 +107,44 @@ namespace WSC.CRM.Application.Services
             if (id <= 0)
                 throw new InvalidInputIdException(id);
 
+            var cacheKey = $"Activity:{id}";
+
+            var cached  = await _cache.GetAsync<ActivityResponseDto?>(cacheKey);
+            if(cached != null)
+            {
+                _logger.LogInformation("Cache hit for activity ID {ActivityId}", id);
+                return ApiResponse<ActivityResponseDto?>.Ok(cached, "Activity retrieved successfully (from cache)");
+            }
+
             var activity = await _repo.GetActivityByIdAsync(id, ct);
             if (activity == null)
                 return ApiResponse<ActivityResponseDto?>.Failed("Activity not found");
 
             var mappedActivity = _mapper.Map<ActivityResponseDto?>(activity);
 
+            await _cache.SetAsync(cacheKey,mappedActivity, TimeSpan.FromMinutes(15));
             return ApiResponse<ActivityResponseDto?>.Ok(mappedActivity, "Activity retrieved successfully");
         }
 
         public async Task<ApiResponse<IEnumerable<ActivityResponseDto>>> GetAllActivitiesAsync(CancellationToken ct)
         {
+            var cacheKey = "Activities:All";
+
+            var cached = await _cache.GetAsync<IEnumerable<ActivityResponseDto>>(cacheKey); 
+
+            if(cached != null)
+            {
+                _logger.LogInformation("Cache hit for all activities");
+                return ApiResponse<IEnumerable<ActivityResponseDto>>.Ok(cached, "Activities retrieved successfully (from cache)");
+            }
+
             var activities = await _repo.GetAllActivitiesAsync(ct);
 
             var mappedActivities = activities != null
                 ? _mapper.Map<IEnumerable<ActivityResponseDto>>(activities)
                 : Enumerable.Empty<ActivityResponseDto>();
 
+            await _cache.SetAsync(cacheKey, mappedActivities, TimeSpan.FromMinutes(15));
             return ApiResponse<IEnumerable<ActivityResponseDto>>
                 .Ok(mappedActivities, "Activities retrieved successfully");
         }
@@ -110,6 +156,14 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<PagedResponse<ActivityResponseDto>>> GetPagedActivitiesAsync(PaginationRequest request, CancellationToken ct)
         {
+            var cacheKey = $"Activities:Page:{request.PageNumber}:Size:{request.PageSize}";
+            var cached = await _cache.GetAsync<PagedResponse<ActivityResponseDto>>(cacheKey);
+            if (cached != null)
+            {
+                _logger.LogInformation("Cache hit for paged activities: Page {PageNumber}, Size {PageSize}", request.PageNumber, request.PageSize);
+                return ApiResponse<PagedResponse<ActivityResponseDto>>.Ok(cached, "Paged activities retrieved successfully (from cache)");
+            }
+
             var (data, totalCount) = await _repo.GetPagedActivitiesAsync(request, ct);
 
             var mappedData = _mapper.Map<IEnumerable<ActivityResponseDto>>(data);
@@ -121,6 +175,7 @@ namespace WSC.CRM.Application.Services
                 totalCount
             );
 
+            await _cache.SetAsync(cacheKey, response, TimeSpan.FromMinutes(15));
             return ApiResponse<PagedResponse<ActivityResponseDto>>
                 .Ok(response, "Paged activities retrieved successfully");
         }
@@ -140,6 +195,9 @@ namespace WSC.CRM.Application.Services
             _mapper.Map(act, activity);
             var updated = await _repo.UpdateActivityAsync(activity, ct);
 
+            await _cache.RemoveAsync($"Activity:{act.ActivityId}");
+            await _cache.RemoveAsync("Activities:All");
+            await _cache.RemoveAsync($"Activities:Lead:{act.LeadId}");
             return updated
                 ? ApiResponse<bool>.Ok(true, "Activity updated successfully")
                 : ApiResponse<bool>.Failed("Failed to update activity");
@@ -165,6 +223,10 @@ namespace WSC.CRM.Application.Services
 
             var updated = await _repo.UpdateCompletedAtAsync(actId, ct);
 
+            await _cache.RemoveAsync($"Activity:{actId}");
+            await _cache.RemoveAsync("Activities:All");
+            await _cache.RemoveAsync($"Activities:Lead:{act.LeadId}");
+            await _cache.RemoveAsync($"Activities:Page:1:Size:10"); // Invalidate first page cache, ideally should be more dynamic
 
             return updated
                 ? ApiResponse<bool>.Ok(true, "Activity completion status updated successfully")

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using WSC.CRM.Application.Dtos;
+using WSC.CRM.Application.Interfaces;
 using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Application.Interfaces.Services;
 using WSC.CRM.Domain.Entities;
@@ -16,11 +17,13 @@ namespace WSC.CRM.Application.Services
         private readonly IMapper _mapper;
         private readonly ILeadRepository _repo;
         private readonly ILogger<LeadService> _logger;
-        public LeadService(IMapper mapper, ILeadRepository repo, ILogger<LeadService> logger)
+        private readonly IRedisCacheService _cache;
+        public LeadService(IMapper mapper, ILeadRepository repo, ILogger<LeadService> logger, IRedisCacheService cache)
         {
             _mapper = mapper;
             _repo = repo;
             _logger = logger;
+            _cache = cache;
         }
 
         public async Task<ApiResponse<int>> CreateLeadAsync(CreateLeadDto dto, CancellationToken ct)
@@ -63,6 +66,16 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<IEnumerable<LeadResponseDto>>> GetAllLeadsAsync(CancellationToken ct)
         {
+            var cacheKey = "Leads:All";
+
+            var cached = await _cache.GetAsync<IEnumerable<LeadResponseDto>>(cacheKey);
+            if (cached != null)
+            {
+                _logger.LogInformation("Leads retrieved from cache. Count: {LeadCount}", cached.Count());
+                return ApiResponse<IEnumerable<LeadResponseDto>>.Ok(cached, "Leads retrieved successfully from cache.");
+            }
+
+
             var leads = await _repo.GetAllLeadsAsync(ct);
             if (leads == null || !leads.Any())
             {
@@ -71,6 +84,8 @@ namespace WSC.CRM.Application.Services
             }
 
             _logger.LogInformation("Retrieved {LeadCount} leads from the system.", leads.Count());
+
+            await _cache.SetAsync(cacheKey, _mapper.Map<IEnumerable<LeadResponseDto>>(leads), TimeSpan.FromMinutes(15));
             return ApiResponse<IEnumerable<LeadResponseDto>>.Ok(
                 _mapper.Map<IEnumerable<LeadResponseDto>>(leads),
                 "Leads retrieved successfully.");
@@ -81,6 +96,15 @@ namespace WSC.CRM.Application.Services
             if (id <= 0)
                 throw new InvalidInputIdException(id);
 
+            var cacheKey = $"Lead:{id}";
+            
+            var cached = await _cache.GetAsync<LeadResponseDto>(cacheKey);
+            if (cached != null)
+            {
+                _logger.LogInformation("Lead retrieved from cache with ID: {LeadId} at {Time}", id, DateTime.UtcNow);
+                return ApiResponse<LeadResponseDto>.Ok(cached, "Lead Found in cache!");
+            }
+
             var lead = await _repo.GetLeadByIdAsync(id, ct);
             if (lead == null)
             {
@@ -90,6 +114,8 @@ namespace WSC.CRM.Application.Services
 
             var result = _mapper.Map<LeadResponseDto>(lead);
             _logger.LogInformation("Lead with ID: {LeadId} retrieved successfully.", id);
+
+            await _cache.SetAsync(cacheKey, result, TimeSpan.FromMinutes(15));
             return ApiResponse<LeadResponseDto>.Ok(result, "Lead Found!");
         }
 
@@ -123,6 +149,14 @@ namespace WSC.CRM.Application.Services
         }
         public async Task<ApiResponse<PagedResponse<LeadResponseDto>>> GetLeadsAsync(PaginationRequest request, CancellationToken ct)
         {
+            var cacheKey = $"Leads:Page:{request.PageNumber}:Size:{request.PageSize}";
+
+            var cached = await _cache.GetAsync<PagedResponse<LeadResponseDto>>(cacheKey);
+            if (cached != null)
+            {
+                _logger.LogInformation("Paged leads retrieved from cache. Page: {PageNumber}, Size: {PageSize}", request.PageNumber, request.PageSize);
+                return ApiResponse<PagedResponse<LeadResponseDto>>.Ok(cached, "Leads retrieved successfully from cache.");
+            }
             var (data, totalCount) = await _repo.GetPagedLeadsAsync(request, ct);
 
             var response = new PagedResponse<LeadResponseDto>(
@@ -131,6 +165,8 @@ namespace WSC.CRM.Application.Services
                 request.PageSize,
                 totalCount
             );
+
+            await _cache.SetAsync(cacheKey, response, TimeSpan.FromMinutes(15));    
 
             return ApiResponse<PagedResponse<LeadResponseDto>>
                 .Ok(response, "Leads retrieved successfully.");

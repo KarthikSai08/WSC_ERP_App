@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Annotations;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
+using System.Net.WebSockets;
 using WSC.CRM.Application.Dtos;
+using WSC.CRM.Application.Interfaces;
 using WSC.CRM.Application.Interfaces.Repository;
 using WSC.CRM.Application.Interfaces.Services;
 using WSC.CRM.Domain.Entities;
@@ -17,12 +20,15 @@ namespace WSC.CRM.Application.Services
         private readonly IMapper _mapper;
         private readonly ICustomerRepository _cxRepo;
         private readonly ILogger<OpportunityService> _logger;
-        public OpportunityService(IOpportunityRepository repo, IMapper mapper, ICustomerRepository cxRepo, ILogger<OpportunityService> logger)
+        private readonly IRedisCacheService _cache;
+        public OpportunityService(IOpportunityRepository repo, IMapper mapper, ICustomerRepository cxRepo, ILogger<OpportunityService> logger, IRedisCacheService cache)
+
         {
             _mapper = mapper;
             _repo = repo;
             _cxRepo = cxRepo;
             _logger = logger;
+            _cache = cache;
         }
         public async Task<ApiResponse<int>> CreateOpportunityAsync(CreateOpportunityDto dto, CancellationToken ct)
         {
@@ -65,12 +71,21 @@ namespace WSC.CRM.Application.Services
 
         public async Task<ApiResponse<IEnumerable<OpportunityResponseDto>>> GetAllOpportunitiesAsync(CancellationToken ct)
         {
+            var cacheKey = "Opportunities:All";
+            var cached = await _cache.GetAsync<IEnumerable<OpportunityResponseDto>>(cacheKey);
+
+            if(cached != null)
+            {
+                _logger.LogInformation("Opportunities retrieved from cache");
+                return ApiResponse<IEnumerable<OpportunityResponseDto>>.Ok(cached, "Opportunities retrieved successfully (from cache)");    
+            }
             var opp = await _repo.GetAllOpportunitiesAsync(ct);
 
             var mappedOpportunities = opp != null
                 ? _mapper.Map<IEnumerable<OpportunityResponseDto>>(opp)
                 : Enumerable.Empty<OpportunityResponseDto>();
 
+            await _cache.SetAsync(cacheKey, mappedOpportunities, TimeSpan.FromMinutes(15));
             return ApiResponse<IEnumerable<OpportunityResponseDto>>
                 .Ok(mappedOpportunities, "Opportunities retrieved successfully");
         }
@@ -80,12 +95,21 @@ namespace WSC.CRM.Application.Services
             if (cxId <= 0)
                 throw new ArgumentException("Invalid customer id", nameof(cxId));
 
+            var cacheKey = $"Opportunities:Customer:{cxId}";
+            var cached = await _cache.GetAsync<IEnumerable<OpportunityResponseDto>>(cacheKey);
+            if (cached != null)
+            {
+                _logger.LogInformation("Opportunities for customer {CustomerId} retrieved from cache", cxId);
+                return ApiResponse<IEnumerable<OpportunityResponseDto>>.Ok(cached, "Opportunities retrieved successfully (from cache)");
+            }
+
             var opp = await _repo.GetOpportunitiesByCustomerIdAsync(cxId, ct);
 
             var mappedOpportunities = opp != null
                 ? _mapper.Map<IEnumerable<OpportunityResponseDto>>(opp)
                 : Enumerable.Empty<OpportunityResponseDto>();
 
+            await _cache.SetAsync(cacheKey, mappedOpportunities, TimeSpan.FromMinutes(15));
             return ApiResponse<IEnumerable<OpportunityResponseDto>>
                 .Ok(mappedOpportunities, "Opportunities retrieved successfully");
         }
@@ -93,13 +117,24 @@ namespace WSC.CRM.Application.Services
         public async Task<ApiResponse<OpportunityResponseDto?>> GetOpportunityByIdAsync(int id, CancellationToken ct)
         {
             if (id <= 0)
-                throw new ArgumentException("Invalid opportunity id", nameof(id));
+                throw new ArgumentException("Invalid opportunity id", nameof(id));      
+
+            var cacheKey = $"Opportunity:{id}";
+            var cached = await _cache.GetAsync<OpportunityResponseDto?>(cacheKey);
+
+            if(cached != null)
+            {
+                _logger.LogInformation("Opportunity {OpportunityId} retrieved from cache", id);
+                return ApiResponse<OpportunityResponseDto?>.Ok(cached, "Opportunity retrieved successfully (from cache)");
+            }
 
             var opp = await _repo.GetOpportunityByIdAsync(id, ct);
             if (opp == null)
                 throw new NotFoundException("Opportunity", id);
 
             var mappedOpportunity = _mapper.Map<OpportunityResponseDto>(opp);
+
+            await _cache.SetAsync(cacheKey, mappedOpportunity, TimeSpan.FromMinutes(15));
             return ApiResponse<OpportunityResponseDto?>.Ok(mappedOpportunity, "Opportunity retrieved successfully");
         }
 
@@ -107,17 +142,34 @@ namespace WSC.CRM.Application.Services
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid opportunity id", nameof(id));
+            var cacheKey = $"OpportunityEntity:{id}";
+
+            var cached = await _cache.GetAsync<Opportunity?>(cacheKey);
+            if (cached != null)
+            {
+                _logger.LogInformation("Opportunity entity {OpportunityId} retrieved from cache", id);
+                return ApiResponse<Opportunity?>.Ok(cached, "Opportunity retrieved successfully (from cache)");
+            }
 
             var opp = await _repo.GetOpportunityEntityByIdAsync(id, ct);
             var mappedOpportunity = opp != null
                 ? _mapper.Map<Opportunity>(opp)
                 : null;
 
+            await _cache.SetAsync(cacheKey, mappedOpportunity, TimeSpan.FromMinutes(15));
             return ApiResponse<Opportunity?>.Ok(mappedOpportunity, "Opportunity retrieved successfully");
         }
 
         public async Task<ApiResponse<PagedResponse<OpportunityResponseDto>>> GetPagedOpportunitiesAsync(PaginationRequest request, CancellationToken ct)
         {
+            var cacheKey = $"Opportunities:Page:{request.PageNumber}:Size:{request.PageSize}";
+
+            var cached = await _cache.GetAsync<PagedResponse<OpportunityResponseDto>>(cacheKey);
+            if (cached != null)
+            {
+                _logger.LogInformation("Paged opportunities retrieved from cache (Page: {PageNumber}, Size: {PageSize})", request.PageNumber, request.PageSize);
+                return ApiResponse<PagedResponse<OpportunityResponseDto>>.Ok(cached, "Paged Opportunities retrieved successfully (from cache)");
+            }
             var (data, totalCount) = await _repo.GetPagedOpportunitiesAsync(request, ct);
 
             var mappedData = _mapper.Map<IEnumerable<OpportunityResponseDto>>(data);
@@ -128,6 +180,7 @@ namespace WSC.CRM.Application.Services
                 request.PageNumber,
                 totalCount
             );
+            await _cache.SetAsync(cacheKey, response,TimeSpan.FromMinutes(15));
             return ApiResponse<PagedResponse<OpportunityResponseDto>>
                 .Ok(response, "Paged Opportunities retrieved successfully");
         }
