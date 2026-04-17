@@ -181,8 +181,7 @@ namespace WSC.CRM.Application.Services
                 totalCount
             );
             await _cache.SetAsync(cacheKey, response,TimeSpan.FromMinutes(15));
-            return ApiResponse<PagedResponse<OpportunityResponseDto>>
-                .Ok(response, "Paged Opportunities retrieved successfully");
+            return ApiResponse<PagedResponse<OpportunityResponseDto>>.Ok(response, "Paged Opportunities retrieved successfully");
         }
 
         public async Task<ApiResponse<bool>> UpdateClosedAtAsync(int oppId, CancellationToken ct)
