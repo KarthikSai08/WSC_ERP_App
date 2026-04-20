@@ -1,11 +1,4 @@
 ﻿namespace WSC.CRM.Application.Dtos
 {
-    public sealed class UpdateLeadDto
-    {
-        public int LeadId { get; set; }
-        public string? LeadName { get; set; }
-        public string? LeadEmail { get; set; }
-        public string? LeadPhone { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-    }
+    public sealed record UpdateLeadDto(int LeadId, string? LeadName, string? LeadEmail, string? LeadPhone, DateTime? UpdatedAt);
 }

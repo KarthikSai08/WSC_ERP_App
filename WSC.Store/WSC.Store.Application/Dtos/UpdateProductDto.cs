@@ -2,13 +2,9 @@
 
 namespace WSC.Store.Application.Dtos
 {
-    public sealed class UpdateProductDto
-    {
-        [Required]
-        public int ProductId { get; set; }
-        public string ProductName { get; set; } = null!;
-        public string SKU { get; set; }
-        public string? Category { get; set; }
-        public decimal Price { get; set; }
-    }
+    public sealed record UpdateProductDto(int ProductId,
+                                string ProductName,
+                                string SKU,
+                                string? Category,
+                                decimal Price);
 }

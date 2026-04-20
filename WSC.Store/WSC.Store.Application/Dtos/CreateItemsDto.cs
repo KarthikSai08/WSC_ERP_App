@@ -1,10 +1,4 @@
 ﻿namespace WSC.Store.Application.Dtos
 {
-    public sealed class CreateItemsDto
-    {
-        public int OrderId { get; set; }
-        public int ProductId { get; set; }
-        public int Quantity { get; set; }
-        public decimal UnitPrice { get; set; }
-    }
+    public sealed record CreateItemsDto(int OrderId, int ProductId, int Quantity, decimal UnitPrice);
 }

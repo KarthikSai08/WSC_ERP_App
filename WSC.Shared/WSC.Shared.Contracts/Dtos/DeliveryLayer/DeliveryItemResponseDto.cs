@@ -1,6 +1,6 @@
 namespace WSC.Shared.Contracts.Dtos.DeliveryLayer
 {
-    public sealed class DeliveryItemResponseDto
+    public sealed record DeliveryItemResponseDto
     {
         public int DeliveryItemId { get; set; }
         public int DeliveryId { get; set; }

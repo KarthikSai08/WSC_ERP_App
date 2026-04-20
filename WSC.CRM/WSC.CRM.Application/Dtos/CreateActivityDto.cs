@@ -2,14 +2,12 @@
 
 namespace WSC.CRM.Application.Dtos
 {
-    public sealed class CreateActivityDto
-    {
-        public string Title { get; set; }
-        public string? Description { get; set; }
-        public ActivityType Type { get; set; }
-        public DateTime ScheduledAt { get; set; }
-        public int? LeadId { get; set; }
-        public int? OpportunityId { get; set; }
-        public int? CustomerId { get; set; }
-    }
+    public sealed record CreateActivityDto(
+        string Title,
+        string? Description,
+        ActivityType Type,
+        DateTime ScheduledAt,
+        int? LeadId,
+        int? OpportunityId,
+        int? CustomerId);
 }

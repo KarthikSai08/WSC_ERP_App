@@ -1,6 +1,6 @@
 ﻿namespace WSC.Shared.Contracts.Dtos.StoreLayer
 {
-    public sealed class ProductResponseDto
+    public sealed record ProductResponseDto
     {
         public int ProductId { get; set; }
         public string ProductName { get; set; }

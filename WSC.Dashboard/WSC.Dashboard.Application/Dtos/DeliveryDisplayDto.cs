@@ -2,7 +2,7 @@
 
 namespace WSC.Dashboard.Application.Dtos
 {
-    public sealed class DeliveryDisplayDto
+    public sealed record DeliveryDisplayDto
     {
         public int DeliveryId { get; set; }
         public string TrackingNumber { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace WSC.Dashboard.Application.Dtos
 {
-    public sealed class OrderItemsDisplayDto
+    public sealed record OrderItemsDisplayDto
     {
         public int OrderItemId { get; set; }
         public int ProductId { get; set; }

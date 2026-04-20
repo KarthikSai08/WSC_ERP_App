@@ -47,7 +47,7 @@ namespace WSC.Store.Infrastructure.Repository
                         SET IsDeleted = 1
                         WHERE InventoryId = @Id";
 
-            var affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
+            int affectedRows = await con.ExecuteAsync(new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
 
             return affectedRows > 0;
         }

@@ -2,7 +2,7 @@
 
 namespace WSC.Dashboard.Application.Dtos
 {
-    public sealed class OrderDisplayDto
+    public sealed record OrderDisplayDto
     {
         public int OrderId { get; set; }
         public decimal TotalAmount { get; set; }

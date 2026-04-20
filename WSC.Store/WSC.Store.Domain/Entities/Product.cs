@@ -13,5 +13,13 @@ namespace WSC.Store.Domain.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool IsActive { get; set; }
+
+        public void SetSKU(string sku)
+        {
+            SKU = sku.ToUpper();
+            if (string.IsNullOrWhiteSpace(sku))
+                throw new ValidationException("SKU cannot be null or empty.");
+
+        }
     }
 }

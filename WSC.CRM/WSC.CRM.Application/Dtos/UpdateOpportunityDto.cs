@@ -2,12 +2,6 @@
 
 namespace WSC.CRM.Application.Dtos
 {
-    public sealed class UpdateOpportunityDto
-    {
-        public int OpportunityId { get; set; }
-        public string? OpportunityName { get; set; }
-        public OpportunityStage? Stage { get; set; }
-        public decimal? Amount { get; set; }
-        public int? CustomerId { get; set; }
-    }
+    public sealed record UpdateOpportunityDto(int OpportunityId, string? OpportunityName, OpportunityStage? Stage,
+                                    decimal? Amount, int? CustomerId);
 }

@@ -1,6 +1,6 @@
 ﻿namespace WSC.Dashboard.Application.Dtos
 {
-    public sealed class CustomerDisplayDto
+    public sealed record CustomerDisplayDto
     {
         public int CxId { get; set; }
         public string CxName { get; set; } = null!;

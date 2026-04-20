@@ -2,7 +2,7 @@
 
 namespace WSC.Shared.Contracts.Dtos.CRMLayer
 {
-    public sealed class LeadResponseDto
+    public sealed record LeadResponseDto
     {
         public int LeadId { get; set; }
         public string LeadName { get; set; }

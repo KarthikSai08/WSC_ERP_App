@@ -1,6 +1,6 @@
 ﻿namespace WSC.Shared.Contracts.Dtos.StoreLayer
 {
-    public sealed class OrderResponseDto
+    public sealed record OrderResponseDto
     {
         public int OrderId { get; set; }
         public int CustomerId { get; set; }  // integrates with CRM

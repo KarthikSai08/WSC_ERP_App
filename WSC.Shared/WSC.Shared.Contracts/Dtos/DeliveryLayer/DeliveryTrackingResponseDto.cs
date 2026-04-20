@@ -4,7 +4,7 @@ using WSC.Delivery.Domain.Enums;
 
 namespace WSC.Shared.Contracts.Dtos.DeliveryLayer
 {
-    public sealed class DeliveryTrackingResponseDto
+    public sealed record DeliveryTrackingResponseDto
     {
         public int TrackingId { get; set; }
         public int DeliveryId { get; set; }

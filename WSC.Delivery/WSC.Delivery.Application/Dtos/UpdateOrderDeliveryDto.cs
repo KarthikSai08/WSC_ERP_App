@@ -3,12 +3,10 @@ using WSC.Delivery.Domain.Enums;
 
 namespace WSC.Delivery.Application.Dtos
 {
-    public sealed class UpdateOrderDeliveryDto
-    {
-        public int DeliveryId { get; set; }
-        public int? AssignedAgentId { get; set; }
-        public DateTime? ScheduledDate { get; set; }
-        public DeliveryStatus Status { get; set; }
-        public string TrackingNumber { get; set; }
-    }
+    public sealed record UpdateOrderDeliveryDto(
+         int DeliveryId,
+         int? AssignedAgentId,
+         DateTime? ScheduledDate,
+         DeliveryStatus Status,
+         string TrackingNumber);
 }

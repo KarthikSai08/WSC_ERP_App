@@ -23,18 +23,15 @@ namespace WSC.Store.Application.Service
         {
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
-
-            var regex = new Regex(@"^[A-Z]{3,5}-[A-Z0-9]{2,20}-\d{3,6}$");
-            dto.SKU = dto.SKU.ToUpper();
-
-            if (!regex.IsMatch(dto.SKU))
-                throw new ValidationException("Invalid SKU format");
+    
             var exists = await _repo.ExistsBySKUAsync(dto.SKU, ct);
 
             if (exists)
                 throw new DuplicateException("Product", dto.SKU);
 
             var product = _mapper.Map<Domain.Entities.Product>(dto);
+
+            product.SetSKU(dto.SKU);
             var result = await _repo.CreateProductAsync(product, ct);
 
             return ApiResponse<int>.Ok(result, "Product created successfully.");
@@ -86,7 +83,7 @@ namespace WSC.Store.Application.Service
 
         public async Task<ApiResponse<bool>> UpdateProductAsync(UpdateProductDto dto, CancellationToken ct)
         {
-            var regex = new Regex(@"^[A-Z]{3,5}-[A-Z0-9]{2,20}-\d{3,6}$");
+           
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
 
@@ -100,9 +97,9 @@ namespace WSC.Store.Application.Service
 
             if (!string.IsNullOrEmpty(dto.SKU))
             {
-                dto.SKU = dto.SKU.ToUpper();
+                product.SetSKU(dto.SKU);
 
-                if (!regex.IsMatch(dto.SKU))
+                if (!Regex.IsMatch(dto.SKU, @"^[A-Z]{3,5}-[A-Z0-9]{2,20}-\d{3,6}$"))
                     throw new ValidationException("Invalid SKU format");
             }
 

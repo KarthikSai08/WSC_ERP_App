@@ -1,10 +1,4 @@
 namespace WSC.Delivery.Application.Dtos
 {
-    public sealed class UpdateDeliveryItemDto
-    {
-        public int DeliveryItemId { get; set; }
-        public int Quantity { get; set; }
-        public string Description { get; set; }
-        public bool IsDelivered { get; set; }
-    }
+    public sealed class UpdateDeliveryItemDto(int DeliveryItemId, int Quantity, string Description, bool IsDelivered);
 }
