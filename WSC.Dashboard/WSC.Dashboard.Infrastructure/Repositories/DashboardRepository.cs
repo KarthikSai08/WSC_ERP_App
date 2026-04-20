@@ -5,7 +5,7 @@ using WSC.Dashboard.Infrastructure.Persistence.Context;
 
 namespace WSC.Dashboard.Infrastructure.Repositories
 {
-    public class DashboardRepository : IDashboardRepository
+    internal sealed class DashboardRepository : IDashboardRepository
     {
         private readonly DapperContext _context;
         public DashboardRepository(DapperContext context)

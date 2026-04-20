@@ -3,7 +3,7 @@ using WSC.Store.Application.Interfaces.RepositoryInterfaces;
 
 namespace WSC.Store.Infrastructure.Repository
 {
-    public class UnitOfWork : IUnitOfWork
+    internal sealed class UnitOfWork : IUnitOfWork
     {
         private readonly IDbConnection _connection;
         public IDbTransaction Transaction { get; private set; }

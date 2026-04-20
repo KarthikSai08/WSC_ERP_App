@@ -7,7 +7,7 @@ using WSC.Shared.Contracts.Dtos.DeliveryLayer;
 
 namespace WSC.Delivery.Infrastructure.Repositories
 {
-    internal class DeliveryTrackingRepository : IDeliveryTrackingRepository
+    internal sealed class DeliveryTrackingRepository : IDeliveryTrackingRepository
     {
         private readonly DapperContext _context;
         public DeliveryTrackingRepository(DapperContext context) => _context = context;

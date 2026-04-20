@@ -7,7 +7,7 @@ using WSC.Store.Infrastructure.Persistence.Context;
 
 namespace WSC.Store.Infrastructure.Repository
 {
-    public class OrderItemsRepository : IOrderItemsRepository
+    internal sealed class OrderItemsRepository : IOrderItemsRepository
     {
         private readonly DapperContext _context;
         public OrderItemsRepository(DapperContext context)

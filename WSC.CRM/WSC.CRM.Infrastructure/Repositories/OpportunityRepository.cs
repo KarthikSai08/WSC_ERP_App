@@ -8,7 +8,7 @@ using WSC.Shared.Contracts.Dtos.CRMLayer;
 
 namespace WSC.CRM.Infrastructure.Repositories
 {
-    public class OpportunityRepository : IOpportunityRepository
+    internal sealed class OpportunityRepository : IOpportunityRepository
     {
         private readonly DapperContext _context;
         public OpportunityRepository(DapperContext context) => _context = context;

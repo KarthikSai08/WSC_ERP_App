@@ -8,7 +8,7 @@ using WSC.Store.Infrastructure.Persistence.Context;
 
 namespace WSC.Store.Infrastructure.Repository
 {
-    public class InventoryRepository : IInventoryRepository
+    internal sealed class InventoryRepository : IInventoryRepository
     {
         private readonly DapperContext _context;
         public InventoryRepository(DapperContext context)

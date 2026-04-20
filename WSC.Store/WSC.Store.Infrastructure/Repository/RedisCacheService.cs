@@ -4,7 +4,7 @@ using WSC.Store.Application.Interfaces;
 
 namespace WSC.Store.Infrastructure.Repository
 {
-    public class RedisCacheService : IRedisCacheService
+    internal sealed class RedisCacheService : IRedisCacheService
     {
         private readonly IDatabase _db;
         public RedisCacheService(IConnectionMultiplexer redis) => _db = redis.GetDatabase();

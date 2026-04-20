@@ -9,7 +9,7 @@ using WSC.Shared.Contracts.Dtos.CRMLayer;
 
 namespace WSC.CRM.Infrastructure.Repositories
 {
-    public class ActivityRepository : IActivityRepository
+    internal sealed class ActivityRepository : IActivityRepository
     {
         private readonly DapperContext _context;
         public ActivityRepository(DapperContext context)

@@ -5,7 +5,7 @@ using WSC.CRM.Application.Interfaces;
 
 namespace WSC.CRM.Infrastructure.Repositories
 {
-    internal class RedisCacheService : IRedisCacheService
+    internal sealed class RedisCacheService : IRedisCacheService
     {
         private readonly IDatabase _db;
         private readonly ILogger<RedisCacheService> _logger;

@@ -10,7 +10,7 @@ using WSC.Shared.Contracts.Enums;
 
 namespace WSC.CRM.Infrastructure.Repositories
 {
-    public class LeadRepository : ILeadRepository
+    internal sealed class LeadRepository : ILeadRepository
     {
         private readonly DapperContext _context;
         public LeadRepository(DapperContext context)

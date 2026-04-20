@@ -7,7 +7,7 @@ using WSC.Store.Infrastructure.Persistence.Context;
 
 namespace WSC.Store.Infrastructure.Repository
 {
-    public class ProductRepository : IProductRepository
+    internal sealed class ProductRepository : IProductRepository
     {
         private DapperContext _context;
         public ProductRepository(DapperContext context)
