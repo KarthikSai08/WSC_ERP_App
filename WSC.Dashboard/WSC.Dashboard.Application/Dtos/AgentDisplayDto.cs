@@ -1,6 +1,6 @@
 ﻿namespace WSC.Dashboard.Application.Dtos
 {
-    public class AgentDisplayDto
+    public sealed class AgentDisplayDto
     {
         public int DeliveryAgentId { get; set; }
         public string AgentName { get; set; }
