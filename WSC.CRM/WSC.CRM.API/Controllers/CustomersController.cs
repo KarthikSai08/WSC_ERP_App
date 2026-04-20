@@ -8,7 +8,7 @@ namespace WSC.CRM.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomersController : ControllerBase
+    public sealed class CustomersController : ControllerBase
     {
         private readonly ICustomerService _service;
         public CustomersController(ICustomerService service) => _service = service;

@@ -8,7 +8,7 @@ namespace WSC.Delivery.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DeliveryItemController : ControllerBase
+    public sealed class DeliveryItemController : ControllerBase
     {
         private readonly IDeliveryItemService _deliveryItemService;
 

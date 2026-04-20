@@ -8,7 +8,7 @@ namespace WSC.CRM.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OpportunitiesController : ControllerBase
+    public sealed class OpportunitiesController : ControllerBase
     {
         private readonly IOpportunityService _service;
         public OpportunitiesController(IOpportunityService service)

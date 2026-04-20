@@ -5,7 +5,7 @@ namespace WSC.Dashboard.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DashboardController : ControllerBase
+    public sealed class DashboardController : ControllerBase
     {
         private readonly IDashboardService _service;
         public DashboardController(IDashboardService service) => _service = service;

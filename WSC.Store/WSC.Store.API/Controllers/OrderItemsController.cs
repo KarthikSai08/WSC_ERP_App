@@ -8,7 +8,7 @@ namespace WSC.Store.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderItemsController : ControllerBase
+    public sealed class OrderItemsController : ControllerBase
     {
         private readonly IOrderItemsService _service;
         public OrderItemsController(IOrderItemsService service) => _service = service;

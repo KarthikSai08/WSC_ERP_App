@@ -9,7 +9,7 @@ namespace WSC.CRM.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LeadsController : ControllerBase
+    public sealed class LeadsController : ControllerBase
     {
         private readonly ILeadService _service;
 

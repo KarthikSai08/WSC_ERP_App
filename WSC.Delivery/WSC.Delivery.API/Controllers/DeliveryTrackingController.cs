@@ -8,7 +8,7 @@ namespace WSC.Delivery.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DeliveryTrackingController : ControllerBase
+    public sealed class DeliveryTrackingController : ControllerBase
     {
         private readonly IDeliveryTrackingService _deliveryTrackingService;
 

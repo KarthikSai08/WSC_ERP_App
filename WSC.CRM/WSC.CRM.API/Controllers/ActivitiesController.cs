@@ -8,7 +8,7 @@ namespace WSC.CRM.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ActivitiesController : ControllerBase
+    public sealed class ActivitiesController : ControllerBase
     {
         private readonly IActivityService _service;
         public ActivitiesController(IActivityService service)
