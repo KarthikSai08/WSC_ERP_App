@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WSC.Dashboard.Application.Dtos
 {
-    public class ProductDisplayDto
+    public sealed class ProductDisplayDto
     {
         public int ProductId { get; set; }
         public string ProductName { get; set; } = null!;

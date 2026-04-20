@@ -2,7 +2,7 @@
 
 namespace WSC.Shared.Contracts.Dtos.DeliveryLayer
 {
-    public class OrderDeliveryResponseDto
+    public sealed class OrderDeliveryResponseDto
     {
         public int DeliveryId { get; set; }
         public int OrderId { get; set; }          // From Store module

@@ -2,7 +2,7 @@
 
 namespace WSC.Shared.Contracts.Dtos.CRMLayer
 {
-    public class ActivityResponseDto
+    public sealed class ActivityResponseDto
     {
         public int ActivityId { get; set; }
         public string Title { get; set; }

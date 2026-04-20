@@ -3,7 +3,7 @@ using WSC.Shared.Contracts.Enums;
 
 namespace WSC.Dashboard.Application.Dtos
 {
-    public class CustomerOrderDetailsDto
+    public sealed class CustomerOrderDetailsDto
     {
         public int CxId { get; set; }
         public string CxName { get; set; } = null!;

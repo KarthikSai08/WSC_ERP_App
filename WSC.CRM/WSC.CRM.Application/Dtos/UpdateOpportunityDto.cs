@@ -2,7 +2,7 @@
 
 namespace WSC.CRM.Application.Dtos
 {
-    public class UpdateOpportunityDto
+    public sealed class UpdateOpportunityDto
     {
         public int OpportunityId { get; set; }
         public string? OpportunityName { get; set; }

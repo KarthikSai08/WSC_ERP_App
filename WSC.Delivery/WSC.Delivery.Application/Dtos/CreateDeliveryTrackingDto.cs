@@ -2,7 +2,7 @@ using WSC.Delivery.Domain.Enums;
 
 namespace WSC.Delivery.Application.Dtos
 {
-    public class CreateDeliveryTrackingDto
+    public sealed class CreateDeliveryTrackingDto
     {
         public int DeliveryId { get; set; }
         public DeliveryStatus Status { get; set; }

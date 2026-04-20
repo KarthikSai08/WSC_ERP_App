@@ -2,7 +2,7 @@
 
 namespace WSC.Store.Application.Dtos
 {
-    public class CreateProductDto
+    public sealed class CreateProductDto
     {
         [Required]
         public string ProductName { get; set; } = null!;

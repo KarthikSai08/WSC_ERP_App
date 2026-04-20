@@ -2,7 +2,7 @@
 
 namespace WSC.Shared.Contracts.Dtos.CRMLayer
 {
-    public class OpportunityResponseDto
+    public sealed class OpportunityResponseDto
     {
         public int OpportunityId { get; set; }
         public string OpportunityName { get; set; } = null!;

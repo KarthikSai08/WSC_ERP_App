@@ -1,6 +1,6 @@
 ﻿namespace WSC.CRM.Application.Dtos
 {
-    public class UpdateCustomerDto
+    public sealed class UpdateCustomerDto
     {
         public int CxId { get; set; }
         public string? CxName { get; set; }

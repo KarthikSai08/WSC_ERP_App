@@ -5,7 +5,7 @@ using WSC.Delivery.Domain.Enums;
 
 namespace WSC.Dashboard.Application.Dtos
 {
-    public class TrackingDisplayDto
+    public sealed class TrackingDisplayDto
     {
         public int TrackingId { get; set; }
         public int DeliveryId { get; set; }

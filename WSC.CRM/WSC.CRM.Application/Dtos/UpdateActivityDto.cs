@@ -2,7 +2,7 @@
 
 namespace WSC.CRM.Application.Dtos
 {
-    public class UpdateActivityDto
+    public sealed class UpdateActivityDto
     {
         public int ActivityId { get; set; }
         public string Title { get; set; }

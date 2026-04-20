@@ -1,6 +1,6 @@
 namespace WSC.Delivery.Application.Dtos
 {
-    public class UpdateDeliveryAgentDto
+    public sealed class UpdateDeliveryAgentDto
     {
         public int AgentId { get; set; }
         public string Name { get; set; }

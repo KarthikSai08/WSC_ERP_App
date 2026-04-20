@@ -3,7 +3,7 @@ using WSC.Delivery.Domain.Enums;
 
 namespace WSC.Delivery.Application.Dtos
 {
-    public class UpdateOrderDeliveryDto
+    public sealed class UpdateOrderDeliveryDto
     {
         public int DeliveryId { get; set; }
         public int? AssignedAgentId { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace WSC.CRM.Application.Dtos
 {
-    public class CreateLeadDto
+    public sealed class CreateLeadDto
     {
         public string LeadName { get; set; }
         public string LeadEmail { get; set; }

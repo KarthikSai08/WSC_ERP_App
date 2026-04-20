@@ -1,6 +1,6 @@
 ﻿namespace WSC.Shared.Contracts.Dtos.CRMLayer
 {
-    public class CustomerResponseDto
+    public sealed class CustomerResponseDto
     {
         public int CxId { get; set; }
         public string CxName { get; set; }

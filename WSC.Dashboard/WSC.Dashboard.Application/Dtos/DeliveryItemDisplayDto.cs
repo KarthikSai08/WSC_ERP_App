@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WSC.Dashboard.Application.Dtos
 {
-    public class DeliveryItemDisplayDto
+    public sealed class DeliveryItemDisplayDto
     {
         public int DeliveryItemId { get; set; }
         public int Quantity { get; set; }

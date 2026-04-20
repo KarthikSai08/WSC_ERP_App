@@ -2,7 +2,7 @@
 
 namespace WSC.CRM.Application.Dtos
 {
-    public class CreateCustomerDto
+    public sealed class CreateCustomerDto
     {
         [Required]
         [StringLength(50)]

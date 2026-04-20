@@ -1,6 +1,6 @@
 namespace WSC.Delivery.Application.Dtos
 {
-    public class CreateOrderDeliveryDto
+    public sealed class CreateOrderDeliveryDto
     {
         public int OrderId { get; set; }
         public int CustomerId { get; set; }

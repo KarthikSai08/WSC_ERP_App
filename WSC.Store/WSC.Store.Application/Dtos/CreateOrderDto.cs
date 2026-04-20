@@ -2,7 +2,7 @@
 
 namespace WSC.Store.Application.Dtos
 {
-    public class CreateOrderDto
+    public sealed class CreateOrderDto
     {
         public int CustomerId { get; set; }  // integrates with CRM
         public decimal TotalAmount { get; set; }

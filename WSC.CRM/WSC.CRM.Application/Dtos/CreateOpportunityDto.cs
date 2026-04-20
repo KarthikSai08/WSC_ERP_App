@@ -3,7 +3,7 @@ using WSC.Shared.Contracts.Enums;
 
 namespace WSC.CRM.Application.Dtos
 {
-    public class CreateOpportunityDto
+    public sealed class CreateOpportunityDto
     {
         public string OpportunityName { get; set; } = null!;
         public OpportunityStage Stage { get; set; }
