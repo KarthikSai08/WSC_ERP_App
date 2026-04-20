@@ -10,7 +10,7 @@ using WSC.Shared.Contracts.Dtos.DeliveryLayer;
 
 namespace WSC.Delivery.Application.Services
 {
-    public class DeliveryTrackingService : IDeliveryTrackingService
+    public sealed class DeliveryTrackingService : IDeliveryTrackingService
     {
         private readonly IDeliveryTrackingRepository _trackingRepository;
         private readonly IMapper _mapper;

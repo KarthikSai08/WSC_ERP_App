@@ -5,7 +5,7 @@ using WSC.Shared.Contracts.Common;
 
 namespace WSC.Dashboard.Application.Services
 {
-    public class DashboardService : IDashboardService
+    public sealed class DashboardService : IDashboardService
     {
         private readonly IDashboardRepository _repo;
         public DashboardService(IDashboardRepository repo)

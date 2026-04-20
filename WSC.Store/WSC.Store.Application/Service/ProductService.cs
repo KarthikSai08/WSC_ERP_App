@@ -10,7 +10,7 @@ using WSC.Store.Application.Interfaces.ServiceInterfaces;
 
 namespace WSC.Store.Application.Service
 {
-    public class ProductService : IProductService
+    public sealed class ProductService : IProductService
     {
         private readonly IProductRepository _repo;
         private readonly IMapper _mapper;

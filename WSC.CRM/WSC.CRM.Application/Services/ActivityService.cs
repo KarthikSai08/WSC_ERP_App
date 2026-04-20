@@ -14,7 +14,7 @@ using WSC.Shared.Contracts.Exceptions;
 
 namespace WSC.CRM.Application.Services
 {
-    public class ActivityService : IActivityService
+    public sealed class ActivityService : IActivityService
     {
         private readonly IActivityRepository _repo;
         private readonly ILeadRepository _leadRepo;

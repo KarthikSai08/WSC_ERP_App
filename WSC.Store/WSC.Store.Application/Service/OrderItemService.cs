@@ -9,7 +9,7 @@ using WSC.Store.Domain.Entities;
 
 namespace WSC.Store.Application.Service
 {
-    public class OrderItemService : IOrderItemsService
+    public sealed class OrderItemService : IOrderItemsService
     {
         private readonly IOrderItemsRepository _itemsRepo;
         private readonly IOrderRepository _orderRepo;

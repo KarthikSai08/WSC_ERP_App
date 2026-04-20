@@ -10,7 +10,7 @@ using WSC.Store.Domain.Entities;
 
 namespace WSC.Store.Application.Service
 {
-    public class InventoryService : IInventoryService
+    public sealed class InventoryService : IInventoryService
     {
         private readonly IInventoryRepository _repo;
         private readonly IProductRepository _productRepo;

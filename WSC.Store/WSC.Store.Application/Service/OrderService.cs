@@ -11,7 +11,7 @@ using WSC.Store.Domain.Entities;
 
 namespace WSC.Store.Application.Service
 {
-    public class OrderService : IOrderService
+    public sealed class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepo;
         private readonly ICustomerClient _cstService;

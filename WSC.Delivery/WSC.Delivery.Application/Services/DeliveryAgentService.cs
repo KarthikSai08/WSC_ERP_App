@@ -10,7 +10,7 @@ using WSC.Shared.Contracts.Exceptions;
 
 namespace WSC.Delivery.Application.Services
 {
-    public class DeliveryAgentService : IDeliveryAgentService
+    public sealed class DeliveryAgentService : IDeliveryAgentService
     {
         private readonly IDeliveryAgentRepository _agentRepository;
         private readonly IMapper _mapper;

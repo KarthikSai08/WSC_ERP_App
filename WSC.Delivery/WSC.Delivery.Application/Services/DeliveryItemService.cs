@@ -11,7 +11,7 @@ using WSC.Shared.Contracts.Interfaces.StoreClients;
 
 namespace WSC.Delivery.Application.Services
 {
-	public class DeliveryItemService : IDeliveryItemService
+	public sealed class DeliveryItemService : IDeliveryItemService
 	{
 		private readonly IDeliveryItemRepository _itemRepo;
 		private readonly IMapper _mapper;

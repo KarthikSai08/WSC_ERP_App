@@ -12,7 +12,7 @@ using WSC.Shared.Contracts.Exceptions;
 
 namespace WSC.CRM.Application.Services
 {
-    public class LeadService : ILeadService
+    public sealed class LeadService : ILeadService
     {
         private readonly IMapper _mapper;
         private readonly ILeadRepository _repo;

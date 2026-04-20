@@ -12,7 +12,7 @@ using WSC.Shared.Contracts.Interfaces.StoreClients;
 
 namespace WSC.Delivery.Application.Services
 {
-    public class OrderDeliveryService : IOrderDeliveryService
+    public sealed class OrderDeliveryService : IOrderDeliveryService
     {
         private readonly IDeliveryRepository _deliveryRepository;
         private readonly ICustomerClient _cstClient;

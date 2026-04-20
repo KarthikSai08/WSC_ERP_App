@@ -12,7 +12,7 @@ using WSC.Shared.Contracts.ValueObjects;
 
 namespace WSC.CRM.Application.Services
 {
-	public class CustomerService : ICustomerService
+	public sealed class CustomerService : ICustomerService
 	{
 		private readonly ICustomerRepository _repo;
 		private readonly IMapper _mapper;

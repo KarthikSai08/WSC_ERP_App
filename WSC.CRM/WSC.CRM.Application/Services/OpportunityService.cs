@@ -14,7 +14,7 @@ using WSC.Shared.Contracts.Exceptions;
 
 namespace WSC.CRM.Application.Services
 {
-    public class OpportunityService : IOpportunityService
+    public sealed class OpportunityService : IOpportunityService
     {
         private readonly IOpportunityRepository _repo;
         private readonly IMapper _mapper;
