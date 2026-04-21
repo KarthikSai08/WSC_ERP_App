@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Claims;
 
 namespace WSC.Shared.Contracts.Interfaces.JwtInterfaces
 {
     public interface IJwtService
     {
         string GenerateAccessToken(string userId, string userName, string email, string role);
-        string GenerateRefreshToken();  
+        string GenerateRefreshToken();
         bool ValidateRefreshToken(string refreshToken);
-         ClaimsPrincipal? GetPrincipalFromExpiredToken(string token);
+        ClaimsPrincipal? GetPrincipalFromExpiredToken(string token);
     }
 }

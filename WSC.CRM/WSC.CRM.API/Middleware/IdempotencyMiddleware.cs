@@ -1,5 +1,4 @@
-﻿using System.Text;
-using WSC.Shared.Infrastructure.Services;
+﻿using WSC.Shared.Infrastructure.Services;
 
 namespace WSC.CRM.API.Middleware
 
@@ -15,10 +14,10 @@ namespace WSC.CRM.API.Middleware
             _logger = logger;
         }
 
-        public async Task InvokeAsync(HttpContext context,IdempotencyService service)
+        public async Task InvokeAsync(HttpContext context, IdempotencyService service)
         {
 
-            if(!(context.Request.Method == HttpMethod.Post.Method ||
+            if (!(context.Request.Method == HttpMethod.Post.Method ||
                  context.Request.Method == HttpMethod.Put.Method ||
                  context.Request.Method == HttpMethod.Delete.Method ||
                  context.Request.Method == HttpMethod.Patch.Method))
@@ -50,7 +49,7 @@ namespace WSC.CRM.API.Middleware
 
             var originalBody = context.Response.Body;
 
-            using var newBody = new MemoryStream(); 
+            using var newBody = new MemoryStream();
             context.Response.Body = newBody;
 
             await _next(context);

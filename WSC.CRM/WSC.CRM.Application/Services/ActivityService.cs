@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
-using System.Net.Http.Headers;
-using System.Runtime.InteropServices.Marshalling;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces;
 using WSC.CRM.Application.Interfaces.Repository;
@@ -54,7 +52,7 @@ namespace WSC.CRM.Application.Services
 
             await _cache.RemoveAsync("Activities:All");
             await _cache.RemoveAsync($"Activities:Lead:{dto.LeadId}");
-            await _cache.RemoveAsync($"Activities:Page:1:Size:10"); 
+            await _cache.RemoveAsync($"Activities:Page:1:Size:10");
 
             _logger.LogInformation("Activity with ID {ActivityId} created successfully", activityId);
             return ApiResponse<int>.Ok(activityId, "Activity created successfully");
@@ -86,7 +84,7 @@ namespace WSC.CRM.Application.Services
             var cacheKey = $"Activities:Lead:{leadId}";
 
             var cached = await _cache.GetAsync<IEnumerable<ActivityResponseDto>>(cacheKey);
-            if(cached != null)
+            if (cached != null)
             {
                 _logger.LogInformation("Cache hit for activities of lead ID {LeadId}", leadId);
                 return ApiResponse<IEnumerable<ActivityResponseDto>>.Ok(cached, "Activities retrieved successfully (from cache)");
@@ -109,8 +107,8 @@ namespace WSC.CRM.Application.Services
 
             var cacheKey = $"Activity:{id}";
 
-            var cached  = await _cache.GetAsync<ActivityResponseDto?>(cacheKey);
-            if(cached != null)
+            var cached = await _cache.GetAsync<ActivityResponseDto?>(cacheKey);
+            if (cached != null)
             {
                 _logger.LogInformation("Cache hit for activity ID {ActivityId}", id);
                 return ApiResponse<ActivityResponseDto?>.Ok(cached, "Activity retrieved successfully (from cache)");
@@ -122,7 +120,7 @@ namespace WSC.CRM.Application.Services
 
             var mappedActivity = _mapper.Map<ActivityResponseDto?>(activity);
 
-            await _cache.SetAsync(cacheKey,mappedActivity, TimeSpan.FromMinutes(15));
+            await _cache.SetAsync(cacheKey, mappedActivity, TimeSpan.FromMinutes(15));
             return ApiResponse<ActivityResponseDto?>.Ok(mappedActivity, "Activity retrieved successfully");
         }
 
@@ -130,9 +128,9 @@ namespace WSC.CRM.Application.Services
         {
             var cacheKey = "Activities:All";
 
-            var cached = await _cache.GetAsync<IEnumerable<ActivityResponseDto>>(cacheKey); 
+            var cached = await _cache.GetAsync<IEnumerable<ActivityResponseDto>>(cacheKey);
 
-            if(cached != null)
+            if (cached != null)
             {
                 _logger.LogInformation("Cache hit for all activities");
                 return ApiResponse<IEnumerable<ActivityResponseDto>>.Ok(cached, "Activities retrieved successfully (from cache)");

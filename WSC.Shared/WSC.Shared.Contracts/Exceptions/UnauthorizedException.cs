@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Shared.Contracts.Exceptions
+﻿namespace WSC.Shared.Contracts.Exceptions
 {
-    internal class UnauthorizedException
+    public class UnauthorizedException : Exception
     {
+        public UnauthorizedException() : base("Unauthorized access.")
+        {
+        }
+
+        public UnauthorizedException(string message) : base(message)
+        {
+        }
     }
 }

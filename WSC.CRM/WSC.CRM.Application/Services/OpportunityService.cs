@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration.Annotations;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
-using System.Net.WebSockets;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces;
 using WSC.CRM.Application.Interfaces.Repository;
@@ -74,10 +72,10 @@ namespace WSC.CRM.Application.Services
             var cacheKey = "Opportunities:All";
             var cached = await _cache.GetAsync<IEnumerable<OpportunityResponseDto>>(cacheKey);
 
-            if(cached != null)
+            if (cached != null)
             {
                 _logger.LogInformation("Opportunities retrieved from cache");
-                return ApiResponse<IEnumerable<OpportunityResponseDto>>.Ok(cached, "Opportunities retrieved successfully (from cache)");    
+                return ApiResponse<IEnumerable<OpportunityResponseDto>>.Ok(cached, "Opportunities retrieved successfully (from cache)");
             }
             var opp = await _repo.GetAllOpportunitiesAsync(ct);
 
@@ -117,12 +115,12 @@ namespace WSC.CRM.Application.Services
         public async Task<ApiResponse<OpportunityResponseDto?>> GetOpportunityByIdAsync(int id, CancellationToken ct)
         {
             if (id <= 0)
-                throw new ArgumentException("Invalid opportunity id", nameof(id));      
+                throw new ArgumentException("Invalid opportunity id", nameof(id));
 
             var cacheKey = $"Opportunity:{id}";
             var cached = await _cache.GetAsync<OpportunityResponseDto?>(cacheKey);
 
-            if(cached != null)
+            if (cached != null)
             {
                 _logger.LogInformation("Opportunity {OpportunityId} retrieved from cache", id);
                 return ApiResponse<OpportunityResponseDto?>.Ok(cached, "Opportunity retrieved successfully (from cache)");
@@ -180,7 +178,7 @@ namespace WSC.CRM.Application.Services
                 request.PageNumber,
                 totalCount
             );
-            await _cache.SetAsync(cacheKey, response,TimeSpan.FromMinutes(15));
+            await _cache.SetAsync(cacheKey, response, TimeSpan.FromMinutes(15));
             return ApiResponse<PagedResponse<OpportunityResponseDto>>.Ok(response, "Paged Opportunities retrieved successfully");
         }
 

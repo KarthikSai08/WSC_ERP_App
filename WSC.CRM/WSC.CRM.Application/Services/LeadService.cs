@@ -97,7 +97,7 @@ namespace WSC.CRM.Application.Services
                 throw new InvalidInputIdException(id);
 
             var cacheKey = $"Lead:{id}";
-            
+
             var cached = await _cache.GetAsync<LeadResponseDto>(cacheKey);
             if (cached != null)
             {
@@ -166,7 +166,7 @@ namespace WSC.CRM.Application.Services
                 totalCount
             );
 
-            await _cache.SetAsync(cacheKey, response, TimeSpan.FromMinutes(15));    
+            await _cache.SetAsync(cacheKey, response, TimeSpan.FromMinutes(15));
 
             return ApiResponse<PagedResponse<LeadResponseDto>>
                 .Ok(response, "Leads retrieved successfully.");

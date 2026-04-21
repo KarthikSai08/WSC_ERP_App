@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System;
-using System.Collections.Generic;
 using System.Text;
-using Microsoft.AspNetCore.Http;
 
 namespace WSC.Shared.Infrastructure.Extensions
 {
@@ -26,9 +24,9 @@ namespace WSC.Shared.Infrastructure.Extensions
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(opts => 
+                .AddJwtBearer(opts =>
                 {
-                    
+
                     opts.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -48,7 +46,7 @@ namespace WSC.Shared.Infrastructure.Extensions
 
                             var jti = context.Principal?.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
 
-                            if(!string.IsNullOrEmpty(jti) && await blockList.IsBlockedAsync(jti))
+                            if (!string.IsNullOrEmpty(jti) && await blockList.IsBlockedAsync(jti))
                             {
                                 context.Fail("Token has been revoked.");
                             }
@@ -65,8 +63,8 @@ namespace WSC.Shared.Infrastructure.Extensions
                     };
                 });
 
-                services.AddSingleton<IJwtService, JwtService>();
-                services.AddSingleton<IJwtBlockistService, JwtBlocklistService>();
+            services.AddSingleton<IJwtService, JwtService>();
+            services.AddSingleton<IJwtBlockistService, JwtBlocklistService>();
 
             return services;
         }

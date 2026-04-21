@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Shared.Contracts.Interfaces.JwtInterfaces
+﻿namespace WSC.Shared.Contracts.Interfaces.JwtInterfaces
 {
     public interface IJwtBlocklistService
     {

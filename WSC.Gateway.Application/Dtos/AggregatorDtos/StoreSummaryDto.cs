@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WSC.Shared.Contracts.Dtos.StoreLayer;
+﻿using WSC.Shared.Contracts.Dtos.StoreLayer;
 
-namespace WSC.Gateway.Application.Dtos
+namespace WSC.Gateway.Application.Dtos.AggregatorDtos
 {
     public record StoreSummaryDto
     {

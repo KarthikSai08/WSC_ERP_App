@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Gateway.Application.Dtos
+﻿namespace WSC.Gateway.Application.Dtos.AggregatorDtos
 {
     public record UserProfileDto
     {

@@ -1,8 +1,5 @@
 ﻿
 using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WSC.Shared.Contracts.Interfaces;
 
 namespace WSC.Shared.Infrastructure.Services
@@ -16,7 +13,7 @@ namespace WSC.Shared.Infrastructure.Services
         }
         public async Task<string?> GetResponseAsync(string key, CancellationToken ct)
         {
-            var value =await _db.StringGetAsync(key);
+            var value = await _db.StringGetAsync(key);
             return value.HasValue ? value.ToString() : null;
         }
 

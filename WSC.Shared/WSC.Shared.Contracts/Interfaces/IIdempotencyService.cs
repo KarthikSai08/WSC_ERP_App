@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Shared.Contracts.Interfaces
+﻿namespace WSC.Shared.Contracts.Interfaces
 {
     public interface IIdempotencyService
     {

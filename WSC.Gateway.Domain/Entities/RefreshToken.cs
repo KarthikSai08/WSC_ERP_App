@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Gateway.Domain.Entities
+﻿namespace WSC.Gateway.Domain.Entities
 {
     public class RefreshToken
     {
@@ -10,7 +6,7 @@ namespace WSC.Gateway.Domain.Entities
         public int UserId { get; set; }
         public string Token { get; set; } = null!;
         public DateTime ExpiresAt { get; set; }
-        public bool IsRevoked { get; set; } 
+        public bool IsRevoked { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? RevokedAt { get; set; }
         public string? ReplacedByToken { get; set; }

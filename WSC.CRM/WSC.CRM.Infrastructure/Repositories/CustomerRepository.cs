@@ -34,7 +34,7 @@ namespace WSC.CRM.Infrastructure.Repositories
                             direction: ParameterDirection.Output);
 
             await con.ExecuteAsync("crm.sp_CreateCustomer",
-                                    parameters,commandType: CommandType.StoredProcedure);
+                                    parameters, commandType: CommandType.StoredProcedure);
 
             var id = parameters.Get<int>("@NewId");
             return id;

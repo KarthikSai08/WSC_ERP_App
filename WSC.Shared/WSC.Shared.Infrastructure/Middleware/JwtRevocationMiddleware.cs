@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using WSC.Shared.Contracts.Interfaces.JwtInterfaces;
 
 namespace WSC.Shared.Infrastructure.Middleware

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WSC.Delivery.Domain.Enums;
+﻿using WSC.Delivery.Domain.Enums;
 
 namespace WSC.Dashboard.Application.Dtos
 {

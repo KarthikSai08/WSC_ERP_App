@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Shared.Contracts.Exceptions
+﻿namespace WSC.Shared.Contracts.Exceptions
 {
     public class InvalidInputIdException : Exception
     {

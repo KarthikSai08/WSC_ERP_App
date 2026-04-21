@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace WSC.Store.Application.Dtos
+﻿namespace WSC.Store.Application.Dtos
 {
     public sealed record UpdateProductDto(int ProductId,
                                 string ProductName,

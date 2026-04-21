@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -25,8 +23,8 @@ namespace WSC.Shared.Infrastructure.Services
             _audience = _config["Jwt:Audience"] ?? throw new ArgumentNullException("Jwt:Audience");
             _issuer = _config["Jwt:Issuer"] ?? throw new ArgumentNullException("Jwt:Issuer");
             _expiryMinutes = int.TryParse(_config["Jwt:ExpiryMinutes"], out var minutes) ? minutes : 60;
-         }
-    
+        }
+
 
         public string GenerateAccessToken(string userId, string userName, string email, string role)
         {

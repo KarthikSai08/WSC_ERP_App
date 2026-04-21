@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WSC.Gateway.Application.Dtos.AuthDtos
+﻿namespace WSC.Gateway.Application.Dtos.AuthDtos
 {
     public record LoginResponseDto
     {

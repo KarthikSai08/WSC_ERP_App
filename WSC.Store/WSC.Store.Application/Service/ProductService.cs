@@ -23,7 +23,7 @@ namespace WSC.Store.Application.Service
         {
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
-    
+
             var exists = await _repo.ExistsBySKUAsync(dto.SKU, ct);
 
             if (exists)
@@ -83,7 +83,7 @@ namespace WSC.Store.Application.Service
 
         public async Task<ApiResponse<bool>> UpdateProductAsync(UpdateProductDto dto, CancellationToken ct)
         {
-           
+
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
 

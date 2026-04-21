@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using WSC.Shared.Contracts.Enums;
+﻿using WSC.Shared.Contracts.Enums;
 
 namespace WSC.CRM.Application.Dtos
 {
