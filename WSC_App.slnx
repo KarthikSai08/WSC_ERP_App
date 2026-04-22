@@ -18,6 +18,9 @@
     <Project Path="WSC.Delivery/WSC.Delivery.Infrastructure/WSC.Delivery.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/WSC.Gateway/">
+    <Project Path="WSC.Gateway.Application/WSC.Gateway.Application.csproj" Id="5fa6e082-b69b-4dfc-aa82-f54365518dcc" />
+    <Project Path="WSC.Gateway.Domain/WSC.Gateway.Domain.csproj" Id="02884224-fe68-40a4-9c31-5112d6c3eff1" />
+    <Project Path="WSC.Gateway.Infrastructure/WSC.Gateway.Infrastructure.csproj" Id="065194f3-8225-4dad-b714-52d8add7c9b1" />
     <Project Path="WSC.Gateway/WSC.Gateway.API/WSC.Gateway.API.csproj" />
   </Folder>
   <Folder Name="/WSC.Shared/">
