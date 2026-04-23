@@ -16,7 +16,7 @@ namespace WSC.Store.API.Controllers
             _service = service;
         }
 
-        [HttpGet("all-orders-summary")]
+        [HttpGet("all-orders")]
         public async Task<ActionResult<ApiResponse<IEnumerable<OrderResponseDto>>>> GetAll(CancellationToken ct)
         {
             var result = await _service.GetAllOrdersAsync(ct);

@@ -13,7 +13,7 @@ namespace WSC.Store.API.Controllers
         private readonly IProductService _service;
         public ProductsController(IProductService service) => _service = service;
 
-        [HttpGet("GetAll")]
+        [HttpGet("all-products")]
         public async Task<ActionResult<ApiResponse<IEnumerable<ProductResponseDto>>>> GetAllProducts(CancellationToken ct)
         {
             var products = await _service.GetAllProductsAsync(ct);

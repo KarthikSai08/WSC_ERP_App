@@ -41,7 +41,7 @@ namespace WSC.Delivery.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("all")]
+        [HttpGet("all-agents")]
         public async Task<ActionResult<ApiResponse<IEnumerable<DeliveryAgentResponseDto>>>> GetAllDeliveryAgents(
             CancellationToken ct)
         {
