@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FluentValidation;
+using WSC.Gateway.Application.Dtos.AuthDtos;
 
 namespace WSC.Gateway.Application.Validators
 {
-    internal class RefreshTokenRequestValidator
+    public class RefreshTokenRequestValidator : AbstractValidator<RefreshTokenRequestDto>
     {
+        public RefreshTokenRequestValidator()
+        {
+            RuleFor(x => x.RefreshToken)
+                .NotEmpty().WithMessage("Refresh token is required.");
+        }
     }
 }
