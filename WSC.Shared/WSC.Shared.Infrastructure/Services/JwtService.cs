@@ -19,19 +19,18 @@ namespace WSC.Shared.Infrastructure.Services
         public JwtService(IConfiguration config)
         {
             _config = config;
-            _secretKey = _config["Jwt:SecretKey"] ?? throw new ArgumentNullException("Jwt:SecretKey");
+            _secretKey = _config["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key");
             _audience = _config["Jwt:Audience"] ?? throw new ArgumentNullException("Jwt:Audience");
             _issuer = _config["Jwt:Issuer"] ?? throw new ArgumentNullException("Jwt:Issuer");
             _expiryMinutes = int.TryParse(_config["Jwt:ExpiryMinutes"], out var minutes) ? minutes : 60;
         }
 
-
-        public string GenerateAccessToken(string userId, string userName, string email, string role)
+        public string GenerateAccessToken(int userId, string userName, string email, string role)
         {
             var claims = new[] {
-                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Name, userName),
-                new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.Role, role),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat,

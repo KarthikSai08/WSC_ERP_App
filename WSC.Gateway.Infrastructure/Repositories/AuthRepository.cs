@@ -1,9 +1,5 @@
 ﻿using Dapper;
-using Microsoft.AspNetCore.Http.Features.Authentication;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using WSC.Gateway.Application.Interfaces;
 using WSC.Gateway.Domain.Entities;
 using WSC.Gateway.Infrastructure.Persistence;
@@ -25,7 +21,7 @@ namespace WSC.Gateway.Infrastructure.Repositories
             parameters.Add("@UserName", user.UserName);
             parameters.Add("@Email", user.Email);
             parameters.Add("@PasswordHash", user.PasswordHash);
-            parameters.Add("@Role", user.Role); 
+            parameters.Add("@Role", user.Role);
             parameters.Add("@NewUserId", dbType: System.Data.DbType.Int32, direction: System.Data.ParameterDirection.Output);
 
             await con.ExecuteAsync("auth.sp_CreateUser",
@@ -69,8 +65,8 @@ namespace WSC.Gateway.Infrastructure.Repositories
         public async Task UpdateLastLoginAsync(int userId, CancellationToken ct)
         {
             using var con = _context.CreateConnection();
-            var sql = "UPDATE auth.Users SET LastLogin = SYSUTCDATETIME() WHERE UserId = @UserId AND IsActive = 1";
-            
+            var sql = "UPDATE auth.Users SET LastLoginAt = SYSUTCDATETIME() WHERE UserId = @UserId AND IsActive = 1";
+
             await con.ExecuteAsync(new CommandDefinition(sql, new { UserId = userId }, cancellationToken: ct));
         }
     }

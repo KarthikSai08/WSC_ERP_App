@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using WSC.Shared.Contracts.Interfaces.JwtInterfaces;
+using WSC.Shared.Infrastructure.Services;
 
 namespace WSC.Shared.Infrastructure.Extensions
 {
@@ -64,7 +66,7 @@ namespace WSC.Shared.Infrastructure.Extensions
                 });
 
             services.AddSingleton<IJwtService, JwtService>();
-            services.AddSingleton<IJwtBlockistService, JwtBlocklistService>();
+            services.AddSingleton<IJwtBlocklistService, JwtBlocklistService>();
 
             return services;
         }
