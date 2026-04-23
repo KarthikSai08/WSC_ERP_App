@@ -5,6 +5,7 @@ using WSC.CRM.API.Filters;
 using WSC.CRM.API.Middleware;
 using WSC.CRM.Application.DependencyInjection;
 using WSC.CRM.Infrastructure.DependencyInjection;
+using WSC.Shared.Infrastructure.Extensions;
 using WSC.Shared.Infrastructure.Logging;
 using WSC.Shared.Infrastructure.Services;
 using WSC.Store.API.Middleware;
@@ -46,6 +47,8 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddMaps(typeof(Program).Assembly);
     cfg.AddMaps(typeof(ApplicationServices).Assembly);
 });
+builder.Services.AddJwtAuthentication(builder.Configuration);
+
 
 var app = builder.Build();
 
@@ -65,6 +68,7 @@ if (app.Environment.IsDevelopment())
 //app.MapGet("/test", () => "WORKING");
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
