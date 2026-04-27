@@ -67,4 +67,7 @@ TECH_STACK_IMPLEMENTATION_GUIDE.md
 appsettings.Development.json
 *.env
 .env
-secrets.json
+secrets.json
+tery (MANDATORY)
+trategies
+ts
