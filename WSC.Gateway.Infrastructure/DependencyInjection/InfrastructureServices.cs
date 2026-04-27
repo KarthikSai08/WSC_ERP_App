@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using WSC.Gateway.Application.Interfaces;
+using WSC.Gateway.Infrastructure.Http;
 using WSC.Gateway.Infrastructure.Persistence;
 using WSC.Gateway.Infrastructure.Repositories;
 
@@ -13,6 +14,8 @@ namespace WSC.Gateway.Infrastructure.DependencyInjection
 
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+            services.AddTransient<BearerTokenHandler>();
 
             return services;
         }
