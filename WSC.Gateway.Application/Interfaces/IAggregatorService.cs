@@ -5,6 +5,6 @@ namespace WSC.Gateway.Application.Interfaces
 {
     public interface IAggregatorService
     {
-        Task<ApiResponse<AppSummaryDto>> GetAppSummaryAsync<T>(string userId, string role, CancellationToken ct);
+        Task<ApiResponse<AppSummaryDto>> GetAppSummaryAsync(int userId, string role, CancellationToken ct);
     }
 }
