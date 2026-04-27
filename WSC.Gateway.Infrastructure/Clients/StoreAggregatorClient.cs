@@ -12,11 +12,16 @@ namespace WSC.Gateway.Infrastructure.Clients
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
+        public StoreAggregatorClient(HttpClient http)
+        {
+            _http = http;
+        }
+
         public async Task<IEnumerable<OrderResponseDto>?> GetAllOrdersAsync(CancellationToken ct)
             => await GetAsync<IEnumerable<OrderResponseDto>>("api/Orders/all-orders", ct);
 
         public async Task<IEnumerable<ProductResponseDto>?> GetAllProductsAsync(CancellationToken ct)
-            => await GetAsync<IEnumerable<ProductResponseDto>>("api/Produts/all-products", ct);
+            => await GetAsync<IEnumerable<ProductResponseDto>>("api/Products/all-products", ct);
 
         private async Task<T?> GetAsync<T>(string url, CancellationToken ct)
         {

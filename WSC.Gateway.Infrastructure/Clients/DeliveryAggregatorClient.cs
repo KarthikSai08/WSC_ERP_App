@@ -12,6 +12,11 @@ namespace WSC.Gateway.Infrastructure.Clients
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
+        public DeliveryAggregatorClient(HttpClient http)
+        {
+            _http = http;
+        }
+
         public async Task<IEnumerable<DeliveryAgentResponseDto>> GetAllAgentsAsync(CancellationToken ct)
             => await GetAsync<IEnumerable<DeliveryAgentResponseDto>>("api/DeliveryAgent/all-agents", ct);
 
