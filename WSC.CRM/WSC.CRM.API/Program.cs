@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Scalar.AspNetCore;
 using Serilog;
 using StackExchange.Redis;
 using WSC.CRM.API.Filters;
 using WSC.CRM.API.Middleware;
+using WSC.CRM.API.RateLimiting;
 using WSC.CRM.Application.DependencyInjection;
 using WSC.CRM.Infrastructure.DependencyInjection;
 using WSC.Shared.Infrastructure.Extensions;
@@ -48,6 +50,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddMaps(typeof(ApplicationServices).Assembly);
 });
 builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddCustomRateLimiting();
 
 
 var app = builder.Build();
@@ -61,7 +64,6 @@ app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.MapScalarApiReference();
 }
 

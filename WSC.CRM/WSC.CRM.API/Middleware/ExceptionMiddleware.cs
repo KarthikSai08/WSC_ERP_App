@@ -8,7 +8,13 @@ namespace WSC.Store.API.Middleware
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        public ExceptionMiddleware(RequestDelegate next) => _next = next;
+        private readonly ILogger<ExceptionMiddleware> _logger;
+
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+        {
+            _next = next;
+            _logger = logger;
+        }
 
         public async Task Invoke(HttpContext context)
         {
@@ -24,6 +30,7 @@ namespace WSC.Store.API.Middleware
 
         private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
+            _logger.LogError(ex, "An unhandled exception occurred: {ExceptionMessage}", ex.Message);
 
             var res = context.Response;
             res.ContentType = "application/json";
@@ -55,3 +62,4 @@ namespace WSC.Store.API.Middleware
         }
     }
 }
+

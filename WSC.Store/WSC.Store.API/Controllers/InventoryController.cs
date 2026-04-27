@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
+using WSC.Store.API.RateLimiting;
 using WSC.Store.Application.Dtos;
 using WSC.Store.Application.Interfaces.ServiceInterfaces;
 
@@ -8,6 +11,7 @@ namespace WSC.Store.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableRateLimiting(RateLimitingPolicy.DefaultPolicy)]
     public sealed class InventoryController : ControllerBase
     {
         private readonly IInventoryService _service;
@@ -27,7 +31,7 @@ namespace WSC.Store.API.Controllers
                 return NotFound(result);
             return Ok(result);
         }
-
+        [Authorize("Admin, StoreManager")]
         [HttpPost("create-inventory-record")]
         public async Task<ActionResult<ApiResponse<int>>> CreateInventoryRecord([FromBody] CreateInventoryRecordDto record, CancellationToken ct)
         {

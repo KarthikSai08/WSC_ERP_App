@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using WSC.Shared.Contracts.Common;
 using WSC.Shared.Contracts.Dtos.StoreLayer;
+using WSC.Store.API.RateLimiting;
 using WSC.Store.Application.Dtos;
 using WSC.Store.Application.Interfaces.ServiceInterfaces;
 

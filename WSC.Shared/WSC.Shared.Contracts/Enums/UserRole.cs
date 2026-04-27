@@ -5,6 +5,7 @@
         Admin = 1,
         SalesAgent = 2,
         DeliveryAgent = 3,
-        Viewer = 4
+        Viewer = 4,
+        StoreManager=5
     }
 }

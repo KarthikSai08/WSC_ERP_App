@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using WSC.Delivery.API.RateLimiting;
 using WSC.Delivery.Application.Dtos;
 using WSC.Delivery.Application.Interfaces.ServiceInterfaces;
 using WSC.Shared.Contracts.Common;
@@ -8,6 +10,7 @@ namespace WSC.Delivery.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableRateLimiting(RateLimitingPolicy.DefaultPolicy)]
     public sealed class DeliveryItemController : ControllerBase
     {
         private readonly IDeliveryItemService _deliveryItemService;

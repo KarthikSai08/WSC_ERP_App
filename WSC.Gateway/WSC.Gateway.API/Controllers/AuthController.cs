@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using WSC.Gateway.API.RateLimiting;
 using WSC.Gateway.Application.Dtos.AuthDtos;
 using WSC.Gateway.Application.Interfaces;
 using WSC.Gateway.Domain.Entities;
@@ -21,6 +23,7 @@ namespace WSC.Gateway.API.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
+        [EnableRateLimiting(RateLimitingPolicy.AuthenticationPolicy)]
         public async Task<ActionResult<ApiResponse<LoginResponseDto>>> LoginAsync([FromBody] LoginRequestDto dto, CancellationToken ct)
         {
             var result = await _service.LoginAsync(dto, ct);
@@ -31,6 +34,7 @@ namespace WSC.Gateway.API.Controllers
 
         [HttpPost("refresh")]
         [AllowAnonymous]
+        [EnableRateLimiting(RateLimitingPolicy.AuthenticationPolicy)]
         public async Task<ActionResult<ApiResponse<LoginResponseDto>>> RefreshTokenAsync([FromBody] RefreshTokenRequestDto dto, CancellationToken ct)
         {
             var result = await _service.RefreshTokenAsync(dto, ct);
@@ -51,6 +55,7 @@ namespace WSC.Gateway.API.Controllers
         }
         [HttpPost("register")]
         [AllowAnonymous]
+        [EnableRateLimiting(RateLimitingPolicy.AuthenticationPolicy)]
         public async Task<ActionResult<ApiResponse<int>>> RegisterAsync([FromBody] RegisterRequestDto dto, CancellationToken ct)
         {
             var result = await _service.RegisterAsync(dto, ct);

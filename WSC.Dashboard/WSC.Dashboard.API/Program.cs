@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Scalar.AspNetCore;
 using StackExchange.Redis;
+using WSC.Dashboard.API.RateLimiting;
 using WSC.Dashboard.Application.DependencyInjection;
 using WSC.Dashboard.Infrastructure.DependencyInjection;
 using WSC.Store.API.Middleware;

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using WSC.CRM.API.RateLimiting;
 using WSC.CRM.Application.Dtos;
 using WSC.CRM.Application.Interfaces.Services;
 using WSC.Shared.Contracts.Common;
@@ -8,6 +10,7 @@ namespace WSC.CRM.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableRateLimiting(RateLimitingPolicy.DefaultPolicy)]
     public sealed class CustomersController : ControllerBase
     {
         private readonly ICustomerService _service;

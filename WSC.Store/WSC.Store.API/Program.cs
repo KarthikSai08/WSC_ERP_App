@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.SqlClient;
 using Scalar.AspNetCore;
 using Serilog;
@@ -8,6 +9,7 @@ using WSC.Shared.Infrastructure.Clients;
 using WSC.Shared.Infrastructure.Logging;
 using WSC.Store.API.Filters;
 using WSC.Store.API.Middleware;
+using WSC.Store.API.RateLimiting;
 using WSC.Store.Application.DependencyInjection;
 using WSC.Store.Infrastructure.DependencyInjection;
 
@@ -52,6 +54,8 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddMaps(typeof(Program).Assembly);
     cfg.AddMaps(typeof(ApplicationService).Assembly);
 });
+
+builder.Services.AddCustomRateLimiting();
 
 var app = builder.Build();
 

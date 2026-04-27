@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Scalar.AspNetCore;
 using Serilog;
 using StackExchange.Redis;
+using WSC.Delivery.API.RateLimiting;
 using WSC.Delivery.Application.DependencyInjection;
 using WSC.Delivery.Infrastructure.DependencyInjection;
 using WSC.Shared.Contracts.Interfaces.CRMClients;

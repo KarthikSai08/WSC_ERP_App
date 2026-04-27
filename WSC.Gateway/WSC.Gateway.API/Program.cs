@@ -4,6 +4,7 @@ using StackExchange.Redis;
 using System.Text.Json.Serialization;
 using WSC.Gateway.API.Filters;
 using WSC.Gateway.API.Middleware;
+using WSC.Gateway.API.RateLimiting;
 using WSC.Gateway.Application.DependencyInjection;
 using WSC.Gateway.Application.Interfaces.Clients;
 using WSC.Gateway.Infrastructure.Clients;
@@ -42,6 +43,8 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddCustomRateLimiting();
+
 builder.Services.AddGatewayApplicationServices();
 builder.Services.AddGatewayInfrastructureService();
 
@@ -55,7 +58,7 @@ var deliveryUrl = builder.Configuration["Services:Delivery"]
 builder.Services.AddHttpClient<ICrmAggregatorClient, CrmAggregatorClient>(client =>
 {
     client.BaseAddress = new Uri(crmUrl);
-    client.Timeout = TimeSpan.FromSeconds(10);
+    client.Timeout = TimeSpan.FromSeconds(30);
 })
 .AddHttpMessageHandler<BearerTokenHandler>();
 
@@ -63,21 +66,24 @@ builder.Services.AddHttpClient<ICrmAggregatorClient, CrmAggregatorClient>(client
 builder.Services.AddHttpClient<IStoreAggregatorClient, StoreAggregatorClient>(client =>
 {
     client.BaseAddress = new Uri(storeUrl);
-    client.Timeout = TimeSpan.FromSeconds(10);
+    client.Timeout = TimeSpan.FromSeconds(30);
 })
 .AddHttpMessageHandler<BearerTokenHandler>();
 
 builder.Services.AddHttpClient<IDeliveryAggregatorClient, DeliveryAggregatorClient>(client =>
 {
     client.BaseAddress = new Uri(deliveryUrl);
-    client.Timeout = TimeSpan.FromSeconds(10);
+    client.Timeout = TimeSpan.FromSeconds(30);
 })
 .AddHttpMessageHandler<BearerTokenHandler>();
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionMiddleware>();
+//app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<CorrelationMiddleware>();
+
+app.UseRouting();
+app.UseRateLimiter();
 app.UseSerilogRequestLogging();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

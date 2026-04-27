@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using WSC.Dashboard.API.RateLimiting;
 using WSC.Dashboard.Application.Interfaces.ServiceInterfaces;
 
 namespace WSC.Dashboard.API.Controllers
